@@ -8,6 +8,11 @@ models/*
 *.onnx
 runs/
 
+# AI-Hub 다운로드 파일 (분할 압축 .zip.part*, 내려받기 도구)
+*.zip
+*.zip.part*
+aihubshell
+
 # 환경 설정·비밀 값
 .env
 .env.*
