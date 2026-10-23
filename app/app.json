@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "음식 칼로리",
+    "slug": "food-kcal",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "음식 사진을 첨부하려면 사진 접근 권한이 필요해요.",
+          "cameraPermission": "음식 사진을 찍으려면 카메라 권한이 필요해요.",
+          "microphonePermission": false
+        }
+      ]
+    ]
+  }
+}

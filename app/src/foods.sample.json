@@ -1,0 +1,13 @@
+[
+  { "foodId": 1, "nameKo": "공깃밥", "servingSizeG": 210, "nutrition": { "basisG": 210, "kcal": 300, "carbG": 66, "proteinG": 5.5, "fatG": 0.6, "sodiumMg": 5 } },
+  { "foodId": 2, "nameKo": "라면 (1봉지)", "servingSizeG": 120, "nutrition": { "basisG": 120, "kcal": 500, "carbG": 78, "proteinG": 10, "fatG": 16, "sodiumMg": 1800 } },
+  { "foodId": 3, "nameKo": "식빵 (1장)", "servingSizeG": 35, "nutrition": { "basisG": 35, "kcal": 95, "carbG": 18, "proteinG": 3, "fatG": 1.3, "sodiumMg": 150 } },
+  { "foodId": 4, "nameKo": "삶은 달걀 (1개)", "servingSizeG": 50, "nutrition": { "basisG": 50, "kcal": 75, "carbG": 0.5, "proteinG": 6.3, "fatG": 5, "sodiumMg": 62 } },
+  { "foodId": 5, "nameKo": "사과 (1개)", "servingSizeG": 200, "nutrition": { "basisG": 200, "kcal": 110, "carbG": 29, "proteinG": 0.5, "fatG": 0.3, "sodiumMg": 2 } },
+  { "foodId": 6, "nameKo": "바나나 (1개)", "servingSizeG": 100, "nutrition": { "basisG": 100, "kcal": 90, "carbG": 23, "proteinG": 1.1, "fatG": 0.3, "sodiumMg": 1 } },
+  { "foodId": 7, "nameKo": "우유 (1컵)", "servingSizeG": 200, "nutrition": { "basisG": 200, "kcal": 130, "carbG": 9.5, "proteinG": 6.5, "fatG": 7, "sodiumMg": 100 } },
+  { "foodId": 8, "nameKo": "콜라 (캔)", "servingSizeG": 355, "nutrition": { "basisG": 355, "kcal": 150, "carbG": 39, "proteinG": 0, "fatG": 0, "sodiumMg": 45 } },
+  { "foodId": 9, "nameKo": "닭가슴살 (삶은 것)", "servingSizeG": 100, "nutrition": { "basisG": 100, "kcal": 165, "carbG": 0, "proteinG": 31, "fatG": 3.6, "sodiumMg": 74 } },
+  { "foodId": 10, "nameKo": "삶은 감자", "servingSizeG": 100, "nutrition": { "basisG": 100, "kcal": 87, "carbG": 20, "proteinG": 1.9, "fatG": 0.1, "sodiumMg": 5 } },
+  { "foodId": 11, "nameKo": "군고구마", "servingSizeG": 100, "nutrition": { "basisG": 100, "kcal": 90, "carbG": 21, "proteinG": 2, "fatG": 0.2, "sodiumMg": 36 } }
+]
