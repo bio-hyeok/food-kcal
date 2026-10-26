@@ -16,13 +16,13 @@ AI-Hub 74번 분류 데이터에서 음식 영역만 잘라 아래 구조로 저
 이어 하기 (끊겨도 같은 명령을 다시 실행하면 된다)
 - --dst 를 Drive 안(/content/drive/MyDrive/...)으로 두면 런타임이 새로 시작돼도 만든 결과가 남는다.
 - 이미 만든 파일과 제외한 이미지(skipped.csv)는 건너뛴다. 파일은 임시 이름으로 쓴 뒤 이름을 바꿔서 쓰다 끊겨도 깨진 파일이 남지 않는다.
-- 이어 할 때는 --limit-per-class, --seed 를 바꾸면 안 된다 (train/val/test 배정이 달라져 평가가 오염된다). 바꾸면 중단한다.
+- 이어 할 때는 --limit-per-class, --seed, --bucket-sec 를 바꾸면 안 된다 (train/val/test 배정이 달라져 평가가 오염된다). 바꾸면 중단한다.
 
 규칙
 - 클래스 = ml/label_map.csv 의 food_id. 이미지가 없는 코드(대분류 11~16)는 건너뛴다.
 - 라벨 xml 의 object 중 name 이 8자리 코드인 상자가 음식 영역이다 (name=dish 는 접시라서 쓰지 않는다).
 - 같은 음식을 이어서 찍은 사진이 train/test 에 갈리면 성능이 부풀려진다. 파일명 속 촬영 시각(초 단위, 10자리)을
-  10분 단위로 묶어 한 묶음으로 나눈다. 이 묶음 기준은 추정이다 (어노테이션에 촬영 세션 정보가 없다).
+  --bucket-sec(기본 3600초=1시간) 단위로 묶어 한 묶음으로 나눈다. 이 묶음 기준은 추정이다 (어노테이션에 촬영 세션 정보가 없다).
 - 이 스크립트는 로컬(Windows, Python 없음)에서 실행해 보지 못했다. 처음에는 --limit-per-class 로 확인한다.
 """
 import argparse
@@ -44,7 +44,6 @@ SIDE = 320          # 짧은 쪽이 이보다 크면 이 크기로 줄인다
 MARGIN = 0.05       # 상자 둘레 여유 비율
 SPLITS = ("train", "val", "test")
 RATIO = (0.8, 0.1, 0.1)
-BUCKET_SEC = 600
 FALLBACK = "성공(이름대체)"
 
 
@@ -121,10 +120,10 @@ def food_box(xml_path: Path, code: str):
     return "음식상자_없음"
 
 
-def group_key(code: str, stem: str):
+def group_key(code: str, stem: str, bucket_sec: int):
     """촬영 시각(10자리 초)을 10분 단위로 묶는다. 읽지 못하면 파일 하나가 한 묶음."""
     m = re.match(r"^\d+_\d+_\d{8}_(\d{10})", stem)
-    return (code, int(m.group(1)) // BUCKET_SEC) if m else (code, stem)
+    return (code, int(m.group(1)) // bucket_sec) if m else (code, stem)
 
 
 def assign_splits(items, rng):
@@ -188,7 +187,7 @@ def make_crop(img_path: Path, xml_path: Path, code: str, dst: Path):
 def check_config(dst: Path, a) -> None:
     """같은 dst 에서 이어 할 때 설정이 바뀌면 중단한다.
     limit/seed 가 바뀌면 사진의 train/val/test 배정이 달라져서, 먼저 만든 파일과 섞이면 평가가 오염된다."""
-    cfg = {"limit_per_class": a.limit_per_class, "seed": a.seed}
+    cfg = {"limit_per_class": a.limit_per_class, "seed": a.seed, "bucket_sec": a.bucket_sec}
     p = dst / "_run_config.json"
     if p.exists():
         old = json.loads(p.read_text(encoding="utf-8"))
@@ -234,6 +233,7 @@ def main():
     ap.add_argument("--limit-per-class", type=int, default=0, help="클래스당 이미지 수 제한 (0=전부). 처음엔 작게")
     ap.add_argument("--workers", type=int, default=8, help="전체 실행은 12~16 권장 (Drive 대기 시간이 대부분)")
     ap.add_argument("--seed", type=int, default=42)
+    ap.add_argument("--bucket-sec", type=int, default=3600, help="촬영 시각을 이 초 단위로 묶어 같은 묶음은 같은 split 에 둔다")
     a = ap.parse_args()
 
     src, dst = Path(a.src), Path(a.dst)
@@ -251,7 +251,7 @@ def main():
         if a.limit_per_class:
             rng.shuffle(paths)
             paths = paths[: a.limit_per_class]
-        sp = assign_splits([(group_key(code, p.stem), p) for p in paths], rng)
+        sp = assign_splits([(group_key(code, p.stem, a.bucket_sec), p) for p in paths], rng)
         for p in paths:
             out = dst / sp[p] / str(lmap[code]) / (p.stem + ".jpg")
             jobs.append((code, lmap[code], p, xml_dir / code / (p.stem + ".xml"), sp[p], out))
