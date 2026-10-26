@@ -54,3 +54,20 @@ python ml/scripts/train_classifier.py --data /content/processed --model-dir /con
 - `<size>`가 없는 xml이 있다. 이미지 크기를 쓴다.
 - 2026-10-27 Colab 시험(클래스당 20장, 6,080장): 저장 5,872 / 제외 208. 제외 이유는 `음식상자_없음` 85, `xml_읽기실패` 123(`<size>` 없음). 위 보완 이후 결과는 다시 확인해야 한다.
 - 속도: 6,080장에 23분(Drive에서 읽는 시간이 대부분). 전체 6만 장은 4시간 안팎으로 예상된다.
+
+## 전체 전처리 (끊겨도 이어 하기)
+
+전체(약 6만 장)는 Drive에서 읽는 시간 때문에 4시간 안팎 걸린다. 결과를 **Drive 안**에 쓰면, 런타임이 끊겨도 같은 명령을 다시 실행해서 이어 할 수 있다.
+
+```bash
+python ml/scripts/prepare_classifier_data.py \
+  --src "/content/drive/MyDrive/음식데이터" \
+  --dst "/content/drive/MyDrive/processed_full" \
+  --workers 12
+```
+
+- 이미 만든 파일과 `skipped.csv`에 있는 제외 이미지는 건너뛴다. 실행 첫머리에 "이미 완료 / 이전에 제외 / 이번에 처리할 것"이 나온다.
+- 파일은 `.jpg.tmp`로 쓴 뒤 이름을 바꿔서, 쓰다 끊겨도 깨진 `.jpg`가 남지 않는다. 남은 `.tmp`는 무시해도 된다.
+- 이어 할 때 `--limit-per-class`와 `--seed`를 바꾸면 중단한다(분할이 달라져 평가가 오염된다). `--label-map`을 바꿨다면 새 `--dst`를 쓴다.
+- 마지막에 `※ 아직 끝나지 않았습니다`가 나오면 같은 명령을 한 번 더 실행한다.
+- 이 이어 하기 로직은 **실행해 보지 못했다**(이 PC에 Python 없음). 처음에는 `--limit-per-class 5` 같은 작은 값으로 두 번 실행해서 두 번째가 "이번에 처리할 것 0장"이 되는지 확인한다.
