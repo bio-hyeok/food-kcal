@@ -1,0 +1,5202 @@
+[
+  {
+    "foodId": 1,
+    "nameKo": "쌀밥",
+    "servingSizeG": 210,
+    "nutrition": {
+      "basisG": 210,
+      "kcal": 334.8,
+      "carbG": 73.71,
+      "proteinG": 5.76,
+      "fatG": 0.45,
+      "sodiumMg": 59.4
+    }
+  },
+  {
+    "foodId": 2,
+    "nameKo": "기타잡곡밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 302.36,
+      "carbG": 65.52,
+      "proteinG": 6.71,
+      "fatG": 0.75,
+      "sodiumMg": 3.39
+    }
+  },
+  {
+    "foodId": 3,
+    "nameKo": "콩밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 322.9,
+      "carbG": 65.85,
+      "proteinG": 8.43,
+      "fatG": 1.67,
+      "sodiumMg": 4.1
+    }
+  },
+  {
+    "foodId": 4,
+    "nameKo": "보리밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 316.1,
+      "carbG": 70.57,
+      "proteinG": 5.55,
+      "fatG": 0.14,
+      "sodiumMg": 4.5
+    }
+  },
+  {
+    "foodId": 5,
+    "nameKo": "돌솥밥",
+    "servingSizeG": 350,
+    "nutrition": {
+      "basisG": 350,
+      "kcal": 528.86,
+      "carbG": 101.85,
+      "proteinG": 10.19,
+      "fatG": 8.35,
+      "sodiumMg": 618.31
+    }
+  },
+  {
+    "foodId": 6,
+    "nameKo": "현미밥",
+    "servingSizeG": 230,
+    "nutrition": {
+      "basisG": 230,
+      "kcal": 351.35,
+      "carbG": 77.88,
+      "proteinG": 6.66,
+      "fatG": 1.1,
+      "sodiumMg": 42.08
+    }
+  },
+  {
+    "foodId": 7,
+    "nameKo": "흑미밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 318,
+      "carbG": 70.29,
+      "proteinG": 5.44,
+      "fatG": 0.39,
+      "sodiumMg": 4.5
+    }
+  },
+  {
+    "foodId": 8,
+    "nameKo": "감자밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 308,
+      "carbG": 68.64,
+      "proteinG": 5.68,
+      "fatG": 0.08,
+      "sodiumMg": 5.2
+    }
+  },
+  {
+    "foodId": 9,
+    "nameKo": "곤드레밥",
+    "servingSizeG": 350,
+    "nutrition": {
+      "basisG": 350,
+      "kcal": 506.8,
+      "carbG": 108.05,
+      "proteinG": 14.14,
+      "fatG": 8.37,
+      "sodiumMg": 88.75
+    }
+  },
+  {
+    "foodId": 10,
+    "nameKo": "김치볶음밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 656.98,
+      "carbG": 79.29,
+      "proteinG": 8.74,
+      "fatG": 5.06,
+      "sodiumMg": 1094.91
+    }
+  },
+  {
+    "foodId": 11,
+    "nameKo": "주먹밥",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 209.56,
+      "carbG": 36.18,
+      "proteinG": 6.7,
+      "fatG": 3.46,
+      "sodiumMg": 329.69
+    }
+  },
+  {
+    "foodId": 12,
+    "nameKo": "볶음밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 687.74,
+      "carbG": 100.33,
+      "proteinG": 24.46,
+      "fatG": 19.29,
+      "sodiumMg": 1441.42
+    }
+  },
+  {
+    "foodId": 13,
+    "nameKo": "일반비빔밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 703,
+      "carbG": 95.68,
+      "proteinG": 22.6,
+      "fatG": 25.28,
+      "sodiumMg": 1234.09
+    }
+  },
+  {
+    "foodId": 14,
+    "nameKo": "전주비빔밥",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 662.19,
+      "carbG": 92.99,
+      "proteinG": 15.84,
+      "fatG": 13.03,
+      "sodiumMg": 1281.3
+    }
+  },
+  {
+    "foodId": 15,
+    "nameKo": "삼선볶음밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 683.62,
+      "carbG": 113.43,
+      "proteinG": 19.26,
+      "fatG": 16.84,
+      "sodiumMg": 1155.81
+    }
+  },
+  {
+    "foodId": 16,
+    "nameKo": "새우볶음밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 634.52,
+      "carbG": 91.62,
+      "proteinG": 24.11,
+      "fatG": 17.91,
+      "sodiumMg": 1124.63
+    }
+  },
+  {
+    "foodId": 17,
+    "nameKo": "알밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 606.54,
+      "carbG": 92.1,
+      "proteinG": 15.16,
+      "fatG": 3.45,
+      "sodiumMg": 1647.87
+    }
+  },
+  {
+    "foodId": 18,
+    "nameKo": "산채비빔밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 495.89,
+      "carbG": 89.66,
+      "proteinG": 10.66,
+      "fatG": 10.99,
+      "sodiumMg": 1060.78
+    }
+  },
+  {
+    "foodId": 19,
+    "nameKo": "오므라이스",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 684.99,
+      "carbG": 101.62,
+      "proteinG": 23.15,
+      "fatG": 19.75,
+      "sodiumMg": 1123.24
+    }
+  },
+  {
+    "foodId": 20,
+    "nameKo": "육회비빔밥",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 661.41,
+      "carbG": 91.74,
+      "proteinG": 32,
+      "fatG": 17.54,
+      "sodiumMg": 1126.6
+    }
+  },
+  {
+    "foodId": 21,
+    "nameKo": "해물볶음밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 659.23,
+      "carbG": 85.19,
+      "proteinG": 22.68,
+      "fatG": 23.71,
+      "sodiumMg": 951.03
+    }
+  },
+  {
+    "foodId": 22,
+    "nameKo": "열무비빔밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 445.66,
+      "carbG": 90.03,
+      "proteinG": 12.99,
+      "fatG": 3.16,
+      "sodiumMg": 718.39
+    }
+  },
+  {
+    "foodId": 23,
+    "nameKo": "불고기덮밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 699.96,
+      "carbG": 92.09,
+      "proteinG": 29.31,
+      "fatG": 21.4,
+      "sodiumMg": 1182.88
+    }
+  },
+  {
+    "foodId": 24,
+    "nameKo": "소고기국밥",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 331.71,
+      "carbG": 54.93,
+      "proteinG": 16.04,
+      "fatG": 4.74,
+      "sodiumMg": 1613.21
+    }
+  },
+  {
+    "foodId": 25,
+    "nameKo": "송이덮밥",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 600.42,
+      "carbG": 103.57,
+      "proteinG": 16.28,
+      "fatG": 14.45,
+      "sodiumMg": 1578.85
+    }
+  },
+  {
+    "foodId": 26,
+    "nameKo": "오징어덮밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 693.98,
+      "carbG": 83.43,
+      "proteinG": 40.59,
+      "fatG": 20.92,
+      "sodiumMg": 1497.37
+    }
+  },
+  {
+    "foodId": 27,
+    "nameKo": "자장밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 729.62,
+      "carbG": 98.08,
+      "proteinG": 25.76,
+      "fatG": 24.95,
+      "sodiumMg": 1521.85
+    }
+  },
+  {
+    "foodId": 28,
+    "nameKo": "잡채밥",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 851.54,
+      "carbG": 125.7,
+      "proteinG": 21.14,
+      "fatG": 28.61,
+      "sodiumMg": 2251.34
+    }
+  },
+  {
+    "foodId": 29,
+    "nameKo": "잡탕밥",
+    "servingSizeG": 750,
+    "nutrition": {
+      "basisG": 750,
+      "kcal": 737.23,
+      "carbG": 100.55,
+      "proteinG": 29.02,
+      "fatG": 22.48,
+      "sodiumMg": 1922.14
+    }
+  },
+  {
+    "foodId": 30,
+    "nameKo": "장어덮밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 671.72,
+      "carbG": 103.04,
+      "proteinG": 26.14,
+      "fatG": 19.24,
+      "sodiumMg": 893.22
+    }
+  },
+  {
+    "foodId": 31,
+    "nameKo": "제육덮밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 796.94,
+      "carbG": 95.8,
+      "proteinG": 37.8,
+      "fatG": 27.52,
+      "sodiumMg": 1375.69
+    }
+  },
+  {
+    "foodId": 32,
+    "nameKo": "짬뽕밥",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 696.69,
+      "carbG": 93.42,
+      "proteinG": 41.8,
+      "fatG": 22.42,
+      "sodiumMg": 2869.54
+    }
+  },
+  {
+    "foodId": 33,
+    "nameKo": "순대국밥",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 690.35,
+      "carbG": 34.23,
+      "proteinG": 17.34,
+      "fatG": 16.48,
+      "sodiumMg": 3418.2
+    }
+  },
+  {
+    "foodId": 34,
+    "nameKo": "카레라이스",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 653.24,
+      "carbG": 92.58,
+      "proteinG": 13.4,
+      "fatG": 10.67,
+      "sodiumMg": 1108.55
+    }
+  },
+  {
+    "foodId": 35,
+    "nameKo": "전주콩나물국밥",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 432.38,
+      "carbG": 88.73,
+      "proteinG": 12.5,
+      "fatG": 3.53,
+      "sodiumMg": 1753.26
+    }
+  },
+  {
+    "foodId": 36,
+    "nameKo": "해물덮밥",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 837.98,
+      "carbG": 100.11,
+      "proteinG": 51.77,
+      "fatG": 29,
+      "sodiumMg": 2117.83
+    }
+  },
+  {
+    "foodId": 37,
+    "nameKo": "회덮밥",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 698,
+      "carbG": 101.75,
+      "proteinG": 42.99,
+      "fatG": 11.4,
+      "sodiumMg": 777.63
+    }
+  },
+  {
+    "foodId": 38,
+    "nameKo": "소머리국밥",
+    "servingSizeG": 1100,
+    "nutrition": {
+      "basisG": 1100,
+      "kcal": 891.43,
+      "carbG": 77.06,
+      "proteinG": 48.94,
+      "fatG": 40.76,
+      "sodiumMg": 970.89
+    }
+  },
+  {
+    "foodId": 39,
+    "nameKo": "돼지국밥",
+    "servingSizeG": 1200,
+    "nutrition": {
+      "basisG": 1200,
+      "kcal": 811.44,
+      "carbG": 78.28,
+      "proteinG": 56.76,
+      "fatG": 36.45,
+      "sodiumMg": 1257.67
+    }
+  },
+  {
+    "foodId": 40,
+    "nameKo": "하이라이스",
+    "servingSizeG": 360,
+    "nutrition": {
+      "basisG": 360,
+      "kcal": 477.6,
+      "carbG": 84.59,
+      "proteinG": 7.92,
+      "fatG": 9.67,
+      "sodiumMg": 991.68
+    }
+  },
+  {
+    "foodId": 41,
+    "nameKo": "김치김밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 377.26,
+      "carbG": 71.8,
+      "proteinG": 11.45,
+      "fatG": 4.62,
+      "sodiumMg": 967.79
+    }
+  },
+  {
+    "foodId": 42,
+    "nameKo": "농어초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 414.78,
+      "carbG": 74.14,
+      "proteinG": 19.93,
+      "fatG": 2.37,
+      "sodiumMg": 1385.46
+    }
+  },
+  {
+    "foodId": 43,
+    "nameKo": "문어초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 377.97,
+      "carbG": 71.83,
+      "proteinG": 16.9,
+      "fatG": 1.03,
+      "sodiumMg": 1420.92
+    }
+  },
+  {
+    "foodId": 44,
+    "nameKo": "새우초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 395.54,
+      "carbG": 69.54,
+      "proteinG": 22.74,
+      "fatG": 1.21,
+      "sodiumMg": 1396.75
+    }
+  },
+  {
+    "foodId": 45,
+    "nameKo": "새우튀김롤",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 572.02,
+      "carbG": 81.5,
+      "proteinG": 21.11,
+      "fatG": 18.9,
+      "sodiumMg": 1512.5
+    }
+  },
+  {
+    "foodId": 46,
+    "nameKo": "샐러드김밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 422.43,
+      "carbG": 75.84,
+      "proteinG": 12.76,
+      "fatG": 7.51,
+      "sodiumMg": 906.68
+    }
+  },
+  {
+    "foodId": 47,
+    "nameKo": "광어초밥",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 471.66,
+      "carbG": 72.53,
+      "proteinG": 33.74,
+      "fatG": 3.21,
+      "sodiumMg": 951.28
+    }
+  },
+  {
+    "foodId": 48,
+    "nameKo": "소고기김밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 425.67,
+      "carbG": 76.07,
+      "proteinG": 14.67,
+      "fatG": 6.64,
+      "sodiumMg": 1477.98
+    }
+  },
+  {
+    "foodId": 49,
+    "nameKo": "갈비삼각김밥",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 183.18,
+      "carbG": 32.75,
+      "proteinG": 6.86,
+      "fatG": 2.6,
+      "sodiumMg": 398.12
+    }
+  },
+  {
+    "foodId": 50,
+    "nameKo": "연어롤",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 518.58,
+      "carbG": 76.11,
+      "proteinG": 20.72,
+      "fatG": 14.72,
+      "sodiumMg": 1243.82
+    }
+  },
+  {
+    "foodId": 51,
+    "nameKo": "연어초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 451.03,
+      "carbG": 70.87,
+      "proteinG": 24.94,
+      "fatG": 5.76,
+      "sodiumMg": 995.03
+    }
+  },
+  {
+    "foodId": 52,
+    "nameKo": "유부초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 463.21,
+      "carbG": 78.47,
+      "proteinG": 12.37,
+      "fatG": 11.23,
+      "sodiumMg": 929.07
+    }
+  },
+  {
+    "foodId": 53,
+    "nameKo": "장어초밥",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 486.35,
+      "carbG": 74.84,
+      "proteinG": 16.33,
+      "fatG": 12.73,
+      "sodiumMg": 1291.81
+    }
+  },
+  {
+    "foodId": 54,
+    "nameKo": "참치김밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 401.22,
+      "carbG": 47.55,
+      "proteinG": 19.83,
+      "fatG": 14.59,
+      "sodiumMg": 925.73
+    }
+  },
+  {
+    "foodId": 55,
+    "nameKo": "참치마요삼각김밥",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 189.58,
+      "carbG": 31.93,
+      "proteinG": 8.11,
+      "fatG": 2.89,
+      "sodiumMg": 189.1
+    }
+  },
+  {
+    "foodId": 56,
+    "nameKo": "치즈김밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 462.23,
+      "carbG": 77.13,
+      "proteinG": 17.12,
+      "fatG": 8.84,
+      "sodiumMg": 919.97
+    }
+  },
+  {
+    "foodId": 57,
+    "nameKo": "캘리포니아롤",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 468.16,
+      "carbG": 81.22,
+      "proteinG": 12.8,
+      "fatG": 9.73,
+      "sodiumMg": 1351.96
+    }
+  },
+  {
+    "foodId": 58,
+    "nameKo": "한치초밥",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 389.96,
+      "carbG": 77.31,
+      "proteinG": 13.54,
+      "fatG": 1.2,
+      "sodiumMg": 1153.49
+    }
+  },
+  {
+    "foodId": 59,
+    "nameKo": "일반김밥",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 348.87,
+      "carbG": 63.64,
+      "proteinG": 10.28,
+      "fatG": 5.42,
+      "sodiumMg": 951.32
+    }
+  },
+  {
+    "foodId": 60,
+    "nameKo": "간자장",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 807.74,
+      "carbG": 121.75,
+      "proteinG": 29.28,
+      "fatG": 26.38,
+      "sodiumMg": 2347.77
+    }
+  },
+  {
+    "foodId": 61,
+    "nameKo": "굴짬뽕",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 640.77,
+      "carbG": 115.82,
+      "proteinG": 37.39,
+      "fatG": 7.76,
+      "sodiumMg": 2385.35
+    }
+  },
+  {
+    "foodId": 62,
+    "nameKo": "기스면",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 645.61,
+      "carbG": 98.3,
+      "proteinG": 43.52,
+      "fatG": 11,
+      "sodiumMg": 2279.52
+    }
+  },
+  {
+    "foodId": 63,
+    "nameKo": "김치라면",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 512.26,
+      "carbG": 80.57,
+      "proteinG": 12.97,
+      "fatG": 20.34,
+      "sodiumMg": 2628.29
+    }
+  },
+  {
+    "foodId": 64,
+    "nameKo": "김치우동",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 512.71,
+      "carbG": 99.06,
+      "proteinG": 16.74,
+      "fatG": 4.74,
+      "sodiumMg": 3003.05
+    }
+  },
+  {
+    "foodId": 65,
+    "nameKo": "김치말이국수",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 310.38,
+      "carbG": 60.76,
+      "proteinG": 10.42,
+      "fatG": 2.47,
+      "sodiumMg": 2335.45
+    }
+  },
+  {
+    "foodId": 66,
+    "nameKo": "닭칼국수",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 643.1,
+      "carbG": 70.24,
+      "proteinG": 39.86,
+      "fatG": 19.59,
+      "sodiumMg": 2492.77
+    }
+  },
+  {
+    "foodId": 67,
+    "nameKo": "들깨칼국수",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 442.32,
+      "carbG": 76.67,
+      "proteinG": 17.48,
+      "fatG": 6.78,
+      "sodiumMg": 1695.77
+    }
+  },
+  {
+    "foodId": 68,
+    "nameKo": "떡라면",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 672.18,
+      "carbG": 121.08,
+      "proteinG": 15.45,
+      "fatG": 17.58,
+      "sodiumMg": 2214.36
+    }
+  },
+  {
+    "foodId": 69,
+    "nameKo": "라면",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 509.33,
+      "carbG": 83.17,
+      "proteinG": 14.08,
+      "fatG": 17.75,
+      "sodiumMg": 1695.5
+    }
+  },
+  {
+    "foodId": 70,
+    "nameKo": "막국수",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 566.89,
+      "carbG": 111.3,
+      "proteinG": 26.95,
+      "fatG": 5.09,
+      "sodiumMg": 1828.02
+    }
+  },
+  {
+    "foodId": 71,
+    "nameKo": "메밀국수",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 588.68,
+      "carbG": 120.09,
+      "proteinG": 25.26,
+      "fatG": 4.53,
+      "sodiumMg": 1962.46
+    }
+  },
+  {
+    "foodId": 72,
+    "nameKo": "물냉면",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 579.71,
+      "carbG": 96.4,
+      "proteinG": 28.78,
+      "fatG": 9.78,
+      "sodiumMg": 2586.16
+    }
+  },
+  {
+    "foodId": 73,
+    "nameKo": "비빔국수",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 577.17,
+      "carbG": 114.48,
+      "proteinG": 16.71,
+      "fatG": 9.55,
+      "sodiumMg": 1628.3
+    }
+  },
+  {
+    "foodId": 74,
+    "nameKo": "비빔냉면",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 594.31,
+      "carbG": 91.49,
+      "proteinG": 23.7,
+      "fatG": 9.13,
+      "sodiumMg": 1530.57
+    }
+  },
+  {
+    "foodId": 75,
+    "nameKo": "삼선우동",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 692.26,
+      "carbG": 89.2,
+      "proteinG": 56.17,
+      "fatG": 10.53,
+      "sodiumMg": 2351.43
+    }
+  },
+  {
+    "foodId": 76,
+    "nameKo": "삼선자장면",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 787.84,
+      "carbG": 111.57,
+      "proteinG": 38.33,
+      "fatG": 24.68,
+      "sodiumMg": 2791.11
+    }
+  },
+  {
+    "foodId": 77,
+    "nameKo": "삼선짬뽕",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 629.1,
+      "carbG": 89.31,
+      "proteinG": 39.17,
+      "fatG": 13.45,
+      "sodiumMg": 2825.66
+    }
+  },
+  {
+    "foodId": 78,
+    "nameKo": "수제비",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 622.15,
+      "carbG": 99.22,
+      "proteinG": 38.53,
+      "fatG": 6.54,
+      "sodiumMg": 1669.32
+    }
+  },
+  {
+    "foodId": 79,
+    "nameKo": "쌀국수",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 321.34,
+      "carbG": 46.2,
+      "proteinG": 21.85,
+      "fatG": 5.81,
+      "sodiumMg": 2032.17
+    }
+  },
+  {
+    "foodId": 80,
+    "nameKo": "열무김치국수",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 488.32,
+      "carbG": 81.61,
+      "proteinG": 21.94,
+      "fatG": 8.22,
+      "sodiumMg": 2587.7
+    }
+  },
+  {
+    "foodId": 81,
+    "nameKo": "오일소스스파게티",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 626.58,
+      "carbG": 99.24,
+      "proteinG": 14.68,
+      "fatG": 16.59,
+      "sodiumMg": 968.7
+    }
+  },
+  {
+    "foodId": 82,
+    "nameKo": "일식우동",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 420.79,
+      "carbG": 81.23,
+      "proteinG": 16.93,
+      "fatG": 1.74,
+      "sodiumMg": 1873.54
+    }
+  },
+  {
+    "foodId": 83,
+    "nameKo": "볶음우동",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 377.92,
+      "carbG": 62.26,
+      "proteinG": 9.58,
+      "fatG": 10.81,
+      "sodiumMg": 1461.31
+    }
+  },
+  {
+    "foodId": 84,
+    "nameKo": "자장면",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 760.88,
+      "carbG": 134.29,
+      "proteinG": 15.74,
+      "fatG": 23.16,
+      "sodiumMg": 2447
+    }
+  },
+  {
+    "foodId": 85,
+    "nameKo": "잔치국수",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 564.23,
+      "carbG": 104.67,
+      "proteinG": 20.26,
+      "fatG": 6.23,
+      "sodiumMg": 1792.23
+    }
+  },
+  {
+    "foodId": 86,
+    "nameKo": "짬뽕",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 650.31,
+      "carbG": 118.54,
+      "proteinG": 25.53,
+      "fatG": 13.52,
+      "sodiumMg": 3451.37
+    }
+  },
+  {
+    "foodId": 87,
+    "nameKo": "짬뽕라면",
+    "servingSizeG": 750,
+    "nutrition": {
+      "basisG": 750,
+      "kcal": 633.34,
+      "carbG": 88.79,
+      "proteinG": 31.41,
+      "fatG": 24.63,
+      "sodiumMg": 2380.93
+    }
+  },
+  {
+    "foodId": 88,
+    "nameKo": "쫄면",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 622.42,
+      "carbG": 110.85,
+      "proteinG": 12.36,
+      "fatG": 6.93,
+      "sodiumMg": 1271.55
+    }
+  },
+  {
+    "foodId": 89,
+    "nameKo": "치즈라면",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 598.67,
+      "carbG": 83.53,
+      "proteinG": 23.35,
+      "fatG": 23.28,
+      "sodiumMg": 2425.97
+    }
+  },
+  {
+    "foodId": 90,
+    "nameKo": "콩국수",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 623.5,
+      "carbG": 67.12,
+      "proteinG": 47.8,
+      "fatG": 20.43,
+      "sodiumMg": 875.84
+    }
+  },
+  {
+    "foodId": 91,
+    "nameKo": "크림소스스파게티",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 825.06,
+      "carbG": 85.88,
+      "proteinG": 19.44,
+      "fatG": 45.4,
+      "sodiumMg": 1025.21
+    }
+  },
+  {
+    "foodId": 92,
+    "nameKo": "토마토소스스파게티",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 642.18,
+      "carbG": 102.07,
+      "proteinG": 20.22,
+      "fatG": 17.37,
+      "sodiumMg": 1404.81
+    }
+  },
+  {
+    "foodId": 93,
+    "nameKo": "해물칼국수",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 621.2,
+      "carbG": 124.21,
+      "proteinG": 24.87,
+      "fatG": 4.01,
+      "sodiumMg": 2195.05
+    }
+  },
+  {
+    "foodId": 94,
+    "nameKo": "회냉면",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 638.9,
+      "carbG": 131.9,
+      "proteinG": 20.22,
+      "fatG": 8.78,
+      "sodiumMg": 1524.28
+    }
+  },
+  {
+    "foodId": 95,
+    "nameKo": "떡국",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 714.99,
+      "carbG": 144.03,
+      "proteinG": 21.86,
+      "fatG": 5.39,
+      "sodiumMg": 2019.28
+    }
+  },
+  {
+    "foodId": 96,
+    "nameKo": "떡만둣국",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 625.35,
+      "carbG": 113.96,
+      "proteinG": 22.72,
+      "fatG": 9.4,
+      "sodiumMg": 1999.12
+    }
+  },
+  {
+    "foodId": 97,
+    "nameKo": "짜장라면",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 409.38,
+      "carbG": 63.77,
+      "proteinG": 12.01,
+      "fatG": 14.85,
+      "sodiumMg": 1276.38
+    }
+  },
+  {
+    "foodId": 98,
+    "nameKo": "고기만두",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 454.39,
+      "carbG": 55.33,
+      "proteinG": 18.66,
+      "fatG": 18.24,
+      "sodiumMg": 888.8
+    }
+  },
+  {
+    "foodId": 99,
+    "nameKo": "군만두",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 684.42,
+      "carbG": 76.17,
+      "proteinG": 19.77,
+      "fatG": 31.17,
+      "sodiumMg": 983.7
+    }
+  },
+  {
+    "foodId": 100,
+    "nameKo": "김치만두",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 424.64,
+      "carbG": 60.79,
+      "proteinG": 18.43,
+      "fatG": 13.1,
+      "sodiumMg": 961.97
+    }
+  },
+  {
+    "foodId": 101,
+    "nameKo": "물만두",
+    "servingSizeG": 120,
+    "nutrition": {
+      "basisG": 120,
+      "kcal": 158.05,
+      "carbG": 20.48,
+      "proteinG": 5.86,
+      "fatG": 5.84,
+      "sodiumMg": 269.52
+    }
+  },
+  {
+    "foodId": 102,
+    "nameKo": "만둣국",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 432.62,
+      "carbG": 53.28,
+      "proteinG": 19.24,
+      "fatG": 14.92,
+      "sodiumMg": 2356.67
+    }
+  },
+  {
+    "foodId": 103,
+    "nameKo": "게살죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 554.24,
+      "carbG": 103.59,
+      "proteinG": 18.15,
+      "fatG": 7.63,
+      "sodiumMg": 1533.96
+    }
+  },
+  {
+    "foodId": 104,
+    "nameKo": "깨죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 505.68,
+      "carbG": 71.13,
+      "proteinG": 13.43,
+      "fatG": 18.94,
+      "sodiumMg": 1212.27
+    }
+  },
+  {
+    "foodId": 105,
+    "nameKo": "닭죽",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 1181.71,
+      "carbG": 92.53,
+      "proteinG": 75.93,
+      "fatG": 48.18,
+      "sodiumMg": 789.79
+    }
+  },
+  {
+    "foodId": 106,
+    "nameKo": "소고기버섯죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 573.24,
+      "carbG": 102.93,
+      "proteinG": 20.52,
+      "fatG": 6.46,
+      "sodiumMg": 1263.62
+    }
+  },
+  {
+    "foodId": 107,
+    "nameKo": "어죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 559.27,
+      "carbG": 90.47,
+      "proteinG": 15.53,
+      "fatG": 6.08,
+      "sodiumMg": 1621.29
+    }
+  },
+  {
+    "foodId": 108,
+    "nameKo": "잣죽",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 872.61,
+      "carbG": 153.79,
+      "proteinG": 15.79,
+      "fatG": 20.29,
+      "sodiumMg": 850.63
+    }
+  },
+  {
+    "foodId": 109,
+    "nameKo": "전복죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 587.29,
+      "carbG": 105.04,
+      "proteinG": 14.57,
+      "fatG": 11.45,
+      "sodiumMg": 1423.93
+    }
+  },
+  {
+    "foodId": 110,
+    "nameKo": "참치죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 658.46,
+      "carbG": 105.94,
+      "proteinG": 26.08,
+      "fatG": 13.85,
+      "sodiumMg": 1264.15
+    }
+  },
+  {
+    "foodId": 111,
+    "nameKo": "채소죽",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 514.83,
+      "carbG": 100.8,
+      "proteinG": 11.89,
+      "fatG": 5.13,
+      "sodiumMg": 1211.63
+    }
+  },
+  {
+    "foodId": 112,
+    "nameKo": "팥죽",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 482.65,
+      "carbG": 100.74,
+      "proteinG": 20.59,
+      "fatG": 0.56,
+      "sodiumMg": 1026.11
+    }
+  },
+  {
+    "foodId": 113,
+    "nameKo": "호박죽",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 430.33,
+      "carbG": 111.41,
+      "proteinG": 8.11,
+      "fatG": 0.72,
+      "sodiumMg": 911.72
+    }
+  },
+  {
+    "foodId": 114,
+    "nameKo": "콘스프",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 280.48,
+      "carbG": 35.37,
+      "proteinG": 5.82,
+      "fatG": 14.02,
+      "sodiumMg": 1319.46
+    }
+  },
+  {
+    "foodId": 115,
+    "nameKo": "토마토스프",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 382.41,
+      "carbG": 12.42,
+      "proteinG": 18.2,
+      "fatG": 25.4,
+      "sodiumMg": 1544.31
+    }
+  },
+  {
+    "foodId": 116,
+    "nameKo": "굴국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 194.42,
+      "carbG": 11.44,
+      "proteinG": 22.8,
+      "fatG": 8.65,
+      "sodiumMg": 1775.97
+    }
+  },
+  {
+    "foodId": 117,
+    "nameKo": "김치국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 86,
+      "carbG": 13.01,
+      "proteinG": 6.03,
+      "fatG": 3.38,
+      "sodiumMg": 1646.15
+    }
+  },
+  {
+    "foodId": 118,
+    "nameKo": "달걀국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 193.04,
+      "carbG": 5.35,
+      "proteinG": 16.19,
+      "fatG": 11.11,
+      "sodiumMg": 1263.96
+    }
+  },
+  {
+    "foodId": 119,
+    "nameKo": "감자국",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 220.07,
+      "carbG": 37.01,
+      "proteinG": 17,
+      "fatG": 2.16,
+      "sodiumMg": 1734.15
+    }
+  },
+  {
+    "foodId": 120,
+    "nameKo": "미역국",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 50.16,
+      "carbG": 4.69,
+      "proteinG": 2.7,
+      "fatG": 4.35,
+      "sodiumMg": 1527.55
+    }
+  },
+  {
+    "foodId": 121,
+    "nameKo": "바지락조개국",
+    "servingSizeG": 550,
+    "nutrition": {
+      "basisG": 550,
+      "kcal": 159.25,
+      "carbG": 8.51,
+      "proteinG": 25.83,
+      "fatG": 1.84,
+      "sodiumMg": 1650.85
+    }
+  },
+  {
+    "foodId": 122,
+    "nameKo": "소고기무국",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 125.22,
+      "carbG": 8.14,
+      "proteinG": 13.51,
+      "fatG": 4.72,
+      "sodiumMg": 1095.18
+    }
+  },
+  {
+    "foodId": 123,
+    "nameKo": "소고기미역국",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 154.93,
+      "carbG": 6.91,
+      "proteinG": 20.23,
+      "fatG": 6.83,
+      "sodiumMg": 2006.87
+    }
+  },
+  {
+    "foodId": 124,
+    "nameKo": "순대국",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 550.66,
+      "carbG": 22.82,
+      "proteinG": 41.22,
+      "fatG": 32.94,
+      "sodiumMg": 1532.59
+    }
+  },
+  {
+    "foodId": 125,
+    "nameKo": "어묵국",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 252.09,
+      "carbG": 37.16,
+      "proteinG": 22.85,
+      "fatG": 4.21,
+      "sodiumMg": 2022.74
+    }
+  },
+  {
+    "foodId": 126,
+    "nameKo": "오징어국",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 169.03,
+      "carbG": 10.6,
+      "proteinG": 27.74,
+      "fatG": 2.35,
+      "sodiumMg": 1573.42
+    }
+  },
+  {
+    "foodId": 127,
+    "nameKo": "토란국",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 462.97,
+      "carbG": 85.16,
+      "proteinG": 23.89,
+      "fatG": 7.07,
+      "sodiumMg": 700.67
+    }
+  },
+  {
+    "foodId": 128,
+    "nameKo": "탕국",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 94.24,
+      "carbG": 2.58,
+      "proteinG": 12.08,
+      "fatG": 4.32,
+      "sodiumMg": 663.05
+    }
+  },
+  {
+    "foodId": 129,
+    "nameKo": "홍합미역국",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 168.88,
+      "carbG": 14.13,
+      "proteinG": 19.99,
+      "fatG": 6.43,
+      "sodiumMg": 2066.27
+    }
+  },
+  {
+    "foodId": 130,
+    "nameKo": "황태해장국",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 184.22,
+      "carbG": 6.39,
+      "proteinG": 25.21,
+      "fatG": 7.22,
+      "sodiumMg": 1526.82
+    }
+  },
+  {
+    "foodId": 131,
+    "nameKo": "근대된장국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 109.26,
+      "carbG": 8.14,
+      "proteinG": 15.31,
+      "fatG": 3.21,
+      "sodiumMg": 1453.19
+    }
+  },
+  {
+    "foodId": 132,
+    "nameKo": "미소된장국",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 37.97,
+      "carbG": 1.69,
+      "proteinG": 4.14,
+      "fatG": 1.75,
+      "sodiumMg": 511.98
+    }
+  },
+  {
+    "foodId": 133,
+    "nameKo": "배추된장국",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 121.53,
+      "carbG": 11.04,
+      "proteinG": 13.96,
+      "fatG": 3.63,
+      "sodiumMg": 2321.48
+    }
+  },
+  {
+    "foodId": 134,
+    "nameKo": "뼈다귀해장국",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 715.98,
+      "carbG": 29.71,
+      "proteinG": 53.63,
+      "fatG": 45.37,
+      "sodiumMg": 3093.6
+    }
+  },
+  {
+    "foodId": 135,
+    "nameKo": "선지(해장)국",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 314.42,
+      "carbG": 22.29,
+      "proteinG": 48.1,
+      "fatG": 5.03,
+      "sodiumMg": 3053.19
+    }
+  },
+  {
+    "foodId": 136,
+    "nameKo": "콩나물국",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 22.53,
+      "carbG": 1.26,
+      "proteinG": 1.82,
+      "fatG": 1.42,
+      "sodiumMg": 752.43
+    }
+  },
+  {
+    "foodId": 137,
+    "nameKo": "시금치된장국",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 121.45,
+      "carbG": 9.9,
+      "proteinG": 16.69,
+      "fatG": 3.39,
+      "sodiumMg": 1381.25
+    }
+  },
+  {
+    "foodId": 138,
+    "nameKo": "시래기된장국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 99.12,
+      "carbG": 10.68,
+      "proteinG": 10.02,
+      "fatG": 2.54,
+      "sodiumMg": 1535.63
+    }
+  },
+  {
+    "foodId": 139,
+    "nameKo": "쑥된장국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 117.32,
+      "carbG": 17.17,
+      "proteinG": 13.21,
+      "fatG": 2.55,
+      "sodiumMg": 1799.6
+    }
+  },
+  {
+    "foodId": 140,
+    "nameKo": "아욱된장국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 103.53,
+      "carbG": 9.96,
+      "proteinG": 12,
+      "fatG": 2.94,
+      "sodiumMg": 1462.13
+    }
+  },
+  {
+    "foodId": 141,
+    "nameKo": "우거지된장국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 85.97,
+      "carbG": 13.72,
+      "proteinG": 6.44,
+      "fatG": 1.81,
+      "sodiumMg": 1593.99
+    }
+  },
+  {
+    "foodId": 142,
+    "nameKo": "우거지해장국",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 158.5,
+      "carbG": 14.86,
+      "proteinG": 14.19,
+      "fatG": 5.73,
+      "sodiumMg": 1972.09
+    }
+  },
+  {
+    "foodId": 143,
+    "nameKo": "우렁된장국",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 245.28,
+      "carbG": 21.19,
+      "proteinG": 24.72,
+      "fatG": 7.05,
+      "sodiumMg": 2150.43
+    }
+  },
+  {
+    "foodId": 144,
+    "nameKo": "갈비탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 240.4,
+      "carbG": 8.21,
+      "proteinG": 18.67,
+      "fatG": 14.33,
+      "sodiumMg": 1688.43
+    }
+  },
+  {
+    "foodId": 145,
+    "nameKo": "감자탕",
+    "servingSizeG": 900,
+    "nutrition": {
+      "basisG": 900,
+      "kcal": 963.71,
+      "carbG": 49.64,
+      "proteinG": 60.55,
+      "fatG": 58.28,
+      "sodiumMg": 2439.38
+    }
+  },
+  {
+    "foodId": 146,
+    "nameKo": "곰탕",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 181.42,
+      "carbG": 15.5,
+      "proteinG": 16.59,
+      "fatG": 5.44,
+      "sodiumMg": 713.64
+    }
+  },
+  {
+    "foodId": 147,
+    "nameKo": "매운탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 402.79,
+      "carbG": 18.83,
+      "proteinG": 37.16,
+      "fatG": 21.56,
+      "sodiumMg": 2130.95
+    }
+  },
+  {
+    "foodId": 148,
+    "nameKo": "꼬리곰탕",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 750.69,
+      "carbG": 10.93,
+      "proteinG": 54.87,
+      "fatG": 52.8,
+      "sodiumMg": 764.73
+    }
+  },
+  {
+    "foodId": 149,
+    "nameKo": "꽃게탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 240.65,
+      "carbG": 20.77,
+      "proteinG": 31.7,
+      "fatG": 5.49,
+      "sodiumMg": 2268.86
+    }
+  },
+  {
+    "foodId": 150,
+    "nameKo": "낙지탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 186.1,
+      "carbG": 11.77,
+      "proteinG": 29.21,
+      "fatG": 2.73,
+      "sodiumMg": 1711.12
+    }
+  },
+  {
+    "foodId": 151,
+    "nameKo": "내장탕",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 549.81,
+      "carbG": 13.7,
+      "proteinG": 56.97,
+      "fatG": 31.51,
+      "sodiumMg": 2383.07
+    }
+  },
+  {
+    "foodId": 152,
+    "nameKo": "닭곰탕",
+    "servingSizeG": 650,
+    "nutrition": {
+      "basisG": 650,
+      "kcal": 527.7,
+      "carbG": 15.39,
+      "proteinG": 58.88,
+      "fatG": 24.14,
+      "sodiumMg": 1005.19
+    }
+  },
+  {
+    "foodId": 153,
+    "nameKo": "닭볶음탕",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 371.81,
+      "carbG": 19.17,
+      "proteinG": 33.85,
+      "fatG": 17.32,
+      "sodiumMg": 1030.46
+    }
+  },
+  {
+    "foodId": 154,
+    "nameKo": "지리탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 260.59,
+      "carbG": 10.52,
+      "proteinG": 38.34,
+      "fatG": 8.36,
+      "sodiumMg": 1685.16
+    }
+  },
+  {
+    "foodId": 155,
+    "nameKo": "도가니탕",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 563.65,
+      "carbG": 5.58,
+      "proteinG": 54.6,
+      "fatG": 34.77,
+      "sodiumMg": 599.27
+    }
+  },
+  {
+    "foodId": 156,
+    "nameKo": "삼계탕",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 881.32,
+      "carbG": 44.08,
+      "proteinG": 76.65,
+      "fatG": 40.57,
+      "sodiumMg": 1211.32
+    }
+  },
+  {
+    "foodId": 157,
+    "nameKo": "설렁탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 422.76,
+      "carbG": 10.94,
+      "proteinG": 52.71,
+      "fatG": 18.2,
+      "sodiumMg": 725.16
+    }
+  },
+  {
+    "foodId": 158,
+    "nameKo": "알탕",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 424.13,
+      "carbG": 49.52,
+      "proteinG": 49.21,
+      "fatG": 6.98,
+      "sodiumMg": 2393.29
+    }
+  },
+  {
+    "foodId": 159,
+    "nameKo": "연포탕",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 541.19,
+      "carbG": 21.64,
+      "proteinG": 91.65,
+      "fatG": 9.2,
+      "sodiumMg": 2307.07
+    }
+  },
+  {
+    "foodId": 160,
+    "nameKo": "오리탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 480.82,
+      "carbG": 24.16,
+      "proteinG": 43.21,
+      "fatG": 21.64,
+      "sodiumMg": 1849.93
+    }
+  },
+  {
+    "foodId": 161,
+    "nameKo": "추어탕",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 338.67,
+      "carbG": 24.42,
+      "proteinG": 37.37,
+      "fatG": 11.51,
+      "sodiumMg": 2077.15
+    }
+  },
+  {
+    "foodId": 162,
+    "nameKo": "해물탕",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 272.26,
+      "carbG": 19.58,
+      "proteinG": 41.74,
+      "fatG": 3.38,
+      "sodiumMg": 2071.99
+    }
+  },
+  {
+    "foodId": 163,
+    "nameKo": "닭개장",
+    "servingSizeG": 700,
+    "nutrition": {
+      "basisG": 700,
+      "kcal": 317.07,
+      "carbG": 19.18,
+      "proteinG": 33.74,
+      "fatG": 14.95,
+      "sodiumMg": 1786.03
+    }
+  },
+  {
+    "foodId": 164,
+    "nameKo": "육개장",
+    "servingSizeG": 440,
+    "nutrition": {
+      "basisG": 440,
+      "kcal": 137.86,
+      "carbG": 11.62,
+      "proteinG": 13.44,
+      "fatG": 5.87,
+      "sodiumMg": 1112.78
+    }
+  },
+  {
+    "foodId": 165,
+    "nameKo": "뼈해장국",
+    "servingSizeG": 1000,
+    "nutrition": {
+      "basisG": 1000,
+      "kcal": 692.93,
+      "carbG": 25.42,
+      "proteinG": 67.92,
+      "fatG": 37.16,
+      "sodiumMg": 3192.46
+    }
+  },
+  {
+    "foodId": 166,
+    "nameKo": "미역오이냉국",
+    "servingSizeG": 450,
+    "nutrition": {
+      "basisG": 450,
+      "kcal": 77.35,
+      "carbG": 19.74,
+      "proteinG": 5.61,
+      "fatG": 1.35,
+      "sodiumMg": 1483.6
+    }
+  },
+  {
+    "foodId": 167,
+    "nameKo": "고등어찌개",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 605.31,
+      "carbG": 32.03,
+      "proteinG": 59.16,
+      "fatG": 28.2,
+      "sodiumMg": 2599.71
+    }
+  },
+  {
+    "foodId": 168,
+    "nameKo": "꽁치찌개",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 356.63,
+      "carbG": 14.48,
+      "proteinG": 29.51,
+      "fatG": 20.69,
+      "sodiumMg": 1296.33
+    }
+  },
+  {
+    "foodId": 169,
+    "nameKo": "동태찌개",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 369.69,
+      "carbG": 18.94,
+      "proteinG": 59.57,
+      "fatG": 7.8,
+      "sodiumMg": 2487.54
+    }
+  },
+  {
+    "foodId": 170,
+    "nameKo": "부대찌개",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 525.98,
+      "carbG": 46.81,
+      "proteinG": 27.71,
+      "fatG": 28.48,
+      "sodiumMg": 2689.19
+    }
+  },
+  {
+    "foodId": 171,
+    "nameKo": "된장찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 147.06,
+      "carbG": 15.98,
+      "proteinG": 11.71,
+      "fatG": 5.27,
+      "sodiumMg": 2021.78
+    }
+  },
+  {
+    "foodId": 172,
+    "nameKo": "청국장찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 275.46,
+      "carbG": 14.97,
+      "proteinG": 25.84,
+      "fatG": 14.43,
+      "sodiumMg": 1839.75
+    }
+  },
+  {
+    "foodId": 173,
+    "nameKo": "두부전골",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 315.11,
+      "carbG": 16.2,
+      "proteinG": 29.15,
+      "fatG": 19.15,
+      "sodiumMg": 1651.53
+    }
+  },
+  {
+    "foodId": 174,
+    "nameKo": "곱창전골",
+    "servingSizeG": 600,
+    "nutrition": {
+      "basisG": 600,
+      "kcal": 532.65,
+      "carbG": 26.89,
+      "proteinG": 38.35,
+      "fatG": 34.73,
+      "sodiumMg": 1750.42
+    }
+  },
+  {
+    "foodId": 175,
+    "nameKo": "소고기전골",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 203.22,
+      "carbG": 16.55,
+      "proteinG": 19.47,
+      "fatG": 7.54,
+      "sodiumMg": 1090.15
+    }
+  },
+  {
+    "foodId": 176,
+    "nameKo": "국수전골",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 643.16,
+      "carbG": 66.93,
+      "proteinG": 45.29,
+      "fatG": 22.39,
+      "sodiumMg": 1524.63
+    }
+  },
+  {
+    "foodId": 177,
+    "nameKo": "돼지고기김치찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 246.29,
+      "carbG": 9.33,
+      "proteinG": 15.5,
+      "fatG": 18.26,
+      "sodiumMg": 1961.48
+    }
+  },
+  {
+    "foodId": 178,
+    "nameKo": "버섯찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 171.86,
+      "carbG": 15.26,
+      "proteinG": 16.64,
+      "fatG": 7.52,
+      "sodiumMg": 1267.81
+    }
+  },
+  {
+    "foodId": 179,
+    "nameKo": "참치김치찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 193.58,
+      "carbG": 13.33,
+      "proteinG": 16.86,
+      "fatG": 10.89,
+      "sodiumMg": 2604.45
+    }
+  },
+  {
+    "foodId": 180,
+    "nameKo": "순두부찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 198.47,
+      "carbG": 8.78,
+      "proteinG": 14.72,
+      "fatG": 14.03,
+      "sodiumMg": 1331.31
+    }
+  },
+  {
+    "foodId": 181,
+    "nameKo": "콩비지찌개",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 248.66,
+      "carbG": 24.52,
+      "proteinG": 15.96,
+      "fatG": 12.81,
+      "sodiumMg": 1206.33
+    }
+  },
+  {
+    "foodId": 182,
+    "nameKo": "햄김치찌개",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 190.47,
+      "carbG": 15.44,
+      "proteinG": 11.63,
+      "fatG": 10.68,
+      "sodiumMg": 1527.82
+    }
+  },
+  {
+    "foodId": 183,
+    "nameKo": "호박찌개",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 98.3,
+      "carbG": 12.74,
+      "proteinG": 7.78,
+      "fatG": 2.34,
+      "sodiumMg": 1028.15
+    }
+  },
+  {
+    "foodId": 184,
+    "nameKo": "고추장찌개",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 263.44,
+      "carbG": 20.08,
+      "proteinG": 25.62,
+      "fatG": 12.35,
+      "sodiumMg": 935.15
+    }
+  },
+  {
+    "foodId": 185,
+    "nameKo": "대구찜",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 372.68,
+      "carbG": 26.42,
+      "proteinG": 54.08,
+      "fatG": 8.43,
+      "sodiumMg": 1888.04
+    }
+  },
+  {
+    "foodId": 186,
+    "nameKo": "도미찜",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 126.31,
+      "carbG": 0.76,
+      "proteinG": 21.01,
+      "fatG": 3.68,
+      "sodiumMg": 882.04
+    }
+  },
+  {
+    "foodId": 187,
+    "nameKo": "문어숙회",
+    "servingSizeG": 80,
+    "nutrition": {
+      "basisG": 80,
+      "kcal": 67.49,
+      "carbG": 0.18,
+      "proteinG": 14.14,
+      "fatG": 0.73,
+      "sodiumMg": 222.83
+    }
+  },
+  {
+    "foodId": 188,
+    "nameKo": "아귀찜",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 310.7,
+      "carbG": 17.59,
+      "proteinG": 48.85,
+      "fatG": 6.68,
+      "sodiumMg": 1463.31
+    }
+  },
+  {
+    "foodId": 189,
+    "nameKo": "조기찜",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 185.25,
+      "carbG": 1.81,
+      "proteinG": 22.27,
+      "fatG": 9.2,
+      "sodiumMg": 631.89
+    }
+  },
+  {
+    "foodId": 190,
+    "nameKo": "참꼬막",
+    "servingSizeG": 80,
+    "nutrition": {
+      "basisG": 80,
+      "kcal": 89.77,
+      "carbG": 4.92,
+      "proteinG": 12.98,
+      "fatG": 2.17,
+      "sodiumMg": 400.23
+    }
+  },
+  {
+    "foodId": 191,
+    "nameKo": "해물찜",
+    "servingSizeG": 500,
+    "nutrition": {
+      "basisG": 500,
+      "kcal": 397.37,
+      "carbG": 36.02,
+      "proteinG": 50.28,
+      "fatG": 8.94,
+      "sodiumMg": 2213.44
+    }
+  },
+  {
+    "foodId": 192,
+    "nameKo": "소갈비찜",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 500.45,
+      "carbG": 11.31,
+      "proteinG": 42.55,
+      "fatG": 29.17,
+      "sodiumMg": 768.42
+    }
+  },
+  {
+    "foodId": 193,
+    "nameKo": "돼지갈비찜",
+    "servingSizeG": 170.1,
+    "nutrition": {
+      "basisG": 170.1,
+      "kcal": 249.7,
+      "carbG": 8.82,
+      "proteinG": 20.57,
+      "fatG": 14.42,
+      "sodiumMg": 946.68
+    }
+  },
+  {
+    "foodId": 194,
+    "nameKo": "돼지고기수육",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 1218.19,
+      "carbG": 8.69,
+      "proteinG": 61.47,
+      "fatG": 99.52,
+      "sodiumMg": 389.53
+    }
+  },
+  {
+    "foodId": 195,
+    "nameKo": "찜닭",
+    "servingSizeG": 1500,
+    "nutrition": {
+      "basisG": 1500,
+      "kcal": 1358.38,
+      "carbG": 140.64,
+      "proteinG": 114.9,
+      "fatG": 36.54,
+      "sodiumMg": 5290.09
+    }
+  },
+  {
+    "foodId": 196,
+    "nameKo": "족발",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 381.57,
+      "carbG": 32.3,
+      "proteinG": 26.02,
+      "fatG": 16.62,
+      "sodiumMg": 839.14
+    }
+  },
+  {
+    "foodId": 197,
+    "nameKo": "달걀찜",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 190,
+      "carbG": 4.81,
+      "proteinG": 16.2,
+      "fatG": 10.91,
+      "sodiumMg": 860.32
+    }
+  },
+  {
+    "foodId": 198,
+    "nameKo": "닭갈비",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 562.1,
+      "carbG": 24.54,
+      "proteinG": 52.3,
+      "fatG": 28.89,
+      "sodiumMg": 975.55
+    }
+  },
+  {
+    "foodId": 199,
+    "nameKo": "닭꼬치",
+    "servingSizeG": 70,
+    "nutrition": {
+      "basisG": 70,
+      "kcal": 177.51,
+      "carbG": 12.9,
+      "proteinG": 12.35,
+      "fatG": 7.9,
+      "sodiumMg": 287.26
+    }
+  },
+  {
+    "foodId": 200,
+    "nameKo": "돼지갈비",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 248.52,
+      "carbG": 7.6,
+      "proteinG": 19.95,
+      "fatG": 14.7,
+      "sodiumMg": 344.89
+    }
+  },
+  {
+    "foodId": 201,
+    "nameKo": "떡갈비",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 762.99,
+      "carbG": 26.61,
+      "proteinG": 43.09,
+      "fatG": 51.58,
+      "sodiumMg": 838.84
+    }
+  },
+  {
+    "foodId": 202,
+    "nameKo": "불고기",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 386.79,
+      "carbG": 13.05,
+      "proteinG": 32.9,
+      "fatG": 21.78,
+      "sodiumMg": 632.54
+    }
+  },
+  {
+    "foodId": 203,
+    "nameKo": "소곱창구이",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 639.11,
+      "carbG": 6.51,
+      "proteinG": 35.62,
+      "fatG": 51.71,
+      "sodiumMg": 332.72
+    }
+  },
+  {
+    "foodId": 204,
+    "nameKo": "소양념갈비구이",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 986.92,
+      "carbG": 27.74,
+      "proteinG": 61.97,
+      "fatG": 66.48,
+      "sodiumMg": 1272.34
+    }
+  },
+  {
+    "foodId": 205,
+    "nameKo": "소불고기",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 174.73,
+      "carbG": 19.63,
+      "proteinG": 14.22,
+      "fatG": 4.68,
+      "sodiumMg": 828.15
+    }
+  },
+  {
+    "foodId": 206,
+    "nameKo": "양념왕갈비",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 485.51,
+      "carbG": 15.04,
+      "proteinG": 29.33,
+      "fatG": 33.71,
+      "sodiumMg": 533.19
+    }
+  },
+  {
+    "foodId": 207,
+    "nameKo": "햄버거스테이크",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 436.75,
+      "carbG": 21.35,
+      "proteinG": 24.92,
+      "fatG": 28.05,
+      "sodiumMg": 920.26
+    }
+  },
+  {
+    "foodId": 208,
+    "nameKo": "훈제오리",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 789.96,
+      "carbG": 11.83,
+      "proteinG": 38.16,
+      "fatG": 64.65,
+      "sodiumMg": 1216.98
+    }
+  },
+  {
+    "foodId": 209,
+    "nameKo": "치킨데리야끼",
+    "servingSizeG": 340,
+    "nutrition": {
+      "basisG": 340,
+      "kcal": 692.52,
+      "carbG": 50.73,
+      "proteinG": 47.34,
+      "fatG": 32.19,
+      "sodiumMg": 865.98
+    }
+  },
+  {
+    "foodId": 210,
+    "nameKo": "치킨윙",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 219.42,
+      "carbG": 9.97,
+      "proteinG": 11.41,
+      "fatG": 14.23,
+      "sodiumMg": 351.39
+    }
+  },
+  {
+    "foodId": 211,
+    "nameKo": "더덕구이",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 183.74,
+      "carbG": 31.78,
+      "proteinG": 5.8,
+      "fatG": 5.62,
+      "sodiumMg": 745.78
+    }
+  },
+  {
+    "foodId": 212,
+    "nameKo": "양배추구이",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 60.93,
+      "carbG": 7.62,
+      "proteinG": 2.71,
+      "fatG": 2.65,
+      "sodiumMg": 242.34
+    }
+  },
+  {
+    "foodId": 213,
+    "nameKo": "두부구이",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 90.67,
+      "carbG": 1.53,
+      "proteinG": 9.41,
+      "fatG": 6.27,
+      "sodiumMg": 164.39
+    }
+  },
+  {
+    "foodId": 214,
+    "nameKo": "삼치구이",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 355.71,
+      "carbG": 8.48,
+      "proteinG": 37.83,
+      "fatG": 18.01,
+      "sodiumMg": 797.71
+    }
+  },
+  {
+    "foodId": 215,
+    "nameKo": "가자미전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 220.46,
+      "carbG": 6.68,
+      "proteinG": 29.97,
+      "fatG": 7.12,
+      "sodiumMg": 814.37
+    }
+  },
+  {
+    "foodId": 216,
+    "nameKo": "굴전",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 192.81,
+      "carbG": 13.92,
+      "proteinG": 12.56,
+      "fatG": 9.07,
+      "sodiumMg": 331.02
+    }
+  },
+  {
+    "foodId": 217,
+    "nameKo": "동태전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 265.25,
+      "carbG": 11.48,
+      "proteinG": 19.87,
+      "fatG": 16.14,
+      "sodiumMg": 672.98
+    }
+  },
+  {
+    "foodId": 218,
+    "nameKo": "해물파전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 267.23,
+      "carbG": 27.68,
+      "proteinG": 12.94,
+      "fatG": 12.57,
+      "sodiumMg": 356.43
+    }
+  },
+  {
+    "foodId": 219,
+    "nameKo": "동그랑땡",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 312.41,
+      "carbG": 14.71,
+      "proteinG": 19.67,
+      "fatG": 18.72,
+      "sodiumMg": 579.81
+    }
+  },
+  {
+    "foodId": 220,
+    "nameKo": "햄부침",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 232.6,
+      "carbG": 9.73,
+      "proteinG": 13.07,
+      "fatG": 15.48,
+      "sodiumMg": 774.68
+    }
+  },
+  {
+    "foodId": 221,
+    "nameKo": "육전",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 197.1,
+      "carbG": 6.72,
+      "proteinG": 19.58,
+      "fatG": 9.51,
+      "sodiumMg": 248.68
+    }
+  },
+  {
+    "foodId": 222,
+    "nameKo": "감자전",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 366.16,
+      "carbG": 53.81,
+      "proteinG": 9.67,
+      "fatG": 13.61,
+      "sodiumMg": 456.53
+    }
+  },
+  {
+    "foodId": 223,
+    "nameKo": "고추전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 261.44,
+      "carbG": 17.78,
+      "proteinG": 13.94,
+      "fatG": 14.86,
+      "sodiumMg": 359.88
+    }
+  },
+  {
+    "foodId": 224,
+    "nameKo": "김치전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 285.73,
+      "carbG": 32.07,
+      "proteinG": 13.17,
+      "fatG": 12.48,
+      "sodiumMg": 785.6
+    }
+  },
+  {
+    "foodId": 225,
+    "nameKo": "깻잎전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 357.62,
+      "carbG": 16.65,
+      "proteinG": 18.3,
+      "fatG": 24.64,
+      "sodiumMg": 464.94
+    }
+  },
+  {
+    "foodId": 226,
+    "nameKo": "녹두빈대떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 200.71,
+      "carbG": 18.64,
+      "proteinG": 9.96,
+      "fatG": 8.32,
+      "sodiumMg": 246.03
+    }
+  },
+  {
+    "foodId": 227,
+    "nameKo": "미나리전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 215.86,
+      "carbG": 30.1,
+      "proteinG": 6.09,
+      "fatG": 8.63,
+      "sodiumMg": 235.65
+    }
+  },
+  {
+    "foodId": 228,
+    "nameKo": "배추전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 241.01,
+      "carbG": 32.51,
+      "proteinG": 6.41,
+      "fatG": 10.49,
+      "sodiumMg": 355.98
+    }
+  },
+  {
+    "foodId": 229,
+    "nameKo": "버섯전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 239.68,
+      "carbG": 18.61,
+      "proteinG": 11.93,
+      "fatG": 12.93,
+      "sodiumMg": 307.92
+    }
+  },
+  {
+    "foodId": 230,
+    "nameKo": "부추전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 241.18,
+      "carbG": 32.01,
+      "proteinG": 7.14,
+      "fatG": 9.5,
+      "sodiumMg": 255.16
+    }
+  },
+  {
+    "foodId": 231,
+    "nameKo": "야채전",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 194.94,
+      "carbG": 24.97,
+      "proteinG": 4.95,
+      "fatG": 8.78,
+      "sodiumMg": 322.92
+    }
+  },
+  {
+    "foodId": 232,
+    "nameKo": "파전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 280.55,
+      "carbG": 37.46,
+      "proteinG": 7.73,
+      "fatG": 12.04,
+      "sodiumMg": 338
+    }
+  },
+  {
+    "foodId": 233,
+    "nameKo": "호박부침개",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 130.72,
+      "carbG": 8.67,
+      "proteinG": 3.37,
+      "fatG": 9.24,
+      "sodiumMg": 172.03
+    }
+  },
+  {
+    "foodId": 234,
+    "nameKo": "호박전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 215.28,
+      "carbG": 16.56,
+      "proteinG": 6.59,
+      "fatG": 14.42,
+      "sodiumMg": 274.63
+    }
+  },
+  {
+    "foodId": 235,
+    "nameKo": "달걀말이",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 172.24,
+      "carbG": 4.67,
+      "proteinG": 12.04,
+      "fatG": 11.23,
+      "sodiumMg": 323.32
+    }
+  },
+  {
+    "foodId": 236,
+    "nameKo": "두부부침",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 134.88,
+      "carbG": 4.29,
+      "proteinG": 9.92,
+      "fatG": 8.76,
+      "sodiumMg": 199.83
+    }
+  },
+  {
+    "foodId": 237,
+    "nameKo": "두부전",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 253.89,
+      "carbG": 8.08,
+      "proteinG": 18.66,
+      "fatG": 18.02,
+      "sodiumMg": 500.53
+    }
+  },
+  {
+    "foodId": 238,
+    "nameKo": "건새우볶음",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 69.19,
+      "carbG": 4.81,
+      "proteinG": 7.22,
+      "fatG": 2.3,
+      "sodiumMg": 193.09
+    }
+  },
+  {
+    "foodId": 239,
+    "nameKo": "낙지볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 180.59,
+      "carbG": 23.51,
+      "proteinG": 17.87,
+      "fatG": 3,
+      "sodiumMg": 868.88
+    }
+  },
+  {
+    "foodId": 240,
+    "nameKo": "멸치볶음",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 69.22,
+      "carbG": 5.69,
+      "proteinG": 6.97,
+      "fatG": 2.04,
+      "sodiumMg": 274.1
+    }
+  },
+  {
+    "foodId": 241,
+    "nameKo": "어묵볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 281.54,
+      "carbG": 36.28,
+      "proteinG": 18.04,
+      "fatG": 8.08,
+      "sodiumMg": 1283.83
+    }
+  },
+  {
+    "foodId": 242,
+    "nameKo": "오징어볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 243.7,
+      "carbG": 27.42,
+      "proteinG": 20.43,
+      "fatG": 6.84,
+      "sodiumMg": 1025.86
+    }
+  },
+  {
+    "foodId": 243,
+    "nameKo": "오징어채볶음",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 55.71,
+      "carbG": 7,
+      "proteinG": 5.39,
+      "fatG": 0.69,
+      "sodiumMg": 240.96
+    }
+  },
+  {
+    "foodId": 244,
+    "nameKo": "주꾸미볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 211.81,
+      "carbG": 21.69,
+      "proteinG": 20.16,
+      "fatG": 6.11,
+      "sodiumMg": 969.88
+    }
+  },
+  {
+    "foodId": 245,
+    "nameKo": "해물볶음",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 420.53,
+      "carbG": 36.53,
+      "proteinG": 37.48,
+      "fatG": 15.32,
+      "sodiumMg": 1647.02
+    }
+  },
+  {
+    "foodId": 246,
+    "nameKo": "감자볶음",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 57.8,
+      "carbG": 8.23,
+      "proteinG": 1.34,
+      "fatG": 2.53,
+      "sodiumMg": 219.94
+    }
+  },
+  {
+    "foodId": 247,
+    "nameKo": "김치볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 189.97,
+      "carbG": 21.83,
+      "proteinG": 5.29,
+      "fatG": 12.13,
+      "sodiumMg": 1513.41
+    }
+  },
+  {
+    "foodId": 248,
+    "nameKo": "깻잎나물볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 212.39,
+      "carbG": 17.33,
+      "proteinG": 8.03,
+      "fatG": 16.37,
+      "sodiumMg": 1046.43
+    }
+  },
+  {
+    "foodId": 249,
+    "nameKo": "느타리버섯볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 133.32,
+      "carbG": 14.22,
+      "proteinG": 4.41,
+      "fatG": 8.93,
+      "sodiumMg": 625.25
+    }
+  },
+  {
+    "foodId": 250,
+    "nameKo": "두부김치",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 292.42,
+      "carbG": 13.84,
+      "proteinG": 19.15,
+      "fatG": 21.32,
+      "sodiumMg": 1033.85
+    }
+  },
+  {
+    "foodId": 251,
+    "nameKo": "머위나물볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 102.99,
+      "carbG": 7.71,
+      "proteinG": 4.3,
+      "fatG": 7.95,
+      "sodiumMg": 696.91
+    }
+  },
+  {
+    "foodId": 252,
+    "nameKo": "양송이버섯볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 132.42,
+      "carbG": 10.55,
+      "proteinG": 5.46,
+      "fatG": 9.79,
+      "sodiumMg": 520.11
+    }
+  },
+  {
+    "foodId": 253,
+    "nameKo": "표고버섯볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 143.59,
+      "carbG": 14.28,
+      "proteinG": 4.01,
+      "fatG": 7.36,
+      "sodiumMg": 563.59
+    }
+  },
+  {
+    "foodId": 254,
+    "nameKo": "고추잡채",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 264.22,
+      "carbG": 22.11,
+      "proteinG": 12.86,
+      "fatG": 12.71,
+      "sodiumMg": 850.31
+    }
+  },
+  {
+    "foodId": 255,
+    "nameKo": "호박볶음",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 29.19,
+      "carbG": 3.09,
+      "proteinG": 0.77,
+      "fatG": 2.01,
+      "sodiumMg": 223.28
+    }
+  },
+  {
+    "foodId": 256,
+    "nameKo": "돼지고기볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 353.13,
+      "carbG": 15.33,
+      "proteinG": 25.75,
+      "fatG": 20.94,
+      "sodiumMg": 1060.33
+    }
+  },
+  {
+    "foodId": 257,
+    "nameKo": "돼지껍데기볶음",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 346.14,
+      "carbG": 22.73,
+      "proteinG": 22.39,
+      "fatG": 19.23,
+      "sodiumMg": 759.29
+    }
+  },
+  {
+    "foodId": 258,
+    "nameKo": "소세지볶음",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 476.04,
+      "carbG": 28.81,
+      "proteinG": 17.04,
+      "fatG": 33.24,
+      "sodiumMg": 1409.05
+    }
+  },
+  {
+    "foodId": 259,
+    "nameKo": "순대볶음",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 579.56,
+      "carbG": 70.96,
+      "proteinG": 17.58,
+      "fatG": 25.61,
+      "sodiumMg": 1379.55
+    }
+  },
+  {
+    "foodId": 260,
+    "nameKo": "오리불고기",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 559.93,
+      "carbG": 24.47,
+      "proteinG": 38.16,
+      "fatG": 34.25,
+      "sodiumMg": 854.07
+    }
+  },
+  {
+    "foodId": 261,
+    "nameKo": "오삼불고기",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 356.94,
+      "carbG": 21.46,
+      "proteinG": 23.35,
+      "fatG": 20.24,
+      "sodiumMg": 870.4
+    }
+  },
+  {
+    "foodId": 262,
+    "nameKo": "떡볶이",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 300.76,
+      "carbG": 58.85,
+      "proteinG": 8.72,
+      "fatG": 2.96,
+      "sodiumMg": 862.23
+    }
+  },
+  {
+    "foodId": 263,
+    "nameKo": "라볶이",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 266.03,
+      "carbG": 41.13,
+      "proteinG": 7.96,
+      "fatG": 9.59,
+      "sodiumMg": 836.24
+    }
+  },
+  {
+    "foodId": 264,
+    "nameKo": "마파두부",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 226.92,
+      "carbG": 10.99,
+      "proteinG": 16.85,
+      "fatG": 12.01,
+      "sodiumMg": 647.45
+    }
+  },
+  {
+    "foodId": 265,
+    "nameKo": "가자미조림",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 301.29,
+      "carbG": 20.34,
+      "proteinG": 40.7,
+      "fatG": 6.9,
+      "sodiumMg": 1621.23
+    }
+  },
+  {
+    "foodId": 266,
+    "nameKo": "갈치조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 99.39,
+      "carbG": 5.49,
+      "proteinG": 10.68,
+      "fatG": 3.92,
+      "sodiumMg": 463.82
+    }
+  },
+  {
+    "foodId": 267,
+    "nameKo": "고등어조림",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 459.33,
+      "carbG": 10.96,
+      "proteinG": 45.37,
+      "fatG": 25.35,
+      "sodiumMg": 1177.96
+    }
+  },
+  {
+    "foodId": 268,
+    "nameKo": "꽁치조림",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 280.09,
+      "carbG": 8.36,
+      "proteinG": 22.59,
+      "fatG": 16.67,
+      "sodiumMg": 679.42
+    }
+  },
+  {
+    "foodId": 269,
+    "nameKo": "동태조림",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 270.61,
+      "carbG": 16.77,
+      "proteinG": 39.03,
+      "fatG": 4.09,
+      "sodiumMg": 1440.17
+    }
+  },
+  {
+    "foodId": 270,
+    "nameKo": "북어조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 184.58,
+      "carbG": 15.66,
+      "proteinG": 23.88,
+      "fatG": 3.04,
+      "sodiumMg": 761.39
+    }
+  },
+  {
+    "foodId": 271,
+    "nameKo": "조기조림",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 378.26,
+      "carbG": 14.24,
+      "proteinG": 41.43,
+      "fatG": 16.26,
+      "sodiumMg": 1682.9
+    }
+  },
+  {
+    "foodId": 272,
+    "nameKo": "코다리조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 146.67,
+      "carbG": 4.57,
+      "proteinG": 18.46,
+      "fatG": 5.62,
+      "sodiumMg": 433.18
+    }
+  },
+  {
+    "foodId": 273,
+    "nameKo": "달걀장조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 133.73,
+      "carbG": 10.03,
+      "proteinG": 8.75,
+      "fatG": 6.4,
+      "sodiumMg": 636.61
+    }
+  },
+  {
+    "foodId": 274,
+    "nameKo": "메추리알장조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 205.08,
+      "carbG": 7.36,
+      "proteinG": 12.11,
+      "fatG": 13.69,
+      "sodiumMg": 758.9
+    }
+  },
+  {
+    "foodId": 275,
+    "nameKo": "돼지고기메추리알장조림",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 62.97,
+      "carbG": 3.14,
+      "proteinG": 7.62,
+      "fatG": 2.11,
+      "sodiumMg": 555.78
+    }
+  },
+  {
+    "foodId": 276,
+    "nameKo": "소고기메추리알장조림",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 61.22,
+      "carbG": 3.45,
+      "proteinG": 6.67,
+      "fatG": 2.21,
+      "sodiumMg": 608.29
+    }
+  },
+  {
+    "foodId": 277,
+    "nameKo": "고추조림",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 105.88,
+      "carbG": 14.83,
+      "proteinG": 2.86,
+      "fatG": 4.18,
+      "sodiumMg": 802.46
+    }
+  },
+  {
+    "foodId": 278,
+    "nameKo": "감자조림",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 39.01,
+      "carbG": 8.4,
+      "proteinG": 1.55,
+      "fatG": 0.2,
+      "sodiumMg": 265.92
+    }
+  },
+  {
+    "foodId": 279,
+    "nameKo": "우엉조림",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 68.5,
+      "carbG": 15.51,
+      "proteinG": 1.1,
+      "fatG": 0.33,
+      "sodiumMg": 242.28
+    }
+  },
+  {
+    "foodId": 280,
+    "nameKo": "알감자조림",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 56.23,
+      "carbG": 10.48,
+      "proteinG": 1.38,
+      "fatG": 1.26,
+      "sodiumMg": 241.73
+    }
+  },
+  {
+    "foodId": 281,
+    "nameKo": "(검은)콩조림",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 56.83,
+      "carbG": 6.98,
+      "proteinG": 3.85,
+      "fatG": 2.09,
+      "sodiumMg": 102.85
+    }
+  },
+  {
+    "foodId": 282,
+    "nameKo": "콩조림",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 59.22,
+      "carbG": 7.75,
+      "proteinG": 3.57,
+      "fatG": 1.94,
+      "sodiumMg": 234.7
+    }
+  },
+  {
+    "foodId": 283,
+    "nameKo": "두부고추장조림",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 67.14,
+      "carbG": 4.03,
+      "proteinG": 5.14,
+      "fatG": 4,
+      "sodiumMg": 199.23
+    }
+  },
+  {
+    "foodId": 284,
+    "nameKo": "땅콩조림",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 80.42,
+      "carbG": 6.54,
+      "proteinG": 2.91,
+      "fatG": 5.11,
+      "sodiumMg": 154.25
+    }
+  },
+  {
+    "foodId": 285,
+    "nameKo": "미꾸라지튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 382.13,
+      "carbG": 30.57,
+      "proteinG": 12.69,
+      "fatG": 22.54,
+      "sodiumMg": 323.26
+    }
+  },
+  {
+    "foodId": 286,
+    "nameKo": "새우튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 311.26,
+      "carbG": 21.83,
+      "proteinG": 11.83,
+      "fatG": 19.64,
+      "sodiumMg": 553.89
+    }
+  },
+  {
+    "foodId": 287,
+    "nameKo": "생선가스",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 646.21,
+      "carbG": 57.38,
+      "proteinG": 24.5,
+      "fatG": 37.09,
+      "sodiumMg": 817.27
+    }
+  },
+  {
+    "foodId": 288,
+    "nameKo": "쥐포튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 353.33,
+      "carbG": 37.99,
+      "proteinG": 11.21,
+      "fatG": 16.54,
+      "sodiumMg": 423.8
+    }
+  },
+  {
+    "foodId": 289,
+    "nameKo": "오징어튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 308.43,
+      "carbG": 26.02,
+      "proteinG": 13.46,
+      "fatG": 16.5,
+      "sodiumMg": 361.57
+    }
+  },
+  {
+    "foodId": 290,
+    "nameKo": "닭강정",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 323.25,
+      "carbG": 24.21,
+      "proteinG": 18.34,
+      "fatG": 15.56,
+      "sodiumMg": 413.14
+    }
+  },
+  {
+    "foodId": 291,
+    "nameKo": "닭튀김",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 909.81,
+      "carbG": 45.92,
+      "proteinG": 54.55,
+      "fatG": 52.34,
+      "sodiumMg": 1150.13
+    }
+  },
+  {
+    "foodId": 292,
+    "nameKo": "돈가스",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 620.64,
+      "carbG": 36.56,
+      "proteinG": 27.78,
+      "fatG": 39.12,
+      "sodiumMg": 557.09
+    }
+  },
+  {
+    "foodId": 293,
+    "nameKo": "모래집튀김",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 457.35,
+      "carbG": 31.86,
+      "proteinG": 22.29,
+      "fatG": 25.89,
+      "sodiumMg": 297.01
+    }
+  },
+  {
+    "foodId": 294,
+    "nameKo": "양념치킨",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 567.58,
+      "carbG": 38.84,
+      "proteinG": 30.47,
+      "fatG": 31.15,
+      "sodiumMg": 777.86
+    }
+  },
+  {
+    "foodId": 295,
+    "nameKo": "치즈돈가스",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 758.5,
+      "carbG": 45.48,
+      "proteinG": 36.02,
+      "fatG": 46.15,
+      "sodiumMg": 855.05
+    }
+  },
+  {
+    "foodId": 296,
+    "nameKo": "치킨가스",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 582.01,
+      "carbG": 51.28,
+      "proteinG": 31.03,
+      "fatG": 28.64,
+      "sodiumMg": 748.73
+    }
+  },
+  {
+    "foodId": 297,
+    "nameKo": "탕수육",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 454.44,
+      "carbG": 56.49,
+      "proteinG": 17.06,
+      "fatG": 16.59,
+      "sodiumMg": 403.26
+    }
+  },
+  {
+    "foodId": 298,
+    "nameKo": "깐풍기",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 585.08,
+      "carbG": 43.36,
+      "proteinG": 27.8,
+      "fatG": 33.34,
+      "sodiumMg": 629.27
+    }
+  },
+  {
+    "foodId": 299,
+    "nameKo": "감자튀김",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 462.11,
+      "carbG": 50.1,
+      "proteinG": 6.24,
+      "fatG": 25.76,
+      "sodiumMg": 374.22
+    }
+  },
+  {
+    "foodId": 300,
+    "nameKo": "고구마맛탕",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 490.93,
+      "carbG": 90.19,
+      "proteinG": 3.3,
+      "fatG": 13.53,
+      "sodiumMg": 213.33
+    }
+  },
+  {
+    "foodId": 301,
+    "nameKo": "고구마튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 241.57,
+      "carbG": 34.1,
+      "proteinG": 3.21,
+      "fatG": 10.8,
+      "sodiumMg": 150.64
+    }
+  },
+  {
+    "foodId": 302,
+    "nameKo": "고추튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 198.35,
+      "carbG": 12.74,
+      "proteinG": 6.48,
+      "fatG": 13.63,
+      "sodiumMg": 260.65
+    }
+  },
+  {
+    "foodId": 303,
+    "nameKo": "김말이튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 240.56,
+      "carbG": 32.49,
+      "proteinG": 2.25,
+      "fatG": 12.38,
+      "sodiumMg": 393.02
+    }
+  },
+  {
+    "foodId": 304,
+    "nameKo": "채소튀김",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 311.99,
+      "carbG": 36.35,
+      "proteinG": 3.01,
+      "fatG": 18.53,
+      "sodiumMg": 277.28
+    }
+  },
+  {
+    "foodId": 305,
+    "nameKo": "노각무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 81.35,
+      "carbG": 16.43,
+      "proteinG": 3.09,
+      "fatG": 2.07,
+      "sodiumMg": 822.1
+    }
+  },
+  {
+    "foodId": 306,
+    "nameKo": "단무지무침",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 19.19,
+      "carbG": 3.22,
+      "proteinG": 0.47,
+      "fatG": 0.91,
+      "sodiumMg": 447.86
+    }
+  },
+  {
+    "foodId": 307,
+    "nameKo": "달래나물무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 132.69,
+      "carbG": 25.26,
+      "proteinG": 4.77,
+      "fatG": 3.3,
+      "sodiumMg": 852.99
+    }
+  },
+  {
+    "foodId": 308,
+    "nameKo": "더덕무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 220.89,
+      "carbG": 48.44,
+      "proteinG": 4.89,
+      "fatG": 2.74,
+      "sodiumMg": 1203.58
+    }
+  },
+  {
+    "foodId": 309,
+    "nameKo": "도라지생채",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 165.23,
+      "carbG": 38.59,
+      "proteinG": 4.15,
+      "fatG": 1.71,
+      "sodiumMg": 789.08
+    }
+  },
+  {
+    "foodId": 310,
+    "nameKo": "도토리묵",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 43.05,
+      "carbG": 9.87,
+      "proteinG": 0.4,
+      "fatG": 0.35,
+      "sodiumMg": 116.47
+    }
+  },
+  {
+    "foodId": 311,
+    "nameKo": "마늘쫑무침",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 38.12,
+      "carbG": 9.35,
+      "proteinG": 0.98,
+      "fatG": 0.28,
+      "sodiumMg": 423.46
+    }
+  },
+  {
+    "foodId": 312,
+    "nameKo": "무생채",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 73.68,
+      "carbG": 16,
+      "proteinG": 2.63,
+      "fatG": 1.28,
+      "sodiumMg": 832.19
+    }
+  },
+  {
+    "foodId": 313,
+    "nameKo": "무말랭이",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 39.89,
+      "carbG": 9.63,
+      "proteinG": 1.36,
+      "fatG": 0.34,
+      "sodiumMg": 378.78
+    }
+  },
+  {
+    "foodId": 314,
+    "nameKo": "오이생채",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 23.36,
+      "carbG": 4.63,
+      "proteinG": 0.89,
+      "fatG": 0.5,
+      "sodiumMg": 269.31
+    }
+  },
+  {
+    "foodId": 315,
+    "nameKo": "파무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 124.3,
+      "carbG": 19.47,
+      "proteinG": 3.82,
+      "fatG": 5.41,
+      "sodiumMg": 693.83
+    }
+  },
+  {
+    "foodId": 316,
+    "nameKo": "상추겉절이",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 130.62,
+      "carbG": 17.99,
+      "proteinG": 5.65,
+      "fatG": 6.25,
+      "sodiumMg": 952.32
+    }
+  },
+  {
+    "foodId": 317,
+    "nameKo": "쑥갓나물무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 94.86,
+      "carbG": 8.78,
+      "proteinG": 5.49,
+      "fatG": 6.51,
+      "sodiumMg": 700.12
+    }
+  },
+  {
+    "foodId": 318,
+    "nameKo": "청포묵무침",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 157.61,
+      "carbG": 19.68,
+      "proteinG": 2.96,
+      "fatG": 4.22,
+      "sodiumMg": 756.74
+    }
+  },
+  {
+    "foodId": 319,
+    "nameKo": "해파리냉채",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 87.29,
+      "carbG": 13.83,
+      "proteinG": 6.63,
+      "fatG": 1.55,
+      "sodiumMg": 490.13
+    }
+  },
+  {
+    "foodId": 320,
+    "nameKo": "가지나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 21.87,
+      "carbG": 3.03,
+      "proteinG": 0.73,
+      "fatG": 1.27,
+      "sodiumMg": 159.17
+    }
+  },
+  {
+    "foodId": 321,
+    "nameKo": "고사리나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 43.51,
+      "carbG": 3.8,
+      "proteinG": 1.97,
+      "fatG": 3.26,
+      "sodiumMg": 251.53
+    }
+  },
+  {
+    "foodId": 322,
+    "nameKo": "도라지나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 54.68,
+      "carbG": 5.34,
+      "proteinG": 0.67,
+      "fatG": 3.82,
+      "sodiumMg": 256.67
+    }
+  },
+  {
+    "foodId": 323,
+    "nameKo": "무나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 34.58,
+      "carbG": 3.04,
+      "proteinG": 0.58,
+      "fatG": 2.56,
+      "sodiumMg": 293.52
+    }
+  },
+  {
+    "foodId": 324,
+    "nameKo": "미나리나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 28.34,
+      "carbG": 2.56,
+      "proteinG": 0.99,
+      "fatG": 2.14,
+      "sodiumMg": 165.52
+    }
+  },
+  {
+    "foodId": 325,
+    "nameKo": "숙주나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 19.51,
+      "carbG": 1.56,
+      "proteinG": 1.31,
+      "fatG": 1.35,
+      "sodiumMg": 186.73
+    }
+  },
+  {
+    "foodId": 326,
+    "nameKo": "시금치나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 37.51,
+      "carbG": 3.82,
+      "proteinG": 2.07,
+      "fatG": 2.37,
+      "sodiumMg": 217.26
+    }
+  },
+  {
+    "foodId": 327,
+    "nameKo": "취나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 72.94,
+      "carbG": 3.46,
+      "proteinG": 1.6,
+      "fatG": 6.71,
+      "sodiumMg": 288.65
+    }
+  },
+  {
+    "foodId": 328,
+    "nameKo": "콩나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 24.13,
+      "carbG": 1.14,
+      "proteinG": 1.64,
+      "fatG": 1.98,
+      "sodiumMg": 203.5
+    }
+  },
+  {
+    "foodId": 329,
+    "nameKo": "고구마줄기나물",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 30.44,
+      "carbG": 2.97,
+      "proteinG": 0.63,
+      "fatG": 2.24,
+      "sodiumMg": 255.71
+    }
+  },
+  {
+    "foodId": 330,
+    "nameKo": "우거지나물무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 126.11,
+      "carbG": 10.28,
+      "proteinG": 5.08,
+      "fatG": 8.66,
+      "sodiumMg": 774.55
+    }
+  },
+  {
+    "foodId": 331,
+    "nameKo": "골뱅이무침",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 107.35,
+      "carbG": 15.56,
+      "proteinG": 7.91,
+      "fatG": 2.3,
+      "sodiumMg": 515.92
+    }
+  },
+  {
+    "foodId": 332,
+    "nameKo": "김무침",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 81.01,
+      "carbG": 12.19,
+      "proteinG": 4.71,
+      "fatG": 4.12,
+      "sodiumMg": 498.63
+    }
+  },
+  {
+    "foodId": 333,
+    "nameKo": "미역초무침",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 24.94,
+      "carbG": 5.7,
+      "proteinG": 1.07,
+      "fatG": 0.54,
+      "sodiumMg": 285.8
+    }
+  },
+  {
+    "foodId": 334,
+    "nameKo": "북어채무침",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 332.05,
+      "carbG": 31.33,
+      "proteinG": 37.37,
+      "fatG": 5.8,
+      "sodiumMg": 1048.53
+    }
+  },
+  {
+    "foodId": 335,
+    "nameKo": "회무침",
+    "servingSizeG": 300,
+    "nutrition": {
+      "basisG": 300,
+      "kcal": 311.59,
+      "carbG": 42.88,
+      "proteinG": 27.18,
+      "fatG": 4.26,
+      "sodiumMg": 1253.25
+    }
+  },
+  {
+    "foodId": 336,
+    "nameKo": "쥐치채",
+    "servingSizeG": 20,
+    "nutrition": {
+      "basisG": 20,
+      "kcal": 53.39,
+      "carbG": 10.18,
+      "proteinG": 2.77,
+      "fatG": 0.2,
+      "sodiumMg": 289.45
+    }
+  },
+  {
+    "foodId": 337,
+    "nameKo": "파래무침",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 31.59,
+      "carbG": 5.43,
+      "proteinG": 2.34,
+      "fatG": 0.69,
+      "sodiumMg": 252.05
+    }
+  },
+  {
+    "foodId": 338,
+    "nameKo": "홍어무침",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 193.14,
+      "carbG": 24.9,
+      "proteinG": 21.64,
+      "fatG": 2.27,
+      "sodiumMg": 817.42
+    }
+  },
+  {
+    "foodId": 339,
+    "nameKo": "골뱅이국수무침",
+    "servingSizeG": 230,
+    "nutrition": {
+      "basisG": 230,
+      "kcal": 256.42,
+      "carbG": 39.63,
+      "proteinG": 10.52,
+      "fatG": 7.01,
+      "sodiumMg": 911.74
+    }
+  },
+  {
+    "foodId": 340,
+    "nameKo": "오징어무침",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 249.53,
+      "carbG": 13.55,
+      "proteinG": 38.67,
+      "fatG": 4.19,
+      "sodiumMg": 682.39
+    }
+  },
+  {
+    "foodId": 341,
+    "nameKo": "잡채",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 198.82,
+      "carbG": 37.47,
+      "proteinG": 2.59,
+      "fatG": 4.7,
+      "sodiumMg": 664.75
+    }
+  },
+  {
+    "foodId": 342,
+    "nameKo": "탕평채",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 101.19,
+      "carbG": 10.2,
+      "proteinG": 3.53,
+      "fatG": 3.11,
+      "sodiumMg": 247.42
+    }
+  },
+  {
+    "foodId": 343,
+    "nameKo": "갓김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 27.64,
+      "carbG": 5.21,
+      "proteinG": 1.98,
+      "fatG": 0.7,
+      "sodiumMg": 447.77
+    }
+  },
+  {
+    "foodId": 344,
+    "nameKo": "고들빼기",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 55.39,
+      "carbG": 11.99,
+      "proteinG": 2.21,
+      "fatG": 0.56,
+      "sodiumMg": 733.75
+    }
+  },
+  {
+    "foodId": 345,
+    "nameKo": "깍두기",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 17.99,
+      "carbG": 3.94,
+      "proteinG": 1,
+      "fatG": 0.23,
+      "sodiumMg": 338.88
+    }
+  },
+  {
+    "foodId": 346,
+    "nameKo": "깻잎김치",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 124.49,
+      "carbG": 23.27,
+      "proteinG": 6.1,
+      "fatG": 3.16,
+      "sodiumMg": 1907.64
+    }
+  },
+  {
+    "foodId": 347,
+    "nameKo": "나박김치",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 14.75,
+      "carbG": 2.26,
+      "proteinG": 0.63,
+      "fatG": 0.42,
+      "sodiumMg": 509.47
+    }
+  },
+  {
+    "foodId": 348,
+    "nameKo": "동치미",
+    "servingSizeG": 400,
+    "nutrition": {
+      "basisG": 400,
+      "kcal": 57.69,
+      "carbG": 14.26,
+      "proteinG": 2.7,
+      "fatG": 0.64,
+      "sodiumMg": 2313.58
+    }
+  },
+  {
+    "foodId": 349,
+    "nameKo": "배추겉절이",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 21.24,
+      "carbG": 4.48,
+      "proteinG": 0.94,
+      "fatG": 0.5,
+      "sodiumMg": 325.41
+    }
+  },
+  {
+    "foodId": 350,
+    "nameKo": "배추김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 18.43,
+      "carbG": 4.15,
+      "proteinG": 1.15,
+      "fatG": 0.3,
+      "sodiumMg": 309.53
+    }
+  },
+  {
+    "foodId": 351,
+    "nameKo": "백김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 19.8,
+      "carbG": 4.38,
+      "proteinG": 0.8,
+      "fatG": 0.26,
+      "sodiumMg": 211.72
+    }
+  },
+  {
+    "foodId": 352,
+    "nameKo": "부추김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 32.91,
+      "carbG": 6.29,
+      "proteinG": 1.88,
+      "fatG": 0.57,
+      "sodiumMg": 399.38
+    }
+  },
+  {
+    "foodId": 353,
+    "nameKo": "열무김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 16.29,
+      "carbG": 3.16,
+      "proteinG": 1.34,
+      "fatG": 0.35,
+      "sodiumMg": 308.35
+    }
+  },
+  {
+    "foodId": 354,
+    "nameKo": "열무얼갈이김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 16.57,
+      "carbG": 3.03,
+      "proteinG": 1.27,
+      "fatG": 0.4,
+      "sodiumMg": 344.2
+    }
+  },
+  {
+    "foodId": 355,
+    "nameKo": "오이소박이",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 16.67,
+      "carbG": 2.96,
+      "proteinG": 0.94,
+      "fatG": 0.53,
+      "sodiumMg": 276.19
+    }
+  },
+  {
+    "foodId": 356,
+    "nameKo": "총각김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 17.56,
+      "carbG": 3.44,
+      "proteinG": 1.03,
+      "fatG": 0.37,
+      "sodiumMg": 347.17
+    }
+  },
+  {
+    "foodId": 357,
+    "nameKo": "파김치",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 28.01,
+      "carbG": 5.47,
+      "proteinG": 1.55,
+      "fatG": 0.7,
+      "sodiumMg": 395.86
+    }
+  },
+  {
+    "foodId": 358,
+    "nameKo": "간장게장",
+    "servingSizeG": 250,
+    "nutrition": {
+      "basisG": 250,
+      "kcal": 292.7,
+      "carbG": 13.88,
+      "proteinG": 32.67,
+      "fatG": 2.09,
+      "sodiumMg": 3075.53
+    }
+  },
+  {
+    "foodId": 359,
+    "nameKo": "마늘쫑장아찌",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 28.27,
+      "carbG": 6.19,
+      "proteinG": 1.05,
+      "fatG": 0.13,
+      "sodiumMg": 778.6
+    }
+  },
+  {
+    "foodId": 360,
+    "nameKo": "고추장아찌",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 22.36,
+      "carbG": 4.18,
+      "proteinG": 0.8,
+      "fatG": 0.09,
+      "sodiumMg": 787.3
+    }
+  },
+  {
+    "foodId": 361,
+    "nameKo": "깻잎장아찌",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 33.64,
+      "carbG": 7.87,
+      "proteinG": 2.11,
+      "fatG": 0.36,
+      "sodiumMg": 568.75
+    }
+  },
+  {
+    "foodId": 362,
+    "nameKo": "마늘장아찌",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 16.06,
+      "carbG": 3.07,
+      "proteinG": 0.79,
+      "fatG": 0.02,
+      "sodiumMg": 481.75
+    }
+  },
+  {
+    "foodId": 363,
+    "nameKo": "무장아찌",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 27.34,
+      "carbG": 5.31,
+      "proteinG": 0.57,
+      "fatG": 0.26,
+      "sodiumMg": 933.28
+    }
+  },
+  {
+    "foodId": 364,
+    "nameKo": "양념게장",
+    "servingSizeG": 200,
+    "nutrition": {
+      "basisG": 200,
+      "kcal": 275.55,
+      "carbG": 46.33,
+      "proteinG": 20.41,
+      "fatG": 2.06,
+      "sodiumMg": 1747.84
+    }
+  },
+  {
+    "foodId": 365,
+    "nameKo": "양파장아찌",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 19.72,
+      "carbG": 3.54,
+      "proteinG": 0.58,
+      "fatG": 0.05,
+      "sodiumMg": 423.61
+    }
+  },
+  {
+    "foodId": 366,
+    "nameKo": "오이지",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 11.44,
+      "carbG": 2.39,
+      "proteinG": 1.14,
+      "fatG": 0.31,
+      "sodiumMg": 926
+    }
+  },
+  {
+    "foodId": 367,
+    "nameKo": "무피클",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 17,
+      "carbG": 4.19,
+      "proteinG": 0.4,
+      "fatG": 0.05,
+      "sodiumMg": 6.6
+    }
+  },
+  {
+    "foodId": 368,
+    "nameKo": "오이피클",
+    "servingSizeG": 50,
+    "nutrition": {
+      "basisG": 50,
+      "kcal": 54,
+      "carbG": 14.64,
+      "proteinG": 0.3,
+      "fatG": 0.15,
+      "sodiumMg": 333.6
+    }
+  },
+  {
+    "foodId": 369,
+    "nameKo": "단무지",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 3.9,
+      "carbG": 0.66,
+      "proteinG": 0.11,
+      "fatG": 0.16,
+      "sodiumMg": 173.55
+    }
+  },
+  {
+    "foodId": 370,
+    "nameKo": "오징어젓갈",
+    "servingSizeG": 10,
+    "nutrition": {
+      "basisG": 10,
+      "kcal": 6.83,
+      "carbG": 0.29,
+      "proteinG": 1.24,
+      "fatG": 0.1,
+      "sodiumMg": 179.11
+    }
+  },
+  {
+    "foodId": 371,
+    "nameKo": "명란젓",
+    "servingSizeG": 10,
+    "nutrition": {
+      "basisG": 10,
+      "kcal": 12,
+      "carbG": 0.27,
+      "proteinG": 2.05,
+      "fatG": 0.3,
+      "sodiumMg": 353.1
+    }
+  },
+  {
+    "foodId": 372,
+    "nameKo": "생연어",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 110.29,
+      "carbG": 1,
+      "proteinG": 20.91,
+      "fatG": 1.94,
+      "sodiumMg": 213.06
+    }
+  },
+  {
+    "foodId": 373,
+    "nameKo": "생선물회",
+    "servingSizeG": 800,
+    "nutrition": {
+      "basisG": 800,
+      "kcal": 575.01,
+      "carbG": 81.45,
+      "proteinG": 36.77,
+      "fatG": 14.13,
+      "sodiumMg": 2986.23
+    }
+  },
+  {
+    "foodId": 374,
+    "nameKo": "광어회",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 116.2,
+      "carbG": 9.34,
+      "proteinG": 17.2,
+      "fatG": 1.36,
+      "sodiumMg": 754.4
+    }
+  },
+  {
+    "foodId": 375,
+    "nameKo": "훈제연어",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 169,
+      "carbG": 9.34,
+      "proteinG": 19.28,
+      "fatG": 6.16,
+      "sodiumMg": 1260.8
+    }
+  },
+  {
+    "foodId": 376,
+    "nameKo": "육회",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 236.56,
+      "carbG": 15.95,
+      "proteinG": 25.03,
+      "fatG": 8.05,
+      "sodiumMg": 433.42
+    }
+  },
+  {
+    "foodId": 377,
+    "nameKo": "육사시미",
+    "servingSizeG": 150,
+    "nutrition": {
+      "basisG": 150,
+      "kcal": 203.55,
+      "carbG": 6.96,
+      "proteinG": 29.28,
+      "fatG": 6.07,
+      "sodiumMg": 888.03
+    }
+  },
+  {
+    "foodId": 378,
+    "nameKo": "가래떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 205.04,
+      "carbG": 45.05,
+      "proteinG": 3.52,
+      "fatG": 0.33,
+      "sodiumMg": 254.68
+    }
+  },
+  {
+    "foodId": 379,
+    "nameKo": "경단",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 303.79,
+      "carbG": 67.04,
+      "proteinG": 6.58,
+      "fatG": 0.54,
+      "sodiumMg": 186.36
+    }
+  },
+  {
+    "foodId": 380,
+    "nameKo": "꿀떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 225.92,
+      "carbG": 50.36,
+      "proteinG": 3.24,
+      "fatG": 0.76,
+      "sodiumMg": 251.34
+    }
+  },
+  {
+    "foodId": 381,
+    "nameKo": "시루떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 223.62,
+      "carbG": 49.03,
+      "proteinG": 5.5,
+      "fatG": 0.28,
+      "sodiumMg": 278.95
+    }
+  },
+  {
+    "foodId": 382,
+    "nameKo": "메밀전병",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 166.14,
+      "carbG": 24.82,
+      "proteinG": 5.79,
+      "fatG": 5.5,
+      "sodiumMg": 340.66
+    }
+  },
+  {
+    "foodId": 383,
+    "nameKo": "찰떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 216.19,
+      "carbG": 44.88,
+      "proteinG": 5.81,
+      "fatG": 1.24,
+      "sodiumMg": 236.82
+    }
+  },
+  {
+    "foodId": 384,
+    "nameKo": "무지개떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 218.18,
+      "carbG": 48.7,
+      "proteinG": 4,
+      "fatG": 0.87,
+      "sodiumMg": 277.71
+    }
+  },
+  {
+    "foodId": 385,
+    "nameKo": "백설기",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 218.82,
+      "carbG": 48.2,
+      "proteinG": 4.04,
+      "fatG": 0.79,
+      "sodiumMg": 296.95
+    }
+  },
+  {
+    "foodId": 386,
+    "nameKo": "송편",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 234.9,
+      "carbG": 46.82,
+      "proteinG": 4.17,
+      "fatG": 2.7,
+      "sodiumMg": 236.55
+    }
+  },
+  {
+    "foodId": 387,
+    "nameKo": "수수부꾸미",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 258.99,
+      "carbG": 46.15,
+      "proteinG": 5.5,
+      "fatG": 5.67,
+      "sodiumMg": 270.04
+    }
+  },
+  {
+    "foodId": 388,
+    "nameKo": "수수팥떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 212.73,
+      "carbG": 45.17,
+      "proteinG": 5.98,
+      "fatG": 0.68,
+      "sodiumMg": 236.38
+    }
+  },
+  {
+    "foodId": 389,
+    "nameKo": "쑥떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 238.06,
+      "carbG": 54.64,
+      "proteinG": 4.53,
+      "fatG": 0.45,
+      "sodiumMg": 256.15
+    }
+  },
+  {
+    "foodId": 390,
+    "nameKo": "약식",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 232.21,
+      "carbG": 48.88,
+      "proteinG": 3.83,
+      "fatG": 2.27,
+      "sodiumMg": 290.64
+    }
+  },
+  {
+    "foodId": 391,
+    "nameKo": "인절미",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 214.46,
+      "carbG": 42.55,
+      "proteinG": 6.4,
+      "fatG": 1.76,
+      "sodiumMg": 337.74
+    }
+  },
+  {
+    "foodId": 392,
+    "nameKo": "절편",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 197.81,
+      "carbG": 44.07,
+      "proteinG": 3.06,
+      "fatG": 0.35,
+      "sodiumMg": 266.77
+    }
+  },
+  {
+    "foodId": 393,
+    "nameKo": "증편",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 198.69,
+      "carbG": 44.22,
+      "proteinG": 2.54,
+      "fatG": 0.34,
+      "sodiumMg": 259.04
+    }
+  },
+  {
+    "foodId": 394,
+    "nameKo": "찹쌀떡",
+    "servingSizeG": 100,
+    "nutrition": {
+      "basisG": 100,
+      "kcal": 264.74,
+      "carbG": 62.08,
+      "proteinG": 3.41,
+      "fatG": 0.23,
+      "sodiumMg": 226.38
+    }
+  },
+  {
+    "foodId": 395,
+    "nameKo": "매작과",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 121.48,
+      "carbG": 19.06,
+      "proteinG": 2.55,
+      "fatG": 3.57,
+      "sodiumMg": 31.05
+    }
+  },
+  {
+    "foodId": 396,
+    "nameKo": "다식",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 105.17,
+      "carbG": 20.81,
+      "proteinG": 3.55,
+      "fatG": 1.73,
+      "sodiumMg": 3.85
+    }
+  },
+  {
+    "foodId": 397,
+    "nameKo": "약과",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 113.85,
+      "carbG": 22.18,
+      "proteinG": 2.57,
+      "fatG": 1.24,
+      "sodiumMg": 16.46
+    }
+  },
+  {
+    "foodId": 398,
+    "nameKo": "유과",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 129.06,
+      "carbG": 24.14,
+      "proteinG": 0.36,
+      "fatG": 3.5,
+      "sodiumMg": 7.06
+    }
+  },
+  {
+    "foodId": 399,
+    "nameKo": "산자",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 121.7,
+      "carbG": 24.7,
+      "proteinG": 0.91,
+      "fatG": 1.2,
+      "sodiumMg": 8.01
+    }
+  },
+  {
+    "foodId": 400,
+    "nameKo": "깨강정",
+    "servingSizeG": 30,
+    "nutrition": {
+      "basisG": 30,
+      "kcal": 150.3,
+      "carbG": 13.62,
+      "proteinG": 4.5,
+      "fatG": 9.87,
+      "sodiumMg": 24.3
+    }
+  }
+]

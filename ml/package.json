@@ -1,0 +1,13 @@
+{
+  "name": "food-kcal-ml-tools",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "데이터 변환·학습 보조 스크립트 (앱과 의존성을 분리하려고 따로 둔다)",
+  "scripts": {
+    "build:foods": "node scripts/build_foods_json.mjs"
+  },
+  "dependencies": {
+    "read-excel-file": "^5.8.8"
+  }
+}
