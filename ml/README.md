@@ -60,14 +60,24 @@ python ml/scripts/train_classifier.py --data /content/processed --model-dir /con
 전체(약 6만 장)는 Drive에서 읽는 시간 때문에 4시간 안팎 걸린다. 결과를 **Drive 안**에 쓰면, 런타임이 끊겨도 같은 명령을 다시 실행해서 이어 할 수 있다.
 
 ```bash
-python ml/scripts/prepare_classifier_data.py \
-  --src "/content/drive/MyDrive/음식데이터" \
-  --dst "/content/drive/MyDrive/processed_full" \
-  --workers 12
+# 0) 먼저 이어 하기 시험 (가짜 데이터, 1분 안쪽). "모든 시험 통과"가 나와야 한다
+python ml/scripts/test_prepare_resume.py
+# 1) 전체 실행. 끊기면 같은 명령을 다시 실행한다
+python ml/scripts/prepare_classifier_data.py   --src "/content/drive/MyDrive/음식데이터"   --dst "/content/drive/MyDrive/processed_full"   --workers 12
 ```
 
-- 이미 만든 파일과 `skipped.csv`에 있는 제외 이미지는 건너뛴다. 실행 첫머리에 "이미 완료 / 이전에 제외 / 이번에 처리할 것"이 나온다.
-- 파일은 `.jpg.tmp`로 쓴 뒤 이름을 바꿔서, 쓰다 끊겨도 깨진 `.jpg`가 남지 않는다. 남은 `.tmp`는 무시해도 된다.
-- 이어 할 때 `--limit-per-class`, `--seed`, `--bucket-sec`를 바꾸면 중단한다(분할이 달라져 평가가 오염된다). `--label-map`을 바꿨다면 새 `--dst`를 쓴다.
-- 마지막에 `※ 아직 끝나지 않았습니다`가 나오면 같은 명령을 한 번 더 실행한다.
-- 이 이어 하기 로직은 **실행해 보지 못했다**(이 PC에 Python 없음). 처음에는 `--limit-per-class 5` 같은 작은 값으로 두 번 실행해서 두 번째가 "이번에 처리할 것 0장"이 되는지 확인한다.
+| 상황 | 동작 |
+| --- | --- |
+| 이미 만든 파일 | 건너뛴다. 크기 0인 파일은 다시 만든다 |
+| 제외한 이미지 | `skipped.csv`에 즉시 기록, 다시 처리하지 않는다 |
+| 쓰다 끊긴 파일 | `.jpg.tmp`로 쓴 뒤 이름을 바꿔서 깨진 `.jpg`가 남지 않는다 |
+| train/val/test 배정 | 첫 실행에 `_splits.csv`로 저장하고 그대로 쓴다. Drive 목록이 실행마다 달라도 바뀌지 않는다 |
+| 다른 split 폴더에 같은 사진 | 섞였다고 보고 중단한다 |
+| Drive 일시 오류 | 제외로 기록하지 않고 "다음에 다시 할 것"으로 센다. 다음 실행에서 다시 한다 |
+| 계속 읽히지 않는 파일 | 두세 번 실행해도 같은 수가 남으면 `--give-up-retries`로 한 번 실행해 제외로 기록한다 |
+| 셀 중지 | 진행 중인 몇 장만 마치고 멈춘다(1,000장 단위로 작업을 넣는다) |
+| 설정 변경 | `--limit-per-class`, `--seed`, `--bucket-sec`, `label_map.csv`가 바뀌면 중단한다. 새 `--dst`를 쓴다 |
+
+- 끝나면 `drive.flush_and_unmount()`로 Drive 쓰기를 마무리한다.
+- 2026-10-27 검토에서 고친 것: 이름 대체 판정 정규식이 깨져(`r"d+"`) 다른 코드·`00000000` 상자도 받아들이던 문제, Drive 일시 오류가 영구 제외되거나 실행이 죽던 문제, 재실행 때 배정이 바뀔 수 있던 문제(공유 난수), 셀 중지가 안 되던 문제. **그 이전 스크립트로 만든 결과 폴더는 쓰지 않는다.**
+- 스크립트와 시험은 이 PC(Python 없음)에서 실행해 보지 못했다. Colab에서 0)부터 확인한다.
