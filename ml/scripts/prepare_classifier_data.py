@@ -38,6 +38,7 @@ MARGIN = 0.05       # 상자 둘레 여유 비율
 SPLITS = ("train", "val", "test")
 RATIO = (0.8, 0.1, 0.1)
 BUCKET_SEC = 600
+FALLBACK = "성공(이름대체)"
 
 
 def nfc(s: str) -> str:
@@ -81,20 +82,36 @@ def find_xml_dir(src: Path) -> Path:
 
 
 def food_box(xml_path: Path, code: str):
-    """(w, h, (x0, y0, x1, y1)) — name == code 인 상자 중 가장 큰 것. 없으면 None."""
+    """(w 또는 None, h 또는 None, (x0, y0, x1, y1), 방식) 또는 제외 이유 문자열.
+
+    - name 이 코드와 같은 상자(가장 큰 것) → "코드"
+    - 없으면, name 이 숫자가 아닌 상자가 하나뿐일 때(한글 음식명이나 깨진 글자) → "이름대체"
+      (일부 xml 은 코드 대신 음식명을 쓰고, 한글이 CP949 깨진 글자로 들어 있다)
+    - name 이 다른 8자리 코드이거나 00000000 이면 라벨이 의심스러워 제외한다 → "코드불일치"
+    - <size> 가 없는 xml 이 있어 w, h 는 None 일 수 있다 (이미지 크기를 쓴다)
+    """
     root = ET.parse(xml_path).getroot()
     size = root.find("size")
-    w, h = int(size.findtext("width")), int(size.findtext("height"))
-    best = None
-    for obj in root.findall("object"):
-        if (obj.findtext("name") or "").strip() != code:
-            continue
+    w = h = None
+    if size is not None and size.findtext("width") and size.findtext("height"):
+        w, h = int(size.findtext("width")), int(size.findtext("height"))
+
+    def box_of(obj):
         b = obj.find("bndbox")
-        box = tuple(int(float(b.findtext(k))) for k in ("xmin", "ymin", "xmax", "ymax"))
-        area = (box[2] - box[0]) * (box[3] - box[1])
-        if best is None or area > best[0]:
-            best = (area, box)
-    return None if best is None else (w, h, best[1])
+        return tuple(int(float(b.findtext(k))) for k in ("xmin", "ymin", "xmax", "ymax"))
+
+    objs = [(((o.findtext("name") or "").strip()), o) for o in root.findall("object") if o.find("bndbox") is not None]
+    exact = [box_of(o) for n, o in objs if n == code]
+    if exact:
+        best = max(exact, key=lambda b: (b[2] - b[0]) * (b[3] - b[1]))
+        return w, h, best, "코드"
+    others = [(n, o) for n, o in objs if n != "dish"]
+    named = [(n, o) for n, o in others if not re.fullmatch(r"d+", n)]
+    if len(named) == 1:
+        return w, h, box_of(named[0][1]), "이름대체"
+    if others:
+        return "코드불일치"
+    return "음식상자_없음"
 
 
 def group_key(code: str, stem: str):
@@ -123,20 +140,20 @@ def assign_splits(items, rng):
 
 
 def make_crop(img_path: Path, xml_path: Path, code: str, dst: Path):
-    """성공하면 None, 건너뛰면 이유 문자열."""
+    """성공하면 None 또는 FALLBACK, 건너뛰면 이유 문자열."""
     if not xml_path.exists():
         return "xml_없음"
     try:
         fb = food_box(xml_path, code)
     except Exception:
         return "xml_읽기실패"
-    if fb is None:
-        return "음식상자_없음"
-    w, h, (x0, y0, x1, y1) = fb
+    if isinstance(fb, str):
+        return fb
+    w, h, (x0, y0, x1, y1), how = fb
     try:
         with Image.open(img_path) as im:
             im = ImageOps.exif_transpose(im).convert("RGB")
-            if (im.width, im.height) != (w, h):
+            if w is not None and (im.width, im.height) != (w, h):
                 if abs(im.width / im.height - w / h) > 0.02:
                     return "크기_불일치"          # 회전 등으로 좌표를 믿을 수 없다
                 sx, sy = im.width / w, im.height / h
@@ -156,7 +173,7 @@ def make_crop(img_path: Path, xml_path: Path, code: str, dst: Path):
             crop.save(dst, "JPEG", quality=90)
     except Exception:
         return "이미지_읽기실패"
-    return None
+    return FALLBACK if how == "이름대체" else None   # 성공. 이름 대체로 찾았으면 표시만 한다
 
 
 def main():
@@ -187,7 +204,7 @@ def main():
             out = dst / sp[p] / str(lmap[code]) / (p.stem + ".jpg")
             jobs.append((code, lmap[code], p, xml_dir / code / (p.stem + ".xml"), sp[p], out))
 
-    skipped, done = [], []
+    skipped, done, fallback = [], [], 0
 
     def run(j):
         code, fid, ip, xp, sp, out = j
@@ -196,6 +213,9 @@ def main():
 
     with ThreadPoolExecutor(a.workers) as ex:
         for n, (j, why) in enumerate(ex.map(run, jobs), 1):
+            if why == FALLBACK:
+                fallback += 1
+                why = None
             (skipped if why else done).append((j, why))
             if n % 2000 == 0:
                 print(f"  {n}/{len(jobs)}")
