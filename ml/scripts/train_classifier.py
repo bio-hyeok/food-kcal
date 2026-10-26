@@ -29,8 +29,8 @@ def main():
     ap.add_argument("--full-epochs", type=int, default=10)
     a = ap.parse_args()
 
-    # Windows 에서는 0 이 안전하다. Linux/WSL/Colab 에서는 4.
-    num_workers = 0 if sys.platform == "win32" else 4
+    # Windows 에서는 0 이 안전하다. 그 밖에는 CPU 수에 맞춰 최대 4 (Colab 은 2).
+    num_workers = 0 if sys.platform == "win32" else min(4, os.cpu_count() or 1)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     os.makedirs(a.model_dir, exist_ok=True)
     print("device:", device)
