@@ -232,7 +232,7 @@ def main():
         for (code, fid, ip, xp, sp, out), why in skipped:
             w.writerow([code, ip, why])
 
-    print(f"\n저장 {len(done)}장 / 제외 {len(skipped)}장")
+    print(f"\n저장 {len(done)}장 (그중 상자 이름이 코드가 아니라 음식명이라 대체한 것 {fallback}장) / 제외 {len(skipped)}장")
     print("split별:", dict(Counter(j[4] for j, _ in done)))
     print("제외 이유:", dict(Counter(why for _, why in skipped)))
     print("클래스 수:", len({j[1] for j, _ in done}))
