@@ -33,6 +33,13 @@ def main():
     # Windows 에서 DataLoader 오류가 나면 --workers 0 으로 실행한다.
     ap.add_argument("--workers", type=int, default=min(4, os.cpu_count() or 1))
     ap.add_argument("--no-amp", action="store_true", help="혼합 정밀도(AMP)를 끈다")
+    # 성능 개선 옵션. 기본값은 첫 기준 모델(2026-10-27)과 같은 설정이다.
+    ap.add_argument("--aug", choices=["basic", "strong"], default="basic",
+                    help="strong: TrivialAugmentWide + RandomErasing 을 더한다")
+    ap.add_argument("--label-smoothing", type=float, default=0.0)
+    ap.add_argument("--dropout", type=float, help="분류 헤드 dropout (B0 기본 0.2)")
+    ap.add_argument("--cosine", action="store_true", help="전체 학습 단계 학습률을 cosine 으로 줄인다")
+    ap.add_argument("--lr", type=float, default=1e-4, help="전체 학습 단계 학습률")
     a = ap.parse_args()
 
     num_workers = a.workers
@@ -43,13 +50,23 @@ def main():
     print(f"device: {device}, workers: {num_workers}, amp: {use_amp}")
 
     norm = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-    tf_train = transforms.Compose([
-        transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
-        transforms.RandomHorizontalFlip(),
-        transforms.ColorJitter(0.2, 0.2, 0.2),
-        transforms.ToTensor(),
-        norm,
-    ])
+    if a.aug == "strong":
+        tf_train = transforms.Compose([
+            transforms.RandomResizedCrop(224, scale=(0.5, 1.0)),
+            transforms.RandomHorizontalFlip(),
+            transforms.TrivialAugmentWide(),
+            transforms.ToTensor(),
+            norm,
+            transforms.RandomErasing(p=0.25),
+        ])
+    else:
+        tf_train = transforms.Compose([
+            transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(0.2, 0.2, 0.2),
+            transforms.ToTensor(),
+            norm,
+        ])
     tf_eval = transforms.Compose([
         transforms.Resize(256),
         transforms.CenterCrop(224),
@@ -68,8 +85,13 @@ def main():
 
     model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
     model.classifier[1] = nn.Linear(model.classifier[1].in_features, len(train_ds.classes))
+    if a.dropout is not None:
+        model.classifier[0].p = a.dropout
     model.to(device)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(label_smoothing=a.label_smoothing)
+    # 어떤 설정으로 만든 모델인지 남긴다
+    with open(f"{a.model_dir}/train_config.json", "w", encoding="utf-8") as f:
+        json.dump(vars(a), f, ensure_ascii=False, indent=2)
 
     def run_epoch(loader, optimizer=None):
         training = optimizer is not None
@@ -108,12 +130,15 @@ def main():
     # 2단계: 전체를 낮은 학습률로 파인튜닝
     for p in model.parameters():
         p.requires_grad = True
-    opt = torch.optim.AdamW(model.parameters(), lr=1e-4)
+    opt = torch.optim.AdamW(model.parameters(), lr=a.lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.full_epochs) if a.cosine else None
     best = 0.0
     for epoch in range(a.full_epochs):
         tr = run_epoch(train_dl, opt)
         va = run_epoch(val_dl)
-        print(f"[full] epoch {epoch} train(loss, acc)={tr} val(loss, acc)={va}")
+        print(f"[full] epoch {epoch} lr={opt.param_groups[0]['lr']:.2e} train(loss, acc)={tr} val(loss, acc)={va}")
+        if sched:
+            sched.step()
         if va[1] >= best:
             best = va[1]
             torch.save(model.state_dict(), f"{a.model_dir}/classifier_best.pt")

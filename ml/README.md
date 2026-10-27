@@ -115,3 +115,23 @@ python ml/scripts/prepare_classifier_data.py   --src "/content/drive/MyDrive/음
 - 칼로리 차이가 큰 혼동: 돼지갈비 → 소양념갈비구이 (7장, 738kcal), 부대찌개 → 햄김치찌개 (6장, 336kcal).
 - train 94.8% / val 73% 로 과적합 경향이 있다.
 - 이 점수는 잘라낸 사진 기준이다. 원본 전체 사진 평가는 아직 하지 않았다.
+
+### 개선 v2 (2026-10-27)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models_v2 --workers 8 --aug strong --label-smoothing 0.1 --dropout 0.3 --cosine --lr 3e-4 --full-epochs 20
+```
+
+| test (5,793장) | 첫 모델 | v2 |
+| --- | --- | --- |
+| top-1 | 73.5% | **80.2%** |
+| top-5 | 92.4% | **95.3%** |
+| 칼로리 오차 평균 (전체) | 51.2 kcal | **36.4 kcal** |
+| 칼로리 오차 평균 (틀린 사진만) | 192.9 kcal | 183.5 kcal |
+| best val | 73.2% | 80.3% |
+| 학습 시간 | 약 14분 | 약 22분 |
+
+- 바꾼 것: TrivialAugmentWide + RandomErasing, RandomResizedCrop scale 0.5~1.0, label smoothing 0.1, dropout 0.3, 학습률 3e-4 cosine, 전체 학습 20 epoch.
+- 여전히 약한 음식: 불고기 17.6%, 치킨가스 22.2%, 돼지갈비 25.0%, 돼지고기볶음 27.8%.
+- 칼로리 차이가 큰 혼동은 남아 있다: 돼지갈비 → 소양념갈비구이 (6장, 738kcal), 뼈다귀해장국 → 감자탕 (7장, 248kcal).
+- label smoothing 을 쓰면 1순위 신뢰도가 전체적으로 낮게 나온다. `RECOGNITION_MIN_CONFIDENCE`(임시 0.5)는 이 모델로 다시 정해야 한다.
