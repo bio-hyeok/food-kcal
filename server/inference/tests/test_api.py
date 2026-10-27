@@ -81,6 +81,13 @@ def test_too_large(client):
     assert r.json()["error"]["code"] == "IMAGE_TOO_LARGE"
 
 
+def test_cors_allows_expo_web(client):
+    r = client.options("/predict", headers={"Origin": "http://localhost:8081", "Access-Control-Request-Method": "POST"})
+    assert r.headers.get("access-control-allow-origin") == "http://localhost:8081"
+    r = client.options("/predict", headers={"Origin": "http://evil.example", "Access-Control-Request-Method": "POST"})
+    assert "access-control-allow-origin" not in r.headers
+
+
 def test_resize_and_crop_match_torchvision_rules():
     im = Image.new("RGB", (400, 300))
     r = resize_short_side(im, 329)
