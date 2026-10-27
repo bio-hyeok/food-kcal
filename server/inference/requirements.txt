@@ -1,0 +1,6 @@
+fastapi>=0.110
+uvicorn[standard]
+python-multipart
+onnxruntime
+numpy
+pillow

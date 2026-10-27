@@ -1,0 +1,23 @@
+name: inference
+
+on:
+  pull_request:
+    paths: ['server/inference/**', '.github/workflows/inference.yml']
+  push:
+    branches: [main, develop, 'feature/**']
+    paths: ['server/inference/**', '.github/workflows/inference.yml']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server/inference
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements-dev.txt
+      # 실제 모델은 저장소에 없으므로 시험용 작은 ONNX 모델로 돌린다 (tests/conftest.py)
+      - run: pytest -q
