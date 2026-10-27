@@ -6,13 +6,15 @@
 사용 (Colab, GPU 런타임):
     !python ml/scripts/train_classifier.py --data /content/processed --model-dir /content/models
 
+사용 (로컬 Windows, RTX GPU):
+    python scripts\\train_classifier.py --data C:\\food-data\\processed_full --model-dir C:\\food-data\\models --workers 8
+
 실행 확인 범위: 위키 기준으로는 무작위 이미지 48장으로 CPU에서만 끝까지 돌려 봤다.
 실제 음식 데이터에서의 성능과 속도는 확인하지 못했다.
 """
 import argparse
 import json
 import os
-import sys
 
 import torch
 import torch.nn as nn
@@ -27,13 +29,18 @@ def main():
     ap.add_argument("--batch", type=int, default=64)
     ap.add_argument("--head-epochs", type=int, default=3)
     ap.add_argument("--full-epochs", type=int, default=10)
+    # 이미지를 읽는 프로세스 수. 기본은 CPU 수에 맞춰 최대 4 (Colab 은 2).
+    # Windows 에서 DataLoader 오류가 나면 --workers 0 으로 실행한다.
+    ap.add_argument("--workers", type=int, default=min(4, os.cpu_count() or 1))
+    ap.add_argument("--no-amp", action="store_true", help="혼합 정밀도(AMP)를 끈다")
     a = ap.parse_args()
 
-    # Windows 에서는 0 이 안전하다. 그 밖에는 CPU 수에 맞춰 최대 4 (Colab 은 2).
-    num_workers = 0 if sys.platform == "win32" else min(4, os.cpu_count() or 1)
+    num_workers = a.workers
     device = "cuda" if torch.cuda.is_available() else "cpu"
+    use_amp = device == "cuda" and not a.no_amp
+    scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     os.makedirs(a.model_dir, exist_ok=True)
-    print("device:", device)
+    print(f"device: {device}, workers: {num_workers}, amp: {use_amp}")
 
     norm = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     tf_train = transforms.Compose([
@@ -52,8 +59,11 @@ def main():
 
     train_ds = datasets.ImageFolder(f"{a.data}/train", tf_train)
     val_ds = datasets.ImageFolder(f"{a.data}/val", tf_eval)
-    train_dl = DataLoader(train_ds, batch_size=a.batch, shuffle=True, num_workers=num_workers)
-    val_dl = DataLoader(val_ds, batch_size=a.batch, num_workers=num_workers)
+    # persistent_workers: epoch 마다 프로세스를 새로 띄우지 않는다 (Windows 에서 특히 느리다)
+    dl_kw = dict(batch_size=a.batch, num_workers=num_workers, pin_memory=device == "cuda",
+                 persistent_workers=num_workers > 0)
+    train_dl = DataLoader(train_ds, shuffle=True, **dl_kw)
+    val_dl = DataLoader(val_ds, **dl_kw)
     print(f"클래스 {len(train_ds.classes)}개, train {len(train_ds)}장, val {len(val_ds)}장")
 
     model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
@@ -67,13 +77,15 @@ def main():
         total, correct, loss_sum = 0, 0, 0.0
         with torch.set_grad_enabled(training):
             for x, y in loader:
-                x, y = x.to(device), y.to(device)
-                out = model(x)
-                loss = criterion(out, y)
+                x, y = x.to(device, non_blocking=True), y.to(device, non_blocking=True)
+                with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=use_amp):
+                    out = model(x)
+                    loss = criterion(out, y)
                 if training:
                     optimizer.zero_grad()
-                    loss.backward()
-                    optimizer.step()
+                    scaler.scale(loss).backward()
+                    scaler.step(optimizer)
+                    scaler.update()
                 loss_sum += loss.item() * x.size(0)
                 correct += (out.argmax(1) == y).sum().item()
                 total += x.size(0)
