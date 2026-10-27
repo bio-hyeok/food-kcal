@@ -135,3 +135,29 @@ python ml/scripts/prepare_classifier_data.py   --src "/content/drive/MyDrive/음
 - 여전히 약한 음식: 불고기 17.6%, 치킨가스 22.2%, 돼지갈비 25.0%, 돼지고기볶음 27.8%.
 - 칼로리 차이가 큰 혼동은 남아 있다: 돼지갈비 → 소양념갈비구이 (6장, 738kcal), 뼈다귀해장국 → 감자탕 (7장, 248kcal).
 - label smoothing 을 쓰면 1순위 신뢰도가 전체적으로 낮게 나온다. `RECOGNITION_MIN_CONFIDENCE`(임시 0.5)는 이 모델로 다시 정해야 한다.
+
+### 개선 v3 — 현재 최종 후보 (2026-10-27)
+
+v2 설정에 입력 크기만 288 로 올렸다 (`--img-size 288`). 전처리 데이터는 그대로 쓴다.
+
+| test (5,793장) | 첫 모델 | v2 (224px) | **v3 (288px)** |
+| --- | --- | --- | --- |
+| top-1 | 73.5% | 80.2% | **81.9%** |
+| top-5 | 92.4% | 95.3% | **96.0%** |
+| 칼로리 오차 평균 (전체) | 51.2 kcal | 36.4 kcal | **32.9 kcal** |
+| best val | 73.2% | 80.3% | 82.0% |
+| 학습 시간 | 약 14분 | 약 22분 | 약 38분 |
+| ONNX CPU 1장 (이 PC, 전처리 제외) | - | 약 4~5ms | 약 6ms |
+
+- 돼지갈비 → 소양념갈비구이 (738kcal) 혼동이 상위 10개에서 빠졌다.
+- 남은 큰 혼동: 뼈다귀해장국 → 감자탕 (10장, 248kcal), 코다리조림 → 고등어조림 (6장, 313kcal), 부대찌개 → 햄김치찌개 (5장, 336kcal).
+
+## ONNX 변환 (`scripts/export_onnx.py`)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\export_onnx.py --model-dir C:\food-data\models_v3 --data C:\food-data\processed_full
+```
+
+- 출력: `classifier.onnx`(17.6MB, 입력 `image` NCHW float32, 출력 `logits`, 배치 크기 가변), `model_meta.json`(전처리 값, 클래스 번호 → foodId, 원본 체크포인트 sha1).
+- 추론 서버는 `model_meta.json` 의 값대로 전처리한다: RGB → 짧은 변 `resize_short_side` 로 Resize → `center_crop` 으로 CenterCrop → 0~1 → mean/std 정규화 → softmax.
+- v3 확인 결과: PyTorch 와 확률 최대 차이 6.7e-06, 1순위 256/256 일치, ONNX Runtime test top-1 81.94% / top-5 96.01%.
