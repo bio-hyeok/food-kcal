@@ -93,3 +93,25 @@ python ml/scripts/prepare_classifier_data.py   --src "/content/drive/MyDrive/음
 
 - 첫 실행은 "저장 59,465장"으로 끝났지만, 런타임이 바뀐 뒤 다시 실행하니 21,993장이 Drive에 없었다. `drive.flush_and_unmount()` 전에 런타임이 끝나 Drive로 올라가지 못한 것으로 보인다. 이어 하기로 21,993장만 다시 만들어 채웠다.
 - 그래서 **끝나면 반드시 `drive.flush_and_unmount()`를 실행하고**, 다시 마운트해서 같은 명령이 "이번에 처리할 것 0장"이 나오는지 확인한다.
+
+## 첫 분류 모델 (2026-10-27, 로컬 RTX 4070 Ti)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models --workers 8
+.\.venv\Scripts\python.exe scripts\evaluate_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models --workers 8
+```
+
+- EfficientNet-B0, 헤드 3 + 전체 10 epoch, AMP. 약 14분 (첫 epoch 2분, 이후 epoch당 약 40초).
+- best val acc 0.7322
+
+| test (5,793장, 잘라낸 음식 상자) | 값 |
+| --- | --- |
+| top-1 | 73.5% |
+| top-5 | 92.4% |
+| 칼로리 오차 평균 (전체) | 51.2 kcal |
+| 칼로리 오차 평균 (틀린 사진만) | 192.9 kcal |
+
+- 약한 음식: 불고기 11.8%, 돼지갈비 15.0%, 돼지고기볶음 16.7%, 두부부침 21.1%, 돼지국밥 25.0% 등. 비슷한 고기 요리·국밥·찌개끼리 헷갈린다.
+- 칼로리 차이가 큰 혼동: 돼지갈비 → 소양념갈비구이 (7장, 738kcal), 부대찌개 → 햄김치찌개 (6장, 336kcal).
+- train 94.8% / val 73% 로 과적합 경향이 있다.
+- 이 점수는 잘라낸 사진 기준이다. 원본 전체 사진 평가는 아직 하지 않았다.
