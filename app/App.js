@@ -3,10 +3,11 @@ import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, TextInput, View 
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import * as ImagePicker from 'expo-image-picker';
-import foods from './src/foods.sample.json';
+import foods from './src/foods.json';
 import { calculate, gramsForServings } from './src/calc';
 
 const SERVINGS = [0.5, 1, 1.5, 2];
+const MAX_LIST = 30;
 const round1 = (n) => Math.round(n * 10) / 10;
 
 export default function App() {
@@ -15,7 +16,8 @@ export default function App() {
   const [food, setFood] = useState(null);
   const [gramText, setGramText] = useState('');
 
-  const matches = useMemo(() => foods.filter((f) => f.nameKo.includes(query.trim())), [query]);
+  const allMatches = useMemo(() => foods.filter((f) => f.nameKo.includes(query.trim())), [query]);
+  const matches = allMatches.slice(0, MAX_LIST); // 400종을 한 번에 그리지 않는다
   const amountG = Number(gramText);
   const result = food ? calculate(food, amountG) : null;
 
@@ -42,7 +44,7 @@ export default function App() {
         <StatusBar style="dark" />
         <ScrollView contentContainerStyle={styles.body} keyboardShouldPersistTaps="handled">
           <Text style={styles.title}>음식 칼로리</Text>
-          <Text style={styles.notice}>※ 샘플 영양 데이터입니다. 실제 값과 다를 수 있어요.</Text>
+          <Text style={styles.notice}>※ 한 접시 기준 영양 값이며, 실제 음식과 다를 수 있어요.</Text>
 
           <View style={styles.photoBox}>
             {photoUri ? (
@@ -60,6 +62,11 @@ export default function App() {
           <Text style={styles.section}>음식 선택</Text>
           <TextInput style={styles.input} placeholder="음식 이름 검색" value={query} onChangeText={setQuery} />
           {matches.length === 0 && <Text style={styles.muted}>검색 결과가 없어요</Text>}
+          {allMatches.length > MAX_LIST && (
+            <Text style={styles.muted}>
+              {allMatches.length}개 중 {MAX_LIST}개만 보여요. 이름을 더 입력해 보세요.
+            </Text>
+          )}
           {matches.map((f) => (
             <Pressable
               key={f.foodId}

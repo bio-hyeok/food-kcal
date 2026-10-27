@@ -1,0 +1,188 @@
+# ml/ — 데이터 변환·학습 보조
+
+## 영양 데이터 만들기 (`feature/food-data`)
+
+```bash
+cd ml
+npm install
+node scripts/build_foods_json.mjs "<음식분류 AI 데이터 영양DB.xlsx 경로>"
+```
+
+- 결과: `app/src/foods.json`(앱용 400종), `ml/label_map.csv`(`food_id`, `name_ko`. `dataset_label`은 학습 데이터와 맞출 때 채운다)
+- 영양값은 **한 접시(양 Q4=100%) 기준**이다. `basisG = servingSizeG = 중량(g)`.
+- `foodId`는 엑셀 행 순서(1부터)이며 모델 클래스 번호와 이어진다. **한 번 정하면 바꾸지 않는다.** 엑셀이 바뀌면 기존 행 순서는 두고 뒤에만 추가한다.
+- 원본 엑셀은 AI-Hub 데이터라 저장소에 올리지 않는다.
+- 양 단계(Q1~Q5) = 25 / 50 / 75 / 100 / 125 %. `먹은 양(g) = 중량 × 비율`.
+
+## 라벨 매핑 (학습 클래스 ↔ foodId)
+
+| 파일 | 대상 | 키 | 근거 |
+| --- | --- | --- | --- |
+| `label_map.csv` | 분류(YOLO) | `dataset_label` = 8자리 코드(예: `01011001`) | **코드를 정렬한 순서 = 영양DB 행 순서.** 분류 xml의 클래스는 이름이 아니라 코드이고 코드표가 없어서, 사진으로 확인했다 |
+| `quantity_label_map.csv` | 양추정(ResNet) | `folder_name` = 양추정 폴더명 | 이름 일치(77), 괄호 제거(4), 수동(3), 영양DB 없음(3) |
+
+- 순서 가설을 확인한 곳: **사진 6곳**(1번 쌀밥, 5번 돌솥밥, 20번 육회비빔밥, 100번 김치만두, 200번 돼지갈비, 300번 고구마맛탕)과 **xml에 음식명이 들어 있는 코드 9곳**(01012001 잡곡밥, 01012004 영양돌솥밥, 01015011 짬뽕밥, 01015013 카레라이스, 01016020 일반김밥, 02011025 볶음우동, 06012001 닭갈비, 08014003 마파두부, 03011006 `잣국`=잣죽의 오기). 모두 일치했고 어긋난 곳은 없다. 대분류 01~09에 걸쳐 있다. **나머지는 보지 않았다.** AI-Hub 쪽에서 코드표를 구하면 그것으로 다시 검증한다.
+- `quantity_label_map.csv`의 수동 매핑 3건은 판단이 들어갔다: 김밥→일반김밥, 물회→생선물회, 영양돌솥밥→돌솥밥.
+- 영양DB에 없는 음식(류산슬덮밥, 병어찜, 오곡밥)은 칼로리를 계산할 수 없어 **학습에서 제외**한다(`match` = `학습제외`, `food_id` 비어 있음). 영양정보를 구하면 `foods.json` 맨 뒤에 추가하고(foodId 401~) 이 표를 채운다.
+
+## 데이터 점검 결과 (2026-10-26, `scripts/check_pairs.mjs`)
+
+- 분류 이미지 60,660장은 **전부 xml 라벨과 짝이 맞는다.** 라벨은 xml/txt 각 80,000개라서 19,340개는 이미지가 없다.
+- 이미지가 있는 코드는 **304개**(대분류 01~10, 영양DB 1~304번). 코드당 156~239장(중앙 200).
+- **대분류 11~16(무침·나물·김치·장아찌·젓갈·회·떡·한과) 96개 코드는 이미지가 드라이브에 없다.** 원천 파일 11~16이 올라오지 않은 것으로 보인다. 지금 학습하면 이 96종은 인식하지 못한다.
+- 분류 라벨 xml의 클래스는 이름이 아니라 코드다. 접시(`dish`)와 음식(`<코드>`) 상자가 따로 있다.
+- 양추정 xml에는 기준물(`ref_spoon`, `ref_fork`, `ref_coin`)과 접시, 음식 상자가 있다.
+
+## 분류 모델 학습 순서 (Colab, GPU 런타임)
+
+```bash
+# 1) 학습용 데이터 만들기 — 처음에는 작게 (클래스당 20장)
+python ml/scripts/prepare_classifier_data.py --src "/content/drive/MyDrive/음식데이터" --dst /content/processed --limit-per-class 20
+# 2) 문제가 없으면 --limit-per-class 를 빼고 전체 (Drive에서 읽어서 오래 걸린다)
+# 3) 학습
+python ml/scripts/train_classifier.py --data /content/processed --model-dir /content/models
+```
+
+- 위 스크립트는 **로컬에서 실행해 보지 못했다**(이 PC에 Python 없음). 1)의 출력(저장/제외 개수, 제외 이유)부터 확인한다.
+- 사이트가 안내한 YOLO v3(검출)·ResNet(양)과 다르게, 이 저장소의 설계(위키 6.7)는 **음식 영역을 잘라 분류**(EfficientNet-B0)한다. 사진 한 장에 음식 한 가지를 가정한다.
+- train/val/test 분할은 파일명의 촬영 시각을 1시간(`--bucket-sec 3600`) 단위로 묶은 단위로 나눈다. 묶음 기준은 추정이다. 10분 단위는 클래스당 중앙 127묶음(사진 약 200장)이라 같은 음식 연속 촬영이 갈릴 위험을 별로 줄이지 못해서 1시간으로 했다. 1시간 단위는 클래스당 최소 13, 중앙 101묶음이다.
+
+## 라벨(xml) 품질 문제 (표본 1,520개, 코드당 5개)
+
+- 약 97%는 음식 상자의 `name`이 코드와 같다.
+- 나머지(약 3%)는 상자 이름이 **음식명(한글)**, **깨진 한글**(CP949를 CP437로 잘못 읽은 모양, 예: `┬½╗═╣Σ`=짬뽕밥), **다른 코드**, **`00000000`** 이다. 다른 코드나 `00000000`은 믿을 수 없어 학습에서 제외한다. 한글/깨진 이름은 상자가 하나뿐일 때 음식 상자로 쓴다.
+- `<size>`가 없는 xml이 있다. 이미지 크기를 쓴다.
+- 2026-10-27 Colab 시험(클래스당 20장, 6,080장): 저장 5,872 / 제외 208. 제외 이유는 `음식상자_없음` 85, `xml_읽기실패` 123(`<size>` 없음). 위 보완 이후 결과는 다시 확인해야 한다.
+- 속도: 6,080장에 23분(Drive에서 읽는 시간이 대부분). 전체 6만 장은 4시간 안팎으로 예상된다.
+
+## 전체 전처리 (끊겨도 이어 하기)
+
+전체(약 6만 장)는 Drive에서 읽는 시간 때문에 4시간 안팎 걸린다. 결과를 **Drive 안**에 쓰면, 런타임이 끊겨도 같은 명령을 다시 실행해서 이어 할 수 있다.
+
+```bash
+# 0) 먼저 이어 하기 시험 (가짜 데이터, 1분 안쪽). "모든 시험 통과"가 나와야 한다
+python ml/scripts/test_prepare_resume.py
+# 1) 전체 실행. 끊기면 같은 명령을 다시 실행한다
+python ml/scripts/prepare_classifier_data.py   --src "/content/drive/MyDrive/음식데이터"   --dst "/content/drive/MyDrive/processed_full"   --workers 12
+```
+
+| 상황 | 동작 |
+| --- | --- |
+| 이미 만든 파일 | 건너뛴다. 크기 0인 파일은 다시 만든다 |
+| 제외한 이미지 | `skipped.csv`에 즉시 기록, 다시 처리하지 않는다 |
+| 쓰다 끊긴 파일 | `.jpg.tmp`로 쓴 뒤 이름을 바꿔서 깨진 `.jpg`가 남지 않는다 |
+| train/val/test 배정 | 첫 실행에 `_splits.csv`로 저장하고 그대로 쓴다. Drive 목록이 실행마다 달라도 바뀌지 않는다 |
+| 다른 split 폴더에 같은 사진 | 섞였다고 보고 중단한다 |
+| Drive 일시 오류 | 제외로 기록하지 않고 "다음에 다시 할 것"으로 센다. 다음 실행에서 다시 한다 |
+| 계속 읽히지 않는 파일 | 두세 번 실행해도 같은 수가 남으면 `--give-up-retries`로 한 번 실행해 제외로 기록한다 |
+| 셀 중지 | 진행 중인 몇 장만 마치고 멈춘다(1,000장 단위로 작업을 넣는다) |
+| 설정 변경 | `--limit-per-class`, `--seed`, `--bucket-sec`, `label_map.csv`가 바뀌면 중단한다. 새 `--dst`를 쓴다 |
+
+- 끝나면 `drive.flush_and_unmount()`로 Drive 쓰기를 마무리한다.
+- 2026-10-27 검토에서 고친 것: 이름 대체 판정 정규식이 깨져(`r"d+"`) 다른 코드·`00000000` 상자도 받아들이던 문제, Drive 일시 오류가 영구 제외되거나 실행이 죽던 문제, 재실행 때 배정이 바뀔 수 있던 문제(공유 난수), 셀 중지가 안 되던 문제. **그 이전 스크립트로 만든 결과 폴더는 쓰지 않는다.**
+- 스크립트와 시험은 이 PC(Python 없음)에서 실행해 보지 못했다. Colab에서 0)부터 확인한다.
+
+### 전체 전처리 결과 (2026-10-27, Colab)
+
+| 항목 | 값 |
+| --- | --- |
+| 전체 이미지 | 60,660장 (코드 304개) |
+| 저장 | 59,465장 (그중 이름 대체 865장) |
+| 제외 | 1,195장, 모두 `코드불일치` |
+| split | train 47,619 / val 6,053 / test 5,793 |
+
+- 첫 실행은 "저장 59,465장"으로 끝났지만, 런타임이 바뀐 뒤 다시 실행하니 21,993장이 Drive에 없었다. `drive.flush_and_unmount()` 전에 런타임이 끝나 Drive로 올라가지 못한 것으로 보인다. 이어 하기로 21,993장만 다시 만들어 채웠다.
+- 그래서 **끝나면 반드시 `drive.flush_and_unmount()`를 실행하고**, 다시 마운트해서 같은 명령이 "이번에 처리할 것 0장"이 나오는지 확인한다.
+
+## 첫 분류 모델 (2026-10-27, 로컬 RTX 4070 Ti)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models --workers 8
+.\.venv\Scripts\python.exe scripts\evaluate_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models --workers 8
+```
+
+- EfficientNet-B0, 헤드 3 + 전체 10 epoch, AMP. 약 14분 (첫 epoch 2분, 이후 epoch당 약 40초).
+- best val acc 0.7322
+
+| test (5,793장, 잘라낸 음식 상자) | 값 |
+| --- | --- |
+| top-1 | 73.5% |
+| top-5 | 92.4% |
+| 칼로리 오차 평균 (전체) | 51.2 kcal |
+| 칼로리 오차 평균 (틀린 사진만) | 192.9 kcal |
+
+- 약한 음식: 불고기 11.8%, 돼지갈비 15.0%, 돼지고기볶음 16.7%, 두부부침 21.1%, 돼지국밥 25.0% 등. 비슷한 고기 요리·국밥·찌개끼리 헷갈린다.
+- 칼로리 차이가 큰 혼동: 돼지갈비 → 소양념갈비구이 (7장, 738kcal), 부대찌개 → 햄김치찌개 (6장, 336kcal).
+- train 94.8% / val 73% 로 과적합 경향이 있다.
+- 이 점수는 잘라낸 사진 기준이다. 원본 전체 사진 평가는 아직 하지 않았다.
+
+### 개선 v2 (2026-10-27)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\train_classifier.py --data C:\food-data\processed_full --model-dir C:\food-data\models_v2 --workers 8 --aug strong --label-smoothing 0.1 --dropout 0.3 --cosine --lr 3e-4 --full-epochs 20
+```
+
+| test (5,793장) | 첫 모델 | v2 |
+| --- | --- | --- |
+| top-1 | 73.5% | **80.2%** |
+| top-5 | 92.4% | **95.3%** |
+| 칼로리 오차 평균 (전체) | 51.2 kcal | **36.4 kcal** |
+| 칼로리 오차 평균 (틀린 사진만) | 192.9 kcal | 183.5 kcal |
+| best val | 73.2% | 80.3% |
+| 학습 시간 | 약 14분 | 약 22분 |
+
+- 바꾼 것: TrivialAugmentWide + RandomErasing, RandomResizedCrop scale 0.5~1.0, label smoothing 0.1, dropout 0.3, 학습률 3e-4 cosine, 전체 학습 20 epoch.
+- 여전히 약한 음식: 불고기 17.6%, 치킨가스 22.2%, 돼지갈비 25.0%, 돼지고기볶음 27.8%.
+- 칼로리 차이가 큰 혼동은 남아 있다: 돼지갈비 → 소양념갈비구이 (6장, 738kcal), 뼈다귀해장국 → 감자탕 (7장, 248kcal).
+- label smoothing 을 쓰면 1순위 신뢰도가 전체적으로 낮게 나온다. `RECOGNITION_MIN_CONFIDENCE`(임시 0.5)는 이 모델로 다시 정해야 한다.
+
+### 개선 v3 — 현재 최종 후보 (2026-10-27)
+
+v2 설정에 입력 크기만 288 로 올렸다 (`--img-size 288`). 전처리 데이터는 그대로 쓴다.
+
+| test (5,793장) | 첫 모델 | v2 (224px) | **v3 (288px)** |
+| --- | --- | --- | --- |
+| top-1 | 73.5% | 80.2% | **81.9%** |
+| top-5 | 92.4% | 95.3% | **96.0%** |
+| 칼로리 오차 평균 (전체) | 51.2 kcal | 36.4 kcal | **32.9 kcal** |
+| best val | 73.2% | 80.3% | 82.0% |
+| 학습 시간 | 약 14분 | 약 22분 | 약 38분 |
+| ONNX CPU 1장 (이 PC, 전처리 제외) | - | 약 4~5ms | 약 6ms |
+
+- 돼지갈비 → 소양념갈비구이 (738kcal) 혼동이 상위 10개에서 빠졌다.
+- 남은 큰 혼동: 뼈다귀해장국 → 감자탕 (10장, 248kcal), 코다리조림 → 고등어조림 (6장, 313kcal), 부대찌개 → 햄김치찌개 (5장, 336kcal).
+
+## 신뢰도 기준값 `RECOGNITION_MIN_CONFIDENCE` (2026-10-27, v3 모델)
+
+**결정: 0.30** (임시값 0.5 를 대체). 모델이 바뀌면 다시 정한다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\build_nonfood_set.py --out C:\food-data\nonfood
+.\.venv\Scripts\python.exe scripts\confidence_threshold.py --model-dir C:\food-data\models_v3 --data C:\food-data\processed_full --nonfood C:\food-data\nonfood
+```
+
+음식이 아닌 사진 320장 (다운로드 없이 이 PC에 있는 것만 사용)
+- `wallpaper` 120장: Windows 기본 배경 화면을 무작위로 잘라 낸 것 (풍경·추상화)
+- `background` 200장: AI-Hub test 원본에서 음식·접시 상자와 겹치지 않는 가장자리(식탁·쟁반)만 잘라 낸 것
+
+| 기준값 | 음식 사진 거절 | 그중 후보 5개 안에 정답 | 통과한 사진의 1순위 정확도 | 음식 아닌 사진 거절 |
+| --- | --- | --- | --- | --- |
+| 0.20 | 3.9% | 2.8% | 84.0% | 43.1% |
+| **0.30** | **9.0%** | 7.1% | **86.6%** | **61.6%** |
+| 0.40 | 14.7% | 12.2% | 88.7% | 72.5% |
+| 0.50 (옛 임시값) | 21.5% | 18.4% | 91.2% | 81.2% |
+
+- 규칙: 음식 사진 거절이 10% 이하인 기준값 중 가장 큰 값. 거절되면 사용자가 수동 검색을 해야 하므로 음식 사진을 덜 거절하는 쪽을 우선했다.
+- 0.5 를 그대로 쓰면 음식 사진 5장 중 1장 이상(21.5%)을 "음식을 찾지 못했어요"로 처리한다. label smoothing 때문에 v3 의 신뢰도가 전체적으로 낮게 나오기 때문이다 (맞힌 음식 사진의 신뢰도 중앙값 0.855, 하위 10% 0.452).
+- **한계**: 기준값 하나로는 음식이 아닌 사진을 약 62%만 걸러 낸다. 음식 아닌 사진 모음도 사람·문서·화면 캡처 같은 사진이 없어 실제보다 쉬울 수 있다. 더 잘 거르려면 "음식 아님" 클래스를 학습하거나 YOLO 같은 음식 위치 찾기 단계를 앞에 둔다.
+- 결과 파일: `C:\food-data\models_v3\threshold\thresholds.csv`, `summary.json`
+
+## ONNX 변환 (`scripts/export_onnx.py`)
+
+```powershell
+.\.venv\Scripts\python.exe scripts\export_onnx.py --model-dir C:\food-data\models_v3 --data C:\food-data\processed_full
+```
+
+- 출력: `classifier.onnx`(17.6MB, 입력 `image` NCHW float32, 출력 `logits`, 배치 크기 가변), `model_meta.json`(전처리 값, 클래스 번호 → foodId, 원본 체크포인트 sha1).
+- 추론 서버는 `model_meta.json` 의 값대로 전처리한다: RGB → 짧은 변 `resize_short_side` 로 Resize → `center_crop` 으로 CenterCrop → 0~1 → mean/std 정규화 → softmax.
+- v3 확인 결과: PyTorch 와 확률 최대 차이 6.7e-06, 1순위 256/256 일치, ONNX Runtime test top-1 81.94% / top-5 96.01%.

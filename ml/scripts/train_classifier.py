@@ -1,0 +1,153 @@
+"""음식 분류 학습 (EfficientNet-B0 파인튜닝). 위키 전체 흐름 문서 6.7 의 초안을 옮긴 것이다.
+
+입력: prepare_classifier_data.py 가 만든 <data>/train, <data>/val (폴더 이름 = food_id)
+출력: <model-dir>/idx_to_food_id.json, classifier_best.pt
+
+사용 (Colab, GPU 런타임):
+    !python ml/scripts/train_classifier.py --data /content/processed --model-dir /content/models
+
+사용 (로컬 Windows, RTX GPU):
+    python scripts\\train_classifier.py --data C:\\food-data\\processed_full --model-dir C:\\food-data\\models --workers 8
+
+실행 확인 범위: 위키 기준으로는 무작위 이미지 48장으로 CPU에서만 끝까지 돌려 봤다.
+실제 음식 데이터에서의 성능과 속도는 확인하지 못했다.
+"""
+import argparse
+import json
+import os
+
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader
+from torchvision import datasets, models, transforms
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--data", default="data/processed")
+    ap.add_argument("--model-dir", default="models")
+    ap.add_argument("--batch", type=int, default=64)
+    ap.add_argument("--head-epochs", type=int, default=3)
+    ap.add_argument("--full-epochs", type=int, default=10)
+    # 이미지를 읽는 프로세스 수. 기본은 CPU 수에 맞춰 최대 4 (Colab 은 2).
+    # Windows 에서 DataLoader 오류가 나면 --workers 0 으로 실행한다.
+    ap.add_argument("--workers", type=int, default=min(4, os.cpu_count() or 1))
+    ap.add_argument("--no-amp", action="store_true", help="혼합 정밀도(AMP)를 끈다")
+    # 성능 개선 옵션. 기본값은 첫 기준 모델(2026-10-27)과 같은 설정이다.
+    ap.add_argument("--aug", choices=["basic", "strong"], default="basic",
+                    help="strong: TrivialAugmentWide + RandomErasing 을 더한다")
+    ap.add_argument("--label-smoothing", type=float, default=0.0)
+    ap.add_argument("--dropout", type=float, help="분류 헤드 dropout (B0 기본 0.2)")
+    ap.add_argument("--cosine", action="store_true", help="전체 학습 단계 학습률을 cosine 으로 줄인다")
+    ap.add_argument("--lr", type=float, default=1e-4, help="전체 학습 단계 학습률")
+    # 입력 크기. 전처리 이미지는 짧은 변 320px 이라 288 까지는 거의 그대로 쓴다.
+    ap.add_argument("--img-size", type=int, default=224)
+    a = ap.parse_args()
+    size = a.img_size
+    resize = round(size * 256 / 224)      # 평가: 224 일 때 Resize(256) → CenterCrop(224) 와 같은 비율
+
+    num_workers = a.workers
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    use_amp = device == "cuda" and not a.no_amp
+    scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
+    os.makedirs(a.model_dir, exist_ok=True)
+    print(f"device: {device}, workers: {num_workers}, amp: {use_amp}, img_size: {size}")
+
+    norm = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    if a.aug == "strong":
+        tf_train = transforms.Compose([
+            transforms.RandomResizedCrop(size, scale=(0.5, 1.0)),
+            transforms.RandomHorizontalFlip(),
+            transforms.TrivialAugmentWide(),
+            transforms.ToTensor(),
+            norm,
+            transforms.RandomErasing(p=0.25),
+        ])
+    else:
+        tf_train = transforms.Compose([
+            transforms.RandomResizedCrop(size, scale=(0.7, 1.0)),
+            transforms.RandomHorizontalFlip(),
+            transforms.ColorJitter(0.2, 0.2, 0.2),
+            transforms.ToTensor(),
+            norm,
+        ])
+    tf_eval = transforms.Compose([
+        transforms.Resize(resize),
+        transforms.CenterCrop(size),
+        transforms.ToTensor(),
+        norm,
+    ])
+
+    train_ds = datasets.ImageFolder(f"{a.data}/train", tf_train)
+    val_ds = datasets.ImageFolder(f"{a.data}/val", tf_eval)
+    # persistent_workers: epoch 마다 프로세스를 새로 띄우지 않는다 (Windows 에서 특히 느리다)
+    dl_kw = dict(batch_size=a.batch, num_workers=num_workers, pin_memory=device == "cuda",
+                 persistent_workers=num_workers > 0)
+    train_dl = DataLoader(train_ds, shuffle=True, **dl_kw)
+    val_dl = DataLoader(val_ds, **dl_kw)
+    print(f"클래스 {len(train_ds.classes)}개, train {len(train_ds)}장, val {len(val_ds)}장")
+
+    model = models.efficientnet_b0(weights=models.EfficientNet_B0_Weights.IMAGENET1K_V1)
+    model.classifier[1] = nn.Linear(model.classifier[1].in_features, len(train_ds.classes))
+    if a.dropout is not None:
+        model.classifier[0].p = a.dropout
+    model.to(device)
+    criterion = nn.CrossEntropyLoss(label_smoothing=a.label_smoothing)
+    # 어떤 설정으로 만든 모델인지 남긴다
+    with open(f"{a.model_dir}/train_config.json", "w", encoding="utf-8") as f:
+        json.dump(vars(a), f, ensure_ascii=False, indent=2)
+
+    def run_epoch(loader, optimizer=None):
+        training = optimizer is not None
+        model.train(training)
+        total, correct, loss_sum = 0, 0, 0.0
+        with torch.set_grad_enabled(training):
+            for x, y in loader:
+                x, y = x.to(device, non_blocking=True), y.to(device, non_blocking=True)
+                with torch.autocast(device_type="cuda", dtype=torch.float16, enabled=use_amp):
+                    out = model(x)
+                    loss = criterion(out, y)
+                if training:
+                    optimizer.zero_grad()
+                    scaler.scale(loss).backward()
+                    scaler.step(optimizer)
+                    scaler.update()
+                loss_sum += loss.item() * x.size(0)
+                correct += (out.argmax(1) == y).sum().item()
+                total += x.size(0)
+        return round(loss_sum / total, 4), round(correct / total, 4)
+
+    # 추론할 때 "클래스 번호 → food_id"가 필요하다. 폴더 이름은 문자열 순서라 "100"이 "12"보다 앞선다.
+    idx_to_food_id = {idx: int(name) for name, idx in train_ds.class_to_idx.items()}
+    with open(f"{a.model_dir}/idx_to_food_id.json", "w", encoding="utf-8") as f:
+        json.dump(idx_to_food_id, f)
+
+    # 1단계: 분류 헤드만 학습
+    for p in model.features.parameters():
+        p.requires_grad = False
+    opt = torch.optim.AdamW(model.classifier.parameters(), lr=1e-3)
+    for epoch in range(a.head_epochs):
+        tr = run_epoch(train_dl, opt)
+        va = run_epoch(val_dl)
+        print(f"[head] epoch {epoch} train(loss, acc)={tr} val(loss, acc)={va}")
+
+    # 2단계: 전체를 낮은 학습률로 파인튜닝
+    for p in model.parameters():
+        p.requires_grad = True
+    opt = torch.optim.AdamW(model.parameters(), lr=a.lr)
+    sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=a.full_epochs) if a.cosine else None
+    best = 0.0
+    for epoch in range(a.full_epochs):
+        tr = run_epoch(train_dl, opt)
+        va = run_epoch(val_dl)
+        print(f"[full] epoch {epoch} lr={opt.param_groups[0]['lr']:.2e} train(loss, acc)={tr} val(loss, acc)={va}")
+        if sched:
+            sched.step()
+        if va[1] >= best:
+            best = va[1]
+            torch.save(model.state_dict(), f"{a.model_dir}/classifier_best.pt")
+    print("best val acc:", best)
+
+
+if __name__ == "__main__":
+    main()
