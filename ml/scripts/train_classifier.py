@@ -40,19 +40,23 @@ def main():
     ap.add_argument("--dropout", type=float, help="분류 헤드 dropout (B0 기본 0.2)")
     ap.add_argument("--cosine", action="store_true", help="전체 학습 단계 학습률을 cosine 으로 줄인다")
     ap.add_argument("--lr", type=float, default=1e-4, help="전체 학습 단계 학습률")
+    # 입력 크기. 전처리 이미지는 짧은 변 320px 이라 288 까지는 거의 그대로 쓴다.
+    ap.add_argument("--img-size", type=int, default=224)
     a = ap.parse_args()
+    size = a.img_size
+    resize = round(size * 256 / 224)      # 평가: 224 일 때 Resize(256) → CenterCrop(224) 와 같은 비율
 
     num_workers = a.workers
     device = "cuda" if torch.cuda.is_available() else "cpu"
     use_amp = device == "cuda" and not a.no_amp
     scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     os.makedirs(a.model_dir, exist_ok=True)
-    print(f"device: {device}, workers: {num_workers}, amp: {use_amp}")
+    print(f"device: {device}, workers: {num_workers}, amp: {use_amp}, img_size: {size}")
 
     norm = transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     if a.aug == "strong":
         tf_train = transforms.Compose([
-            transforms.RandomResizedCrop(224, scale=(0.5, 1.0)),
+            transforms.RandomResizedCrop(size, scale=(0.5, 1.0)),
             transforms.RandomHorizontalFlip(),
             transforms.TrivialAugmentWide(),
             transforms.ToTensor(),
@@ -61,15 +65,15 @@ def main():
         ])
     else:
         tf_train = transforms.Compose([
-            transforms.RandomResizedCrop(224, scale=(0.7, 1.0)),
+            transforms.RandomResizedCrop(size, scale=(0.7, 1.0)),
             transforms.RandomHorizontalFlip(),
             transforms.ColorJitter(0.2, 0.2, 0.2),
             transforms.ToTensor(),
             norm,
         ])
     tf_eval = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+        transforms.Resize(resize),
+        transforms.CenterCrop(size),
         transforms.ToTensor(),
         norm,
     ])

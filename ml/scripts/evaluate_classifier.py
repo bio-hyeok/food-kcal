@@ -47,9 +47,14 @@ def main():
     # 1인분 기준 kcal (foods.json 은 basisG 기준값이라 servingSizeG 로 환산)
     kcal = {fid: x["nutrition"]["kcal"] * x["servingSizeG"] / x["nutrition"]["basisG"] for fid, x in foods.items()}
 
+    # 학습 때 입력 크기를 따른다 (train_config.json 이 없던 첫 모델은 224)
+    size = 224
+    cfg_path = Path(a.model_dir) / "train_config.json"
+    if cfg_path.exists():
+        size = json.loads(cfg_path.read_text(encoding="utf-8")).get("img_size", 224)
     tf_eval = transforms.Compose([
-        transforms.Resize(256),
-        transforms.CenterCrop(224),
+        transforms.Resize(round(size * 256 / 224)),
+        transforms.CenterCrop(size),
         transforms.ToTensor(),
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
     ])
