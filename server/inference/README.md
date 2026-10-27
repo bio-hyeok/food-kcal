@@ -13,7 +13,8 @@
                                          └─ 후보마다 FOODS 영양정보를 붙여 GET /recognitions/{resultId} 로 응답
 ```
 
-- **앱이 직접 부르지 않는다.** API 서버가 내부에서만 부른다. 그래서 인증이 없다. 밖으로 열지 말고 내부망·localhost 에만 둔다.
+- **위키 설계에서는 앱이 직접 부르지 않는다.** API 서버가 내부에서만 부른다. 그래서 인증이 없다. 밖으로 열지 말고 내부망·localhost 에만 둔다.
+- 단, **과제 시연용으로는 앱이 이 서버를 직접 부른다** (API 서버 없음, `app/README.md`). 같은 Wi-Fi 안에서만 쓰고 인터넷에 열지 않는다.
 - 영양정보, DB 저장, 사용자 구분은 API 서버가 맡는다. 추론 서버는 "사진 → foodId 후보"만 한다.
 - PyTorch 없이 ONNX Runtime 으로만 돈다. CPU 로 사진 1장에 수 ms (전처리 제외, 개발 PC 기준).
 
@@ -42,6 +43,7 @@ $env:MODEL_DIR = "C:\food-data\models_v3"
 | `RECOGNITION_TOP_K` | `5` | 돌려줄 후보 수 |
 | `MODEL_NAME` / `MODEL_VERSION` | `efficientnet_b0_food` / `v0.1.0` | 응답의 `model` 값. `MODEL_VERSIONS` 테이블과 맞춘다 |
 | `MAX_IMAGE_BYTES` | `10485760` (10MB) | 받는 이미지 최대 크기 |
+| `CORS_ORIGINS` | `http://localhost:8081,http://127.0.0.1:8081` | 브라우저에서 부를 수 있는 주소 (과제 시연용 Expo 웹). 비우면 끈다 |
 
 **모델을 바꾸면 `RECOGNITION_MIN_CONFIDENCE` 도 다시 정한다** (`ml/scripts/confidence_threshold.py`). 학습 설정에 따라 신뢰도 분포가 크게 달라진다.
 
@@ -120,4 +122,4 @@ cd server\inference
 - 학습은 **잘라 낸 음식 상자**로 했고, 이 서버는 **사진 전체**를 받는다. 실제 정확도는 test 점수(81.9%)보다 낮을 수 있다. 원본 전체 사진 평가가 남아 있다.
 - 기준값 하나로는 음식 아닌 사진을 약 62%만 거른다.
 - 304종만 인식한다. 원천 이미지가 없는 96종은 후보에 나오지 않는다 (수동 검색).
-- API 서버(`/images`, `/recognitions`, 비동기 처리, DB 저장)는 아직 없다. 다음 작업이다.
+- API 서버(`/images`, `/recognitions`, 비동기 처리, DB 저장)는 만들지 않았다. 과제 범위에서는 앱이 직접 부른다.

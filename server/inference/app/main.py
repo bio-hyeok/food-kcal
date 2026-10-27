@@ -8,10 +8,12 @@ API 서버가 내부에서 호출한다. 앱이 직접 부르지 않는다.
 FAILED 여도 candidates 는 내려준다. API 서버가 RECOGNITION_ITEMS 에 저장하고, 앱에는 빈 items 로 보낸다
 (위키 API 문서 4절 GET /recognitions/{resultId}).
 """
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, File, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from PIL import Image, UnidentifiedImageError
 from starlette.concurrency import run_in_threadpool
@@ -36,6 +38,12 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="food-kcal inference", lifespan=lifespan)
+
+# 과제 시연용: Expo 웹(브라우저)에서 직접 부를 수 있게 허용한다. 휴대폰 앱(Expo Go)은 CORS 와 상관없다.
+# API 서버가 생기면 앱은 이 서버를 직접 부르지 않으므로 CORS_ORIGINS 를 비워 끈다.
+_origins = [o.strip() for o in os.environ.get("CORS_ORIGINS", "http://localhost:8081,http://127.0.0.1:8081").split(",") if o.strip()]
+if _origins:
+    app.add_middleware(CORSMiddleware, allow_origins=_origins, allow_methods=["GET", "POST"], allow_headers=["*"])
 
 
 @app.exception_handler(ApiError)
