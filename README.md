@@ -9,6 +9,8 @@
 ```
 food-kcal/
 ├─ server/              # API 서버
+│  ├─ db/               # DB 스키마 (마이그레이션)
+│  └─ inference/        # 추론 서버 (ONNX 분류 모델, 사진 → 음식 후보)
 ├─ app/                 # 클라이언트
 ├─ ml/                  # 학습·추론
 │  ├─ scripts/          # 전처리, 학습, 평가 스크립트
