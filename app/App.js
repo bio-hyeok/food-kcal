@@ -39,8 +39,6 @@ export default function App() {
 
   const allMatches = useMemo(() => foods.filter((f) => f.nameKo.includes(query.trim())), [query]);
   const matches = allMatches.slice(0, MAX_LIST); // 400종을 한 번에 그리지 않는다
-  const amountG = Number(gramText);
-  const result = food ? calculate(food, amountG) : null;
 
   const runRecognition = async (asset) => {
     setRecog({ loading: true });
@@ -120,6 +118,8 @@ export default function App() {
             </>
           )}
 
+          {food && <ResultCard food={food} gramText={gramText} setGramText={setGramText} />}
+
           <Text style={styles.section}>음식 검색</Text>
           <TextInput style={styles.input} placeholder="음식 이름 검색" value={query} onChangeText={setQuery} />
           {matches.length === 0 && <Text style={styles.muted}>검색 결과가 없어요</Text>}
@@ -140,46 +140,51 @@ export default function App() {
               </Text>
             </Pressable>
           ))}
-
-          {food && (
-            <View style={styles.card}>
-              <Text style={styles.section}>{food.nameKo}</Text>
-              <View style={styles.row}>
-                {SERVINGS.map((r) => (
-                  <Button
-                    key={r}
-                    label={`${r}인분`}
-                    on={amountG === gramsForServings(food, r)}
-                    onPress={() => setGramText(String(gramsForServings(food, r)))}
-                  />
-                ))}
-              </View>
-              <View style={styles.gramRow}>
-                <TextInput
-                  style={[styles.input, styles.gramInput]}
-                  keyboardType="numeric"
-                  value={gramText}
-                  onChangeText={setGramText}
-                />
-                <Text style={styles.itemName}>g</Text>
-              </View>
-
-              {result ? (
-                <>
-                  <Text style={styles.kcal}>약 {Math.round(result.kcal)} kcal</Text>
-                  <Text style={styles.muted}>
-                    탄수화물 {round1(result.carbG)}g · 단백질 {round1(result.proteinG)}g · 지방 {round1(result.fatG)}g ·
-                    나트륨 {Math.round(result.sodiumMg)}mg
-                  </Text>
-                </>
-              ) : (
-                <Text style={styles.muted}>먹은 양을 입력해 주세요</Text>
-              )}
-            </View>
-          )}
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>
+  );
+}
+
+// 고른 음식의 양 입력과 칼로리. 후보 목록 바로 아래, 음식 검색 위에 둔다.
+function ResultCard({ food, gramText, setGramText }) {
+  const amountG = Number(gramText);
+  const result = calculate(food, amountG);
+  return (
+    <View style={styles.card}>
+      <Text style={styles.section}>{food.nameKo}</Text>
+      <View style={styles.row}>
+        {SERVINGS.map((r) => (
+          <Button
+            key={r}
+            label={`${r}인분`}
+            on={amountG === gramsForServings(food, r)}
+            onPress={() => setGramText(String(gramsForServings(food, r)))}
+          />
+        ))}
+      </View>
+      <View style={styles.gramRow}>
+        <TextInput
+          style={[styles.input, styles.gramInput]}
+          keyboardType="numeric"
+          value={gramText}
+          onChangeText={setGramText}
+        />
+        <Text style={styles.itemName}>g</Text>
+      </View>
+
+      {result ? (
+        <>
+          <Text style={styles.kcal}>약 {Math.round(result.kcal)} kcal</Text>
+          <Text style={styles.muted}>
+            탄수화물 {round1(result.carbG)}g · 단백질 {round1(result.proteinG)}g · 지방 {round1(result.fatG)}g ·
+            나트륨 {Math.round(result.sodiumMg)}mg
+          </Text>
+        </>
+      ) : (
+        <Text style={styles.muted}>먹은 양을 입력해 주세요</Text>
+      )}
+    </View>
   );
 }
 
