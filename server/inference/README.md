@@ -25,8 +25,11 @@ cd server\inference
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 $env:MODEL_DIR = "C:\food-data\models_v3"
+$env:DETECT_MODEL_DIR = "C:\food-data\detector_v1"   # 한 사진에 여러 음식(/detect). 없으면 /detect 만 꺼진다
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8100
 ```
+
+Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food-data\detector_v1" .venv/Scripts/python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100`.
 
 `MODEL_DIR` 에는 `ml/scripts/export_onnx.py` 가 만든 두 파일이 있어야 한다. 없으면 서버가 뜨지 않는다.
 - `classifier.onnx` — 모델
@@ -44,6 +47,10 @@ $env:MODEL_DIR = "C:\food-data\models_v3"
 | `MODEL_NAME` / `MODEL_VERSION` | `efficientnet_b0_food` / `v0.1.0` | 응답의 `model` 값. `MODEL_VERSIONS` 테이블과 맞춘다 |
 | `MAX_IMAGE_BYTES` | `10485760` (10MB) | 받는 이미지 최대 크기 |
 | `CORS_ORIGINS` | `http://localhost:8081,http://127.0.0.1:8081` | 브라우저에서 부를 수 있는 주소 (과제 시연용 Expo 웹). 비우면 끈다 |
+| `DETECT_MODEL_DIR` | (없음) | `detector.onnx`, `detector_meta.json` 폴더 (`ml/scripts/export_detector.py`). 없으면 `/detect` 가 503 |
+| `DETECT_MIN_CONFIDENCE` | `0.25` | 이 신뢰도 미만의 상자는 버린다 |
+| `DETECT_IOU` | `0.7` | 이만큼 겹친 상자는 신뢰도 높은 하나만 남긴다 (NMS) |
+| `DETECT_MAX_ITEMS` | `6` | 한 사진에서 돌려줄 음식 최대 수 |
 
 **모델을 바꾸면 `RECOGNITION_MIN_CONFIDENCE` 도 다시 정한다** (`ml/scripts/confidence_threshold.py`). 학습 설정에 따라 신뢰도 분포가 크게 달라진다.
 
@@ -89,6 +96,42 @@ $env:MODEL_DIR = "C:\food-data\models_v3"
 | 413 | `IMAGE_TOO_LARGE` | `MAX_IMAGE_BYTES` 초과, 또는 해상도가 지나치게 큼 |
 | 415 | `UNSUPPORTED_IMAGE` | 이미지가 아니거나 JPEG/PNG 가 아님 |
 
+### POST `/detect` — 한 사진에 여러 음식 (2026-11-11 추가)
+
+`/predict` 와 같은 업로드(`file`)·같은 오류 코드. 사진에서 음식 상자를 찾고(검출), 상자마다 잘라서 분류한다.
+
+```json
+{
+  "success": true,
+  "data": {
+    "model": { "name": "efficientnet_b0_food", "version": "v0.1.0" },
+    "minConfidence": 0.3,
+    "imageWidth": 1024, "imageHeight": 768,
+    "items": [
+      { "itemNo": 1, "box": { "x0": 0.08, "y0": 0.12, "x1": 0.52, "y1": 0.81 }, "detConfidence": 0.93,
+        "status": "SUCCESS", "candidates": [ { "rankNo": 1, "foodId": 1, "confidence": 0.91 } ] }
+    ]
+  }
+}
+```
+
+- `box` 는 사진(EXIF 회전 반영) 대비 0~1 비율. `items` 는 검출 신뢰도 높은 순서.
+- 상자를 하나도 못 찾으면 `items` 는 빈 배열 → 앱은 "음식을 찾지 못했어요". 음식이 아닌 사진이 여기서 많이 걸러진다.
+- `status` 는 상자마다 `/predict` 와 같은 규칙(1순위 신뢰도 ≥ `minConfidence`).
+- `DETECT_MODEL_DIR` 이 없으면 `503 DETECTOR_NOT_AVAILABLE`.
+
+서버 코드로 잰 결과 (`scripts/eval_detect.py`, 2026-11-11):
+
+| | `/predict` (사진 전체) | `/detect` (상자 잘라서) |
+| --- | --- | --- |
+| 음식 test 1,520장 top-1 / top-5 | 74.5% / 92.8% | **82.6% / 95.8%** |
+| 칼로리 오차 평균 | 47.2 kcal | **30.5 kcal** |
+| 음식 사진을 거절 (잘못 거절) | 18.5% | **9.0%** |
+| 음식 아닌 사진 320장 거절 | 62.2% | **86.3%** (그중 상자 없음 75.0%) |
+| CPU 시간 (사진 1장, 이 PC) | 약 25ms | 약 80ms |
+
+검출 전처리는 Ultralytics 와 같다: 비율을 유지해 640 에 맞게 줄이고 가운데 놓기(남는 곳 회색 114) → 0~1. 출력 (1, 5, N) 을 신뢰도로 거르고 NMS 를 서버에서 한다 (`app/detector.py`).
+
 ## 전처리 (학습 때와 같아야 한다)
 
 `app/classifier.py` 가 `model_meta.json` 값대로 처리한다.
@@ -119,7 +162,8 @@ cd server\inference
 
 ## 알려진 한계
 
-- 학습은 **잘라 낸 음식 상자**로 했고, 이 서버는 **사진 전체**를 받는다. 실제 정확도는 test 점수(81.9%)보다 낮을 수 있다. 원본 전체 사진 평가가 남아 있다.
-- 기준값 하나로는 음식 아닌 사진을 약 62%만 거른다.
+- 분류 학습은 **잘라 낸 음식 상자**로 했다. `/predict` 에 사진 전체를 넣으면 top-1 이 74.5% 로 떨어진다 (잘라 낸 사진 기준 81.9%). `/detect` 는 상자를 잘라 넣어 82.6% 다.
+- `/predict` 는 기준값 하나로 음식 아닌 사진을 약 62%만 거른다 (`/detect` 는 86%).
+- 검출 학습 사진은 거의 모두 음식이 하나다. 여러 음식이 함께 찍힌 사진의 정확도는 재지 못했다.
 - 304종만 인식한다. 원천 이미지가 없는 96종은 후보에 나오지 않는다 (수동 검색).
 - API 서버(`/images`, `/recognitions`, 비동기 처리, DB 저장)는 만들지 않았다. 과제 범위에서는 앱이 직접 부른다.

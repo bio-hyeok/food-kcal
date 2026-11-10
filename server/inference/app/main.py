@@ -1,8 +1,9 @@
 """추론 서버 (위키 전체 흐름 문서의 "추론 서버 (분류 모델)").
 
-API 서버가 내부에서 호출한다. 앱이 직접 부르지 않는다.
+API 서버가 내부에서 호출한다. 앱이 직접 부르지 않는다 (과제 시연용으로는 앱이 직접 부른다).
   GET  /health   상태와 모델 정보
   POST /predict  사진 1장 → 후보 Top-N + 신뢰도 + status(SUCCESS/FAILED)
+  POST /detect   사진 1장 → 음식 상자마다 후보 Top-N + status (한 사진에 여러 음식. DETECT_MODEL_DIR 필요)
 
 응답 형식은 위키 API 문서 1절의 공통 규칙({"success": ..., "data"/"error": ...})을 따른다.
 FAILED 여도 candidates 는 내려준다. API 서버가 RECOGNITION_ITEMS 에 저장하고, 앱에는 빈 items 로 보낸다
@@ -20,6 +21,7 @@ from starlette.concurrency import run_in_threadpool
 
 from .classifier import Classifier
 from .config import load_settings
+from .detector import Detector, crop_box
 
 ALLOWED_FORMATS = {"JPEG", "PNG"}
 
@@ -34,6 +36,8 @@ async def lifespan(app: FastAPI):
     # 모델은 서버가 켜질 때 한 번만 불러온다. 파일이 없으면 서버가 뜨지 않는다.
     app.state.settings = load_settings()
     app.state.classifier = Classifier(app.state.settings.model_dir)
+    dmd = app.state.settings.detect_model_dir
+    app.state.detector = Detector(dmd) if dmd else None
     yield
 
 
@@ -73,14 +77,13 @@ def health(request: Request):
         "inputSize": clf.crop,
         "minConfidence": s.min_confidence,
         "topK": s.top_k,
+        "detect": {"enabled": request.app.state.detector is not None, "minConfidence": s.detect_min_confidence,
+                   "maxItems": s.detect_max_items},
     }}
 
 
-@app.post("/predict")
-async def predict(request: Request, file: UploadFile = File(...)):
-    s = request.app.state.settings
-    clf: Classifier = request.app.state.classifier
-
+async def read_image(file: UploadFile, s, clf: Classifier) -> Image.Image:
+    """업로드한 파일 → PIL 이미지. 크기·형식이 맞지 않으면 ApiError."""
     data = await file.read(s.max_image_bytes + 1)
     if not data:
         raise ApiError(400, "INVALID_REQUEST", "빈 파일입니다.")
@@ -94,6 +97,18 @@ async def predict(request: Request, file: UploadFile = File(...)):
         raise ApiError(415, "UNSUPPORTED_IMAGE", "JPEG 또는 PNG 이미지만 받습니다.")
     if fmt not in ALLOWED_FORMATS:
         raise ApiError(415, "UNSUPPORTED_IMAGE", "JPEG 또는 PNG 이미지만 받습니다.")
+    return im
+
+
+def candidates_json(candidates) -> list[dict]:
+    return [{"rankNo": c.rank_no, "foodId": c.food_id, "confidence": round(c.confidence, 4)} for c in candidates]
+
+
+@app.post("/predict")
+async def predict(request: Request, file: UploadFile = File(...)):
+    s = request.app.state.settings
+    clf: Classifier = request.app.state.classifier
+    im = await read_image(file, s, clf)
 
     # 추론은 CPU 작업이라 이벤트 루프를 막지 않게 스레드에서 돌린다
     candidates = await run_in_threadpool(clf.predict, im, s.top_k)
@@ -102,6 +117,40 @@ async def predict(request: Request, file: UploadFile = File(...)):
         "status": status,
         "model": model_info(request),
         "minConfidence": s.min_confidence,
-        "candidates": [{"rankNo": c.rank_no, "foodId": c.food_id, "confidence": round(c.confidence, 4)}
-                       for c in candidates],
+        "candidates": candidates_json(candidates),
+    }}
+
+
+@app.post("/detect")
+async def detect(request: Request, file: UploadFile = File(...)):
+    """음식 상자를 찾아 상자마다 분류한다. 상자를 못 찾으면 items 는 빈 배열 (음식이 아닌 사진 포함).
+
+    box 는 사진(EXIF 회전 반영) 대비 0~1 비율. 앱은 사진 위에 그대로 그릴 수 있다.
+    """
+    s = request.app.state.settings
+    det: Detector | None = request.app.state.detector
+    if det is None:
+        raise ApiError(503, "DETECTOR_NOT_AVAILABLE", "검출 모델이 설정되지 않았습니다 (DETECT_MODEL_DIR).")
+    clf: Classifier = request.app.state.classifier
+    im = await read_image(file, s, clf)
+
+    def run():
+        boxes = det.detect(im, s.detect_min_confidence, s.detect_iou, s.detect_max_items)
+        return [(b, clf.predict(crop_box(im, b), s.top_k)) for b in boxes]
+
+    results = await run_in_threadpool(run)
+    w, h = im.size
+    items = [{
+        "itemNo": i,
+        "box": {"x0": round(b.x0 / w, 4), "y0": round(b.y0 / h, 4), "x1": round(b.x1 / w, 4), "y1": round(b.y1 / h, 4)},
+        "detConfidence": round(b.confidence, 4),
+        "status": "SUCCESS" if cands[0].confidence >= s.min_confidence else "FAILED",
+        "candidates": candidates_json(cands),
+    } for i, (b, cands) in enumerate(results, 1)]
+    return {"success": True, "data": {
+        "model": model_info(request),
+        "minConfidence": s.min_confidence,
+        "imageWidth": w,
+        "imageHeight": h,
+        "items": items,
     }}

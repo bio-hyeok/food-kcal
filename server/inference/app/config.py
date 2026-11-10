@@ -11,6 +11,11 @@ class Settings:
     min_confidence: float
     top_k: int
     max_image_bytes: int
+    # 한 사진에 여러 음식(POST /detect). DETECT_MODEL_DIR 이 없으면 /detect 만 꺼진다.
+    detect_model_dir: str | None = None
+    detect_min_confidence: float = 0.25
+    detect_iou: float = 0.7
+    detect_max_items: int = 6
 
 
 def load_settings() -> Settings:
@@ -25,9 +30,18 @@ def load_settings() -> Settings:
         min_confidence=float(os.environ.get("RECOGNITION_MIN_CONFIDENCE", "0.30")),
         top_k=int(os.environ.get("RECOGNITION_TOP_K", "5")),
         max_image_bytes=int(os.environ.get("MAX_IMAGE_BYTES", str(10 * 1024 * 1024))),
+        detect_model_dir=os.environ.get("DETECT_MODEL_DIR") or None,
+        # 0.25, 0.7 은 Ultralytics 기본값 (test 평가도 이 값으로 했다, ml/README.md)
+        detect_min_confidence=float(os.environ.get("DETECT_MIN_CONFIDENCE", "0.25")),
+        detect_iou=float(os.environ.get("DETECT_IOU", "0.7")),
+        detect_max_items=int(os.environ.get("DETECT_MAX_ITEMS", "6")),
     )
     if not 0.0 <= s.min_confidence <= 1.0:
         raise RuntimeError("RECOGNITION_MIN_CONFIDENCE 는 0~1 사이여야 합니다")
     if s.top_k < 1:
         raise RuntimeError("RECOGNITION_TOP_K 는 1 이상이어야 합니다")
+    if not (0.0 <= s.detect_min_confidence <= 1.0 and 0.0 < s.detect_iou <= 1.0):
+        raise RuntimeError("DETECT_MIN_CONFIDENCE 는 0~1, DETECT_IOU 는 0 초과 1 이하여야 합니다")
+    if s.detect_max_items < 1:
+        raise RuntimeError("DETECT_MAX_ITEMS 는 1 이상이어야 합니다")
     return s
