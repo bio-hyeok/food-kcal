@@ -186,3 +186,35 @@ v2 설정에 입력 크기만 288 로 올렸다 (`--img-size 288`). 전처리 �
 - 출력: `classifier.onnx`(17.6MB, 입력 `image` NCHW float32, 출력 `logits`, 배치 크기 가변), `model_meta.json`(전처리 값, 클래스 번호 → foodId, 원본 체크포인트 sha1).
 - 추론 서버는 `model_meta.json` 의 값대로 전처리한다: RGB → 짧은 변 `resize_short_side` 로 Resize → `center_crop` 으로 CenterCrop → 0~1 → mean/std 정규화 → softmax.
 - v3 확인 결과: PyTorch 와 확률 최대 차이 6.7e-06, 1순위 256/256 일치, ONNX Runtime test top-1 81.94% / top-5 96.01%.
+
+## 한 사진에 여러 음식: 음식 위치 찾기(검출) + 분류 (2026-11-11)
+
+중간발표 이후 추가. 사진에서 **음식이 있는 곳을 먼저 찾고(검출), 찾은 곳마다 잘라서 v3 분류 모델에 넣는다.** 검출 모델은 종류를 가리지 않고 "food" 한 클래스만 찾는다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_detect_data.py --out C:\food-data\detect
+.\.venv\Scripts\python.exe scripts\train_detector.py --data C:\food-data\detect\data.yaml --project C:\food-data\detect_runs --epochs 40
+.\.venv\Scripts\python.exe scripts\evaluate_detect_pipeline.py --detect C:\food-data\detect --weights C:\food-data\detect_runs\yolo26n_food\weights\best.pt --cls-model-dir C:\food-data\models_v3
+.\.venv\Scripts\yolo.exe export model=C:\food-data\detect_runs\yolo26n_food\weights\best.pt format=onnx imgsz=640 simplify=True
+```
+
+- 데이터: 분류와 같은 원본·같은 split 에서 클래스당 train 20 / val 3 / test 5장 → 8,512장(제외 0), 긴 변 1024px, 1.5GB. **상자가 2개 이상인 사진은 5장뿐**이라 사실상 "한 사진 한 음식" 데이터로 배운다.
+- 모델: YOLO26n (Ultralytics 8.4, COCO 사전학습), 640px, 40 epoch, RTX 4070 Ti 약 20분.
+
+| test 1,520장 (분류·검출 모두 본 적 없는 사진) | 값 |
+| --- | --- |
+| 검출 mAP50 / mAP50-95 | 0.994 / 0.846 |
+| 검출 precision / recall | 0.993 / 0.996 |
+| 상자를 못 찾은 사진 | 0장 |
+
+같은 test 사진으로 분류 정확도 비교 (분류는 추론 서버 코드 그대로):
+
+| 분류에 넣는 것 | top-1 | top-5 | 칼로리 오차 평균 |
+| --- | --- | --- | --- |
+| 사진 전체 (지금 앱·서버) | 74.5% | 92.8% | 47.2 kcal |
+| **검출 상자로 잘라서 (새 방식)** | **82.3%** | **96.0%** | **30.8 kcal** |
+| 라벨 상자로 잘라서 (상한선) | 82.8% | 95.9% | 31.1 kcal |
+
+- 사진 전체를 넣으면 잘라 낸 사진으로 잰 점수(81.9%)보다 7%p 이상 낮았다. 검출로 잘라 넣으면 라벨 상자와 거의 같은 수준으로 돌아온다.
+- ONNX: `best.onnx`(9.9MB, 입력 `images` 1×3×640×640, 출력 `output0` 1×5×8400 = cx, cy, w, h, 신뢰도). 겹친 상자 지우기(NMS)는 모델 밖에서 한다. 640×640 고정 입력으로 PyTorch 와 비교하면 상자 IoU 평균 1.000, 최소 0.999 (100장).
+- 한계: 여러 음식이 함께 찍힌 사진의 정답 데이터가 없어 여러 음식에서의 정확도는 재지 못했다. 직접 찍은 상차림 사진으로 사례를 확인한다.

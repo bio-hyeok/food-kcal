@@ -3,3 +3,4 @@ torchvision
 pillow
 onnx
 onnxruntime
+ultralytics>=8.4  # 검출 모델 (AGPL-3.0)
