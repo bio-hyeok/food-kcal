@@ -51,8 +51,74 @@ def model_dir(tmp_path):
     return tmp_path
 
 
+DET_SIZE = 640
+# 가짜 검출 모델이 항상 내는 상자 (입력 640 기준 cx, cy, w, h, 신뢰도)
+#   128×64 사진은 640×320 으로 줄어 위아래에 160 씩 여백이 생긴다 → A 는 사진 왼쪽 절반, B 는 오른쪽 절반
+DET_BOXES = [
+    (160, 320, 320, 320, 0.9),   # A
+    (480, 320, 320, 320, 0.8),   # B
+    (165, 320, 320, 320, 0.5),   # A 와 거의 겹침 → NMS 로 지워진다
+    (320, 320, 40, 40, 0.1),     # 신뢰도가 낮아 지워진다
+]
+
+
+def build_detector(path):
+    """입력과 상관없이 DET_BOXES 를 (1, 5, N) 으로 내는 모델. 입력 × 0 을 더해 입력과 연결해 둔다."""
+    const = np.array(DET_BOXES, dtype=np.float32).T[None]               # (1, 5, N)
+    c = helper.make_tensor("C", TensorProto.FLOAT, const.shape, const.flatten().tolist())
+    zero = helper.make_tensor("Z", TensorProto.FLOAT, [], [0.0])
+    shape = helper.make_tensor("S", TensorProto.INT64, [3], [1, 1, 1])
+    nodes = [
+        helper.make_node("ReduceMean", ["images"], ["m"], keepdims=1),
+        helper.make_node("Reshape", ["m", "S"], ["m3"]),
+        helper.make_node("Mul", ["m3", "Z"], ["z"]),
+        helper.make_node("Add", ["z", "C"], ["output0"]),
+    ]
+    graph = helper.make_graph(
+        nodes, "tiny_det",
+        [helper.make_tensor_value_info("images", TensorProto.FLOAT, [1, 3, DET_SIZE, DET_SIZE])],
+        [helper.make_tensor_value_info("output0", TensorProto.FLOAT, [1, 5, len(DET_BOXES)])],
+        initializer=[c, zero, shape],
+    )
+    model = helper.make_model(graph, opset_imports=[helper.make_opsetid("", 17)])
+    model.ir_version = 8
+    onnx.save(model, path)
+
+
+@pytest.fixture
+def detect_dir(tmp_path):
+    d = tmp_path / "det"
+    d.mkdir()
+    build_detector(d / "detector.onnx")
+    meta = {"onnx": "detector.onnx", "input": {"name": "images", "size": DET_SIZE, "pad_value": 114},
+            "output": {"name": "output0", "format": "cx,cy,w,h,conf"}, "classes": ["food"]}
+    (d / "detector_meta.json").write_text(json.dumps(meta), encoding="utf-8")
+    return d
+
+
+@pytest.fixture
+def detect_client(model_dir, detect_dir, monkeypatch):
+    monkeypatch.setenv("MODEL_DIR", str(model_dir))
+    monkeypatch.setenv("DETECT_MODEL_DIR", str(detect_dir))
+    monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.5")
+    monkeypatch.setenv("RECOGNITION_TOP_K", "3")
+    from app.main import app
+    with TestClient(app) as c:
+        yield c
+
+
+def two_color_image(size=(128, 64)):
+    """왼쪽 절반 빨강(foodId 5), 오른쪽 절반 초록(foodId 12)."""
+    im = Image.new("RGB", size, (0, 255, 0))
+    im.paste((255, 0, 0), (0, 0, size[0] // 2, size[1]))
+    buf = io.BytesIO()
+    im.save(buf, "PNG")
+    return buf.getvalue()
+
+
 @pytest.fixture
 def client(model_dir, monkeypatch):
+    monkeypatch.delenv("DETECT_MODEL_DIR", raising=False)
     monkeypatch.setenv("MODEL_DIR", str(model_dir))
     monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.5")
     monkeypatch.setenv("RECOGNITION_TOP_K", "3")

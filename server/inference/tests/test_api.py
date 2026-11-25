@@ -1,7 +1,8 @@
 from PIL import Image
 
 from app.classifier import center_crop, resize_short_side
-from conftest import image_bytes
+from app.detector import letterbox
+from conftest import image_bytes, two_color_image
 
 
 def post(client, data, name="a.jpg", ctype="image/jpeg"):
@@ -96,3 +97,55 @@ def test_resize_and_crop_match_torchvision_rules():
     assert c.size == (288, 288)
     tall = resize_short_side(Image.new("RGB", (300, 401)), 100)
     assert tall.size == (100, 133)
+
+
+def test_detect_finds_each_food_and_classifies_it(detect_client):
+    r = detect_client.post("/detect", files={"file": ("a.png", two_color_image(), "image/png")})
+    assert r.status_code == 200
+    d = r.json()["data"]
+    assert (d["imageWidth"], d["imageHeight"]) == (128, 64)
+    items = d["items"]
+    assert [i["itemNo"] for i in items] == [1, 2]                 # 겹친 상자·낮은 신뢰도 상자는 빠진다
+    assert [i["detConfidence"] for i in items] == [0.9, 0.8]
+    assert items[0]["box"] == {"x0": 0.0, "y0": 0.0, "x1": 0.5, "y1": 1.0}   # 위아래 여백을 빼고 원본 비율로
+    assert items[1]["box"] == {"x0": 0.5, "y0": 0.0, "x1": 1.0, "y1": 1.0}
+    assert items[0]["candidates"][0]["foodId"] == 5               # 왼쪽 빨강
+    assert items[1]["candidates"][0]["foodId"] == 12              # 오른쪽 초록
+    assert all(i["status"] == "SUCCESS" for i in items)
+    assert (items[0]["cropShortSide"], items[0]["small"]) == (64, True)   # 64px < 128px → 작게 찍힘
+
+
+def test_detect_small_flag_off_for_big_photo(detect_client):
+    r = detect_client.post("/detect", files={"file": ("a.png", two_color_image((512, 256)), "image/png")})
+    items = r.json()["data"]["items"]
+    assert [(i["cropShortSide"], i["small"]) for i in items] == [(256, False), (256, False)]
+
+
+def test_detect_no_box_gives_empty_items(detect_client, monkeypatch):
+    monkeypatch.setenv("DETECT_MIN_CONFIDENCE", "0.95")
+    from app.main import app
+    from fastapi.testclient import TestClient
+    with TestClient(app) as c:
+        r = c.post("/detect", files={"file": ("a.png", two_color_image(), "image/png")})
+    assert r.status_code == 200
+    assert r.json()["data"]["items"] == []
+
+
+def test_detect_validates_upload_like_predict(detect_client):
+    r = detect_client.post("/detect", files={"file": ("a.txt", b"hello", "text/plain")})
+    assert r.status_code == 415
+
+
+def test_detect_not_configured(client):
+    r = client.post("/detect", files={"file": ("a.png", two_color_image(), "image/png")})
+    assert r.status_code == 503
+    assert r.json()["error"]["code"] == "DETECTOR_NOT_AVAILABLE"
+    assert client.get("/health").json()["data"]["detect"]["enabled"] is False
+
+
+def test_letterbox_matches_ultralytics_rules():
+    canvas, r, left, top = letterbox(Image.new("RGB", (1024, 768)), 640, 114)
+    assert canvas.size == (640, 640)
+    assert (r, left, top) == (0.625, 0, 80)                        # 640×480 → 위아래 80
+    _, r, left, top = letterbox(Image.new("RGB", (300, 401)), 640, 114)
+    assert (left, top) == (80, 0)                                  # 479×640 → 왼쪽 round(80.5-0.1)=80

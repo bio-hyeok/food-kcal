@@ -186,3 +186,63 @@ v2 설정에 입력 크기만 288 로 올렸다 (`--img-size 288`). 전처리 �
 - 출력: `classifier.onnx`(17.6MB, 입력 `image` NCHW float32, 출력 `logits`, 배치 크기 가변), `model_meta.json`(전처리 값, 클래스 번호 → foodId, 원본 체크포인트 sha1).
 - 추론 서버는 `model_meta.json` 의 값대로 전처리한다: RGB → 짧은 변 `resize_short_side` 로 Resize → `center_crop` 으로 CenterCrop → 0~1 → mean/std 정규화 → softmax.
 - v3 확인 결과: PyTorch 와 확률 최대 차이 6.7e-06, 1순위 256/256 일치, ONNX Runtime test top-1 81.94% / top-5 96.01%.
+
+## 한 사진에 여러 음식: 음식 위치 찾기(검출) + 분류 (2026-11-11)
+
+중간발표 이후 추가. 사진에서 **음식이 있는 곳을 먼저 찾고(검출), 찾은 곳마다 잘라서 v3 분류 모델에 넣는다.** 검출 모델은 종류를 가리지 않고 "food" 한 클래스만 찾는다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\prepare_detect_data.py --out C:\food-data\detect
+.\.venv\Scripts\python.exe scripts\train_detector.py --data C:\food-data\detect\data.yaml --project C:\food-data\detect_runs --epochs 40
+.\.venv\Scripts\python.exe scripts\evaluate_detect_pipeline.py --detect C:\food-data\detect --weights C:\food-data\detect_runs\yolo26n_food\weights\best.pt --cls-model-dir C:\food-data\models_v3
+.\.venv\Scripts\yolo.exe export model=C:\food-data\detect_runs\yolo26n_food\weights\best.pt format=onnx imgsz=640 simplify=True
+```
+
+- 데이터: 분류와 같은 원본·같은 split 에서 클래스당 train 20 / val 3 / test 5장 → 8,512장(제외 0), 긴 변 1024px, 1.5GB. **상자가 2개 이상인 사진은 5장뿐**이라 사실상 "한 사진 한 음식" 데이터로 배운다.
+- 모델: YOLO26n (Ultralytics 8.4, COCO 사전학습), 640px, 40 epoch, RTX 4070 Ti 약 20분.
+
+| test 1,520장 (분류·검출 모두 본 적 없는 사진) | 값 |
+| --- | --- |
+| 검출 mAP50 / mAP50-95 | 0.994 / 0.846 |
+| 검출 precision / recall | 0.993 / 0.996 |
+| 상자를 못 찾은 사진 | 0장 |
+
+같은 test 사진으로 분류 정확도 비교 (분류는 추론 서버 코드 그대로):
+
+| 분류에 넣는 것 | top-1 | top-5 | 칼로리 오차 평균 |
+| --- | --- | --- | --- |
+| 사진 전체 (지금 앱·서버) | 74.5% | 92.8% | 47.2 kcal |
+| **검출 상자로 잘라서 (새 방식)** | **82.3%** | **96.0%** | **30.8 kcal** |
+| 라벨 상자로 잘라서 (상한선) | 82.8% | 95.9% | 31.1 kcal |
+
+- 사진 전체를 넣으면 잘라 낸 사진으로 잰 점수(81.9%)보다 7%p 이상 낮았다. 검출로 잘라 넣으면 라벨 상자와 거의 같은 수준으로 돌아온다.
+- ONNX: `best.onnx`(9.9MB, 입력 `images` 1×3×640×640, 출력 `output0` 1×5×8400 = cx, cy, w, h, 신뢰도). 겹친 상자 지우기(NMS)는 모델 밖에서 한다. 640×640 고정 입력으로 PyTorch 와 비교하면 상자 IoU 평균 1.000, 최소 0.999 (100장).
+- 한계: 여러 음식이 함께 찍힌 진짜 사진의 정답 데이터가 없다. 아래 가짜 상차림으로 재고, 직접 찍은 상차림 사진으로 사례를 확인한다.
+
+### 검출 v2: 가짜 상차림 사진으로 다시 학습 (2026-11-26) — 현재 기본값
+
+v1 은 음식이 하나인 사진만 보고 배워, 음식이 여러 개 있으면 일부만 찾았다. 음식 사진을 오려 식탁 배경에 2~5개 붙인 **가짜 상차림 사진**을 만들어 v1 데이터와 함께 다시 학습했다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\make_synthetic_meals.py --detect C:\food-data\detect --out C:\food-data\detect_syn
+.\.venv\Scripts\python.exe scripts\train_detector.py --data C:\food-data\detect_syn\data_combined.yaml --project C:\food-data\detect_runs --name yolo26n_food_syn --epochs 40 --workers 2
+.\.venv\Scripts\python.exe scripts\export_detector.py --weights C:\food-data\detect_runs\yolo26n_food_syn\weights\best.pt --out C:\food-data\detector_v2
+```
+
+- 합성: 배경은 같은 split 사진에서 음식 상자 밖 가장 넓은 띠, 음식은 상자 둘레 12% 를 더 잘라 모서리를 둥글게 오려 붙임, 크기 캔버스 너비의 14~45%, 서로 거의 안 겹치게. train 3,000 / val 300 / test 300장 (음식 10,983개, 441MB). train/val/test 재료를 섞지 않는다.
+- 학습: v1 데이터 + 합성 데이터, YOLO26n 사전학습에서 다시 시작, 40 epoch 약 31분. Windows 에서 `--workers 8` 은 페이징 파일 부족(WinError 1455)으로 멈춰 `--workers 2` 로 돌렸다.
+
+결과 (추론 서버 코드 그대로, `server/inference/scripts/eval_multi.py`, `eval_detect.py`):
+
+| | v1 | **v2** |
+| --- | --- | --- |
+| 가짜 상차림 test 300장 (음식 930개): 음식 찾음 | 59.5% | **100%** |
+| 〃 1순위 정답 / 후보 5개 안 | 46.5% / 56.0% | **71.4% / 91.5%** |
+| 〃 사진 속 음식 모두 맞힘 | 16.3% | **38.3%** |
+| 〃 사진당 헛상자 | 0.22 | **0.003** |
+| 한 음식 test 1,520장 top-1 / top-5 | 82.6% / 95.8% | **82.8% / 95.9%** |
+| 음식 사진 잘못 거절 | 9.0% | **8.4%** |
+| 음식 아닌 사진 320장 거절 | 86.3% | **95.0%** |
+
+- 주의: 가짜 상차림 점수는 학습과 같은 방법으로 만든 사진이라 **실제보다 좋게 나온다** (특히 찾음 100%). 진짜 상차림에서는 음식이 겹치거나 그릇이 붙어 있어 더 낮을 수 있다. 한 음식·음식 아닌 사진 결과는 진짜 사진이라 믿을 만하다.
+- 찾은 음식 중 1순위 정답은 약 71% 로, 한 음식 사진(83%)보다 낮다. 합성 사진의 음식이 작게 붙은 경우가 많아서다 (작을수록 분류가 약하다, 서버 README 표).
