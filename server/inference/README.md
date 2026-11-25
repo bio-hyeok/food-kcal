@@ -25,11 +25,11 @@ cd server\inference
 py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 $env:MODEL_DIR = "C:\food-data\models_v3"
-$env:DETECT_MODEL_DIR = "C:\food-data\detector_v1"   # 한 사진에 여러 음식(/detect). 없으면 /detect 만 꺼진다
+$env:DETECT_MODEL_DIR = "C:\food-data\detector_v2"   # 한 사진에 여러 음식(/detect). 없으면 /detect 만 꺼진다
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8100
 ```
 
-Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food-data\detector_v1" .venv/Scripts/python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100`.
+Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food-data\detector_v2" .venv/Scripts/python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100`.
 
 `MODEL_DIR` 에는 `ml/scripts/export_onnx.py` 가 만든 두 파일이 있어야 한다. 없으면 서버가 뜨지 않는다.
 - `classifier.onnx` — 모델
@@ -132,6 +132,19 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 | 음식 아닌 사진 320장 거절 | 62.2% | **86.3%** (그중 상자 없음 75.0%) |
 | CPU 시간 (사진 1장, 이 PC) | 약 25ms | 약 80ms |
 
+위 표는 검출 v1. **기본값은 검출 v2** (가짜 상차림 사진으로 다시 학습, 2026-11-26, 만드는 법은 `ml/README.md`):
+
+| | 검출 v1 | **검출 v2** |
+| --- | --- | --- |
+| 음식 test 1,520장 top-1 / top-5 | 82.6% / 95.8% | **82.8% / 95.9%** |
+| 칼로리 오차 평균 | 30.5 kcal | 31.0 kcal |
+| 음식 사진을 거절 (잘못 거절) | 9.0% | **8.4%** |
+| 음식 아닌 사진 320장 거절 | 86.3% | **95.0%** |
+| 가짜 상차림 test 300장: 음식 찾음 / 1순위 정답 (`scripts/eval_multi.py`) | 59.5% / 46.5% | **100% / 71.4%** |
+| 〃 사진 속 음식 모두 맞힘 | 16.3% | **38.3%** |
+
+가짜 상차림 점수는 학습과 같은 방법으로 만든 사진이라 실제보다 좋게 나온다.
+
 #### 작은 설정 조정 (`scripts/tune_detect.py`, 2026-11-25)
 
 값은 val 912장으로 고르고 test 1,520장으로 확인했다 (test 로 고르면 점수가 부풀려진다).
@@ -184,6 +197,6 @@ cd server\inference
 
 - 분류 학습은 **잘라 낸 음식 상자**로 했다. `/predict` 에 사진 전체를 넣으면 top-1 이 74.5% 로 떨어진다 (잘라 낸 사진 기준 81.9%). `/detect` 는 상자를 잘라 넣어 82.6% 다.
 - `/predict` 는 기준값 하나로 음식 아닌 사진을 약 62%만 거른다 (`/detect` 는 86%).
-- 검출 학습 사진은 거의 모두 음식이 하나다. 여러 음식이 함께 찍힌 사진의 정확도는 재지 못했다.
+- 여러 음식은 가짜 상차림 사진으로만 쟀다. 진짜 상차림 사진(음식이 겹치거나 그릇이 붙은 사진)의 정확도는 아직 재지 못했다.
 - 304종만 인식한다. 원천 이미지가 없는 96종은 후보에 나오지 않는다 (수동 검색).
 - API 서버(`/images`, `/recognitions`, 비동기 처리, DB 저장)는 만들지 않았다. 과제 범위에서는 앱이 직접 부른다.

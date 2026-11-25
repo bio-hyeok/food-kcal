@@ -29,7 +29,7 @@
 ```powershell
 cd server\inference
 $env:MODEL_DIR = "C:\food-data\models_v3"
-$env:DETECT_MODEL_DIR = "C:\food-data\detector_v1"
+$env:DETECT_MODEL_DIR = "C:\food-data\detector_v2"
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100
 ```
 
@@ -68,7 +68,7 @@ npx expo start
 
 - 모델은 304종만 안다. 김치, 나물, 회, 떡 등 원천 이미지가 없던 96종은 후보에 나오지 않으니 검색으로 고른다.
 - test 1,520장(서버 코드로 측정): 음식을 찾아 잘라 분류하면 1순위 82.6%, 후보 5개 안 95.8% (사진 전체로 분류하면 74.5%). 음식이 아닌 사진은 86% 를 걸러 낸다 (`server/inference/README.md`).
-- 검출 학습 사진은 거의 모두 음식이 하나라, 여러 음식이 함께 찍힌 사진의 정확도는 재지 못했다. 사진이 작거나 흐리면 음식마다 잘라 낸 부분이 작아져 정확도가 크게 떨어진다 (여러 음식을 이어 붙인 시험 사진에서 확인).
+- 여러 음식은 가짜 상차림 사진으로만 쟀다 (검출 v2, 음식 찾음 100% · 1순위 71%, 실제보다 좋게 나오는 값). 진짜 상차림 사진의 정확도는 아직 재지 못했다. 사진이 작거나 흐리면 음식마다 잘라 낸 부분이 작아져 정확도가 크게 떨어진다 (여러 음식을 이어 붙인 시험 사진에서 확인).
 - 번호는 검출 신뢰도 순서다 (왼쪽→오른쪽 순서가 아님).
 - 칼로리는 AI-Hub 영양DB의 한 접시 기준 값이다.
 

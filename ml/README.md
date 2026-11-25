@@ -217,4 +217,32 @@ v2 설정에 입력 크기만 288 로 올렸다 (`--img-size 288`). 전처리 �
 
 - 사진 전체를 넣으면 잘라 낸 사진으로 잰 점수(81.9%)보다 7%p 이상 낮았다. 검출로 잘라 넣으면 라벨 상자와 거의 같은 수준으로 돌아온다.
 - ONNX: `best.onnx`(9.9MB, 입력 `images` 1×3×640×640, 출력 `output0` 1×5×8400 = cx, cy, w, h, 신뢰도). 겹친 상자 지우기(NMS)는 모델 밖에서 한다. 640×640 고정 입력으로 PyTorch 와 비교하면 상자 IoU 평균 1.000, 최소 0.999 (100장).
-- 한계: 여러 음식이 함께 찍힌 사진의 정답 데이터가 없어 여러 음식에서의 정확도는 재지 못했다. 직접 찍은 상차림 사진으로 사례를 확인한다.
+- 한계: 여러 음식이 함께 찍힌 진짜 사진의 정답 데이터가 없다. 아래 가짜 상차림으로 재고, 직접 찍은 상차림 사진으로 사례를 확인한다.
+
+### 검출 v2: 가짜 상차림 사진으로 다시 학습 (2026-11-26) — 현재 기본값
+
+v1 은 음식이 하나인 사진만 보고 배워, 음식이 여러 개 있으면 일부만 찾았다. 음식 사진을 오려 식탁 배경에 2~5개 붙인 **가짜 상차림 사진**을 만들어 v1 데이터와 함께 다시 학습했다.
+
+```powershell
+.\.venv\Scripts\python.exe scripts\make_synthetic_meals.py --detect C:\food-data\detect --out C:\food-data\detect_syn
+.\.venv\Scripts\python.exe scripts\train_detector.py --data C:\food-data\detect_syn\data_combined.yaml --project C:\food-data\detect_runs --name yolo26n_food_syn --epochs 40 --workers 2
+.\.venv\Scripts\python.exe scripts\export_detector.py --weights C:\food-data\detect_runs\yolo26n_food_syn\weights\best.pt --out C:\food-data\detector_v2
+```
+
+- 합성: 배경은 같은 split 사진에서 음식 상자 밖 가장 넓은 띠, 음식은 상자 둘레 12% 를 더 잘라 모서리를 둥글게 오려 붙임, 크기 캔버스 너비의 14~45%, 서로 거의 안 겹치게. train 3,000 / val 300 / test 300장 (음식 10,983개, 441MB). train/val/test 재료를 섞지 않는다.
+- 학습: v1 데이터 + 합성 데이터, YOLO26n 사전학습에서 다시 시작, 40 epoch 약 31분. Windows 에서 `--workers 8` 은 페이징 파일 부족(WinError 1455)으로 멈춰 `--workers 2` 로 돌렸다.
+
+결과 (추론 서버 코드 그대로, `server/inference/scripts/eval_multi.py`, `eval_detect.py`):
+
+| | v1 | **v2** |
+| --- | --- | --- |
+| 가짜 상차림 test 300장 (음식 930개): 음식 찾음 | 59.5% | **100%** |
+| 〃 1순위 정답 / 후보 5개 안 | 46.5% / 56.0% | **71.4% / 91.5%** |
+| 〃 사진 속 음식 모두 맞힘 | 16.3% | **38.3%** |
+| 〃 사진당 헛상자 | 0.22 | **0.003** |
+| 한 음식 test 1,520장 top-1 / top-5 | 82.6% / 95.8% | **82.8% / 95.9%** |
+| 음식 사진 잘못 거절 | 9.0% | **8.4%** |
+| 음식 아닌 사진 320장 거절 | 86.3% | **95.0%** |
+
+- 주의: 가짜 상차림 점수는 학습과 같은 방법으로 만든 사진이라 **실제보다 좋게 나온다** (특히 찾음 100%). 진짜 상차림에서는 음식이 겹치거나 그릇이 붙어 있어 더 낮을 수 있다. 한 음식·음식 아닌 사진 결과는 진짜 사진이라 믿을 만하다.
+- 찾은 음식 중 1순위 정답은 약 71% 로, 한 음식 사진(83%)보다 낮다. 합성 사진의 음식이 작게 붙은 경우가 많아서다 (작을수록 분류가 약하다, 서버 README 표).
