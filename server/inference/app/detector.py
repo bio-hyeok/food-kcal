@@ -1,9 +1,12 @@
 """ONNX 음식 위치 찾기(검출) 모델. 사진 한 장 → 음식 상자 여러 개.
 
 종류는 가리지 않고 "food" 한 클래스만 찾는다. 찾은 상자는 잘라서 분류 모델(classifier.py)에 넣는다.
+여러 클래스 모델(예: COCO 사전학습 YOLO)도 쓸 수 있다. detector_meta.json 의 keep_classes(클래스 번호)만 남긴다
+(실제 상차림에서 "그릇(bowl)" 찾기, server/inference/README.md).
 전처리는 학습 때(Ultralytics)와 같게 한다. 값은 detector_meta.json 에서 읽는다 (ml/scripts/export_detector.py).
   RGB → 비율 유지하며 size 에 맞게 줄이고 가운데 놓기(남는 곳은 pad_value 회색) → 0~1 → NCHW
-출력 (1, 5, N) = 가운데 x, y, 너비, 높이(입력 size 기준 픽셀), 신뢰도 → 신뢰도로 거르고 겹친 상자(NMS)를 지운다.
+출력 (1, 4+클래스 수, N) = 가운데 x, y, 너비, 높이(입력 size 기준 픽셀), 클래스별 신뢰도
+→ keep_classes 중 가장 높은 신뢰도로 거르고 겹친 상자(NMS)를 지운다.
 """
 import json
 from dataclasses import dataclass
@@ -71,6 +74,7 @@ class Detector:
         self.input_name = self.meta["input"]["name"]
         self.size = int(self.meta["input"]["size"])
         self.pad_value = int(self.meta["input"].get("pad_value", 114))
+        self.keep_classes = [int(c) for c in self.meta.get("keep_classes", [0])]
         self.session = ort.InferenceSession(str(onnx_path), providers=["CPUExecutionProvider"])
 
     def detect(self, im: Image.Image, min_confidence: float, iou_th: float, max_det: int) -> list[Box]:
@@ -78,11 +82,13 @@ class Detector:
         im = im.convert("RGB")
         x, r, left, top = letterbox(im, self.size, self.pad_value)
         x = np.asarray(x, dtype=np.float32).transpose(2, 0, 1)[None] / 255.0
-        pred = self.session.run(None, {self.input_name: x})[0][0].T    # (N, 5)
-        pred = pred[pred[:, 4] >= min_confidence]
+        pred = self.session.run(None, {self.input_name: x})[0][0].T    # (N, 4 + 클래스 수)
+        conf = pred[:, [4 + c for c in self.keep_classes]].max(axis=1)
+        ok = conf >= min_confidence
+        pred, conf = pred[ok], conf[ok]
         if not len(pred):
             return []
-        cx, cy, bw, bh, conf = pred.T
+        cx, cy, bw, bh = pred[:, :4].T
         xyxy = np.stack([cx - bw / 2, cy - bh / 2, cx + bw / 2, cy + bh / 2], axis=1)
         keep = nms(xyxy, conf, iou_th, max_det)
         w, h = im.size

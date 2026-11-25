@@ -3,7 +3,8 @@
 API 서버가 내부에서 호출한다. 앱이 직접 부르지 않는다 (과제 시연용으로는 앱이 직접 부른다).
   GET  /health   상태와 모델 정보
   POST /predict  사진 1장 → 후보 Top-N + 신뢰도 + status(SUCCESS/FAILED)
-  POST /detect   사진 1장 → 음식 상자마다 후보 Top-N + status (한 사진에 여러 음식. DETECT_MODEL_DIR 필요)
+  POST /detect   사진 1장 → 음식 상자마다 후보 Top-N + status (한 사진에 여러 음식. DETECT_MODEL_DIR 필요,
+                 DETECT_BOWL_MODEL_DIR 가 있으면 그릇 찾기도 함께 쓴다 → app/pipeline.py)
 
 응답 형식은 위키 API 문서 1절의 공통 규칙({"success": ..., "data"/"error": ...})을 따른다.
 FAILED 여도 candidates 는 내려준다. API 서버가 RECOGNITION_ITEMS 에 저장하고, 앱에는 빈 items 로 보낸다
@@ -21,7 +22,8 @@ from starlette.concurrency import run_in_threadpool
 
 from .classifier import Classifier
 from .config import load_settings
-from .detector import Detector, crop_box
+from .detector import Detector
+from .pipeline import detect_items
 
 ALLOWED_FORMATS = {"JPEG", "PNG"}
 
@@ -38,6 +40,8 @@ async def lifespan(app: FastAPI):
     app.state.classifier = Classifier(app.state.settings.model_dir)
     dmd = app.state.settings.detect_model_dir
     app.state.detector = Detector(dmd) if dmd else None
+    bmd = app.state.settings.detect_bowl_model_dir
+    app.state.bowl_detector = Detector(bmd) if bmd and dmd else None
     yield
 
 
@@ -78,7 +82,7 @@ def health(request: Request):
         "minConfidence": s.min_confidence,
         "topK": s.top_k,
         "detect": {"enabled": request.app.state.detector is not None, "minConfidence": s.detect_min_confidence,
-                   "maxItems": s.detect_max_items},
+                   "maxItems": s.detect_max_items, "bowl": request.app.state.bowl_detector is not None},
     }}
 
 
@@ -127,6 +131,7 @@ async def detect(request: Request, file: UploadFile = File(...)):
 
     box 는 사진(EXIF 회전 반영) 대비 0~1 비율. 앱은 사진 위에 그대로 그릴 수 있다.
     small 은 음식이 작게 찍혀(상자의 짧은 변 < DETECT_SMALL_PX) 정확도가 떨어질 수 있다는 표시다.
+    source 는 상자를 찾은 모델: "food"(음식 검출) 또는 "bowl"(그릇 찾기). 그릇 상자는 기본으로 FAILED (후보만 보여 준다).
     """
     s = request.app.state.settings
     det: Detector | None = request.app.state.detector
@@ -135,21 +140,23 @@ async def detect(request: Request, file: UploadFile = File(...)):
     clf: Classifier = request.app.state.classifier
     im = await read_image(file, s, clf)
 
-    def run():
-        boxes = det.detect(im, s.detect_min_confidence, s.detect_iou, s.detect_max_items)
-        return [(b, clf.predict(crop_box(im, b), s.top_k)) for b in boxes]
-
-    results = await run_in_threadpool(run)
+    results = await run_in_threadpool(detect_items, im, s, clf, det, request.app.state.bowl_detector)
     w, h = im.size
-    items = [{
-        "itemNo": i,
-        "box": {"x0": round(b.x0 / w, 4), "y0": round(b.y0 / h, 4), "x1": round(b.x1 / w, 4), "y1": round(b.y1 / h, 4)},
-        "detConfidence": round(b.confidence, 4),
-        "cropShortSide": round(min(b.x1 - b.x0, b.y1 - b.y0)),
-        "small": min(b.x1 - b.x0, b.y1 - b.y0) < s.detect_small_px,
-        "status": "SUCCESS" if cands[0].confidence >= s.min_confidence else "FAILED",
-        "candidates": candidates_json(cands),
-    } for i, (b, cands) in enumerate(results, 1)]
+
+    def item_json(i, it):
+        b = it.box
+        return {
+            "itemNo": i,
+            "box": {"x0": round(b.x0 / w, 4), "y0": round(b.y0 / h, 4), "x1": round(b.x1 / w, 4), "y1": round(b.y1 / h, 4)},
+            "detConfidence": round(b.confidence, 4),
+            "cropShortSide": round(min(b.x1 - b.x0, b.y1 - b.y0)),
+            "small": min(b.x1 - b.x0, b.y1 - b.y0) < s.detect_small_px,
+            "source": it.source,
+            "status": it.status,
+            "candidates": candidates_json(it.candidates),
+        }
+
+    items = [item_json(i, it) for i, it in enumerate(results, 1)]
     return {"success": True, "data": {
         "model": model_info(request),
         "minConfidence": s.min_confidence,

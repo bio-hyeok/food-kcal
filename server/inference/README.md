@@ -26,10 +26,11 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 $env:MODEL_DIR = "C:\food-data\models_v3"
 $env:DETECT_MODEL_DIR = "C:\food-data\detector_v2"   # 한 사진에 여러 음식(/detect). 없으면 /detect 만 꺼진다
+$env:DETECT_BOWL_MODEL_DIR = "C:\food-data\bowl_coco"  # 실제 상차림용 그릇 찾기. 없으면 음식 검출 모델만 쓴다
 .\.venv\Scripts\python.exe -m uvicorn app.main:app --host 127.0.0.1 --port 8100
 ```
 
-Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food-data\detector_v2" .venv/Scripts/python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100`.
+Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food-data\detector_v2" DETECT_BOWL_MODEL_DIR="C:\food-data\bowl_coco" .venv/Scripts/python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8100`.
 
 `MODEL_DIR` 에는 `ml/scripts/export_onnx.py` 가 만든 두 파일이 있어야 한다. 없으면 서버가 뜨지 않는다.
 - `classifier.onnx` — 모델
@@ -50,8 +51,11 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 | `DETECT_MODEL_DIR` | (없음) | `detector.onnx`, `detector_meta.json` 폴더 (`ml/scripts/export_detector.py`). 없으면 `/detect` 가 503 |
 | `DETECT_MIN_CONFIDENCE` | `0.25` | 이 신뢰도 미만의 상자는 버린다 |
 | `DETECT_IOU` | `0.7` | 이만큼 겹친 상자는 신뢰도 높은 하나만 남긴다 (NMS) |
-| `DETECT_MAX_ITEMS` | `6` | 한 사진에서 돌려줄 음식 최대 수 |
+| `DETECT_MAX_ITEMS` | `15` | 한 사진에서 돌려줄 음식 최대 수 (실제 상차림은 반찬이 10개 넘게 나온다) |
 | `DETECT_SMALL_PX` | `128` | 음식 상자의 짧은 변이 이보다 작으면 `small: true` (앱이 "가까이서 찍어 주세요" 안내) |
+| `DETECT_BOWL_MODEL_DIR` | (없음) | 그릇 찾기 모델 폴더 (COCO 사전학습 YOLO26n, `export_detector.py --keep-class bowl`). 있으면 음식 검출과 함께 쓴다 (`app/pipeline.py`) |
+| `DETECT_BOWL_MIN_CONFIDENCE` | `0.15` | 이 신뢰도 미만의 그릇 상자는 버린다 |
+| `DETECT_BOWL_AUTO_SELECT` | `false` | 그릇 상자도 1순위를 미리 고를지 (`SUCCESS`). 이름을 모르는 반찬을 잘못 고르는 경우가 많아 기본은 끈다 |
 
 **모델을 바꾸면 `RECOGNITION_MIN_CONFIDENCE` 도 다시 정한다** (`ml/scripts/confidence_threshold.py`). 학습 설정에 따라 신뢰도 분포가 크게 달라진다.
 
@@ -110,13 +114,15 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
     "imageWidth": 1024, "imageHeight": 768,
     "items": [
       { "itemNo": 1, "box": { "x0": 0.08, "y0": 0.12, "x1": 0.52, "y1": 0.81 }, "detConfidence": 0.93,
+        "cropShortSide": 330, "small": false, "source": "food",
         "status": "SUCCESS", "candidates": [ { "rankNo": 1, "foodId": 1, "confidence": 0.91 } ] }
     ]
   }
 }
 ```
 
-- `box` 는 사진(EXIF 회전 반영) 대비 0~1 비율. `items` 는 검출 신뢰도 높은 순서.
+- `box` 는 사진(EXIF 회전 반영) 대비 0~1 비율. `items` 는 음식 검출 상자(신뢰도 순) 다음에 그릇 상자(신뢰도 순).
+- `source` 는 상자를 찾은 모델: `food`(음식 검출) 또는 `bowl`(그릇 찾기). 그릇 상자는 기본으로 `status: "FAILED"` 라 앱이 1순위를 미리 고르지 않고 후보만 보여 준다.
 - `cropShortSide` 는 상자의 짧은 변(px), `small` 은 그 값이 `DETECT_SMALL_PX` 미만인지. 음식이 작게 찍히면 정확도가 떨어진다 (아래 표).
 - 상자를 하나도 못 찾으면 `items` 는 빈 배열 → 앱은 "음식을 찾지 못했어요". 음식이 아닌 사진이 여기서 많이 걸러진다.
 - `status` 는 상자마다 `/predict` 와 같은 규칙(1순위 신뢰도 ≥ `minConfidence`).
@@ -143,7 +149,27 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 | 가짜 상차림 test 300장: 음식 찾음 / 1순위 정답 (`scripts/eval_multi.py`) | 59.5% / 46.5% | **100% / 71.4%** |
 | 〃 사진 속 음식 모두 맞힘 | 16.3% | **38.3%** |
 
-가짜 상차림 점수는 학습과 같은 방법으로 만든 사진이라 실제보다 좋게 나온다.
+가짜 상차림 점수는 학습과 같은 방법으로 만든 사진이라 실제보다 좋게 나온다. **실제 상차림 사진에서는 v2 도 거의 못 찾았다** (아래).
+
+#### 실제 상차림과 그릇 찾기 (`DETECT_BOWL_MODEL_DIR`, 2026-11-26)
+
+인터넷 공개 상차림 사진 20장에 정답을 직접 표시해 쟀다 (`scripts/eval_real.py`, 만든 과정은 `ml/README.md`).
+
+| | 검출 v2 만 | **v2 + 그릇 찾기 (기본)** |
+| --- | --- | --- |
+| 실제 상차림 20장: 아는 음식 50개 중 찾음 | 14% | **94%** |
+| 〃 1순위 정답 / 후보 5개 안 | 14% / 14% | **68% / 86%** |
+| 〃 사진당 상자 | 1.3 | 9.9 |
+| 〃 미리 고른 음식이 틀린 수 (20장 합계) | 9 | 7 |
+| 한 음식 test 1,520장 top-1 / top-5 | 82.8% / 95.9% | 82.8% / 95.8% |
+| 칼로리 오차 평균 | 31.0 kcal | 31.0 kcal |
+| 음식 사진을 잘못 거절 | 8.4% | 8.5% |
+| 음식 아닌 사진 320장 거절 | 95.0% | 95.0% |
+| CPU 시간 (사진 1장) | 약 70ms | 약 480ms (같은 측정에서 `/predict` 49ms) |
+
+- 그릇 상자는 이름을 모르는 반찬(김치·나물 등)도 잡는다. 그래서 그릇 상자는 1순위를 미리 고르지 않는다 (`status: "FAILED"`, 앱은 후보만 보여 준다). 미리 고르게 하면 20장에서 틀린 것이 맞은 것보다 많았다.
+- 상 전체를 덮은 음식 상자는 지운다: 사진 넓이의 40% 이상이고 그릇이 3개 이상 들어 있을 때. 처음에 "그릇 2개 이상"만 보았더니 한 음식 test 사진의 5% 에서 진짜 음식 상자가 지워져 잘못 거절이 8.4% → 13.6% 로 늘었다.
+- 시간이 늘어난 것은 그릇 찾기(1024px 입력)와 상자 최대 15개 분류 때문이다.
 
 #### 작은 설정 조정 (`scripts/tune_detect.py`, 2026-11-25)
 
@@ -197,6 +223,6 @@ cd server\inference
 
 - 분류 학습은 **잘라 낸 음식 상자**로 했다. `/predict` 에 사진 전체를 넣으면 top-1 이 74.5% 로 떨어진다 (잘라 낸 사진 기준 81.9%). `/detect` 는 상자를 잘라 넣어 82.6% 다.
 - `/predict` 는 기준값 하나로 음식 아닌 사진을 약 62%만 거른다 (`/detect` 는 86%).
-- 여러 음식은 가짜 상차림 사진으로만 쟀다. 진짜 상차림 사진(음식이 겹치거나 그릇이 붙은 사진)의 정확도는 아직 재지 못했다.
+- 실제 상차림은 공개 사진 20장으로만 쟀다. 그릇에 담기지 않은 음식(접시째 생선구이·전, 도마 위 음식)은 놓치기 쉽고, 그릇 상자는 사용자가 후보에서 골라야 한다.
 - 304종만 인식한다. 원천 이미지가 없는 96종은 후보에 나오지 않는다 (수동 검색).
 - API 서버(`/images`, `/recognitions`, 비동기 처리, DB 저장)는 만들지 않았다. 과제 범위에서는 앱이 직접 부른다.

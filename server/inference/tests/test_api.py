@@ -1,7 +1,8 @@
 from PIL import Image
 
 from app.classifier import center_crop, resize_short_side
-from app.detector import letterbox
+from app.detector import Box, letterbox
+from app.pipeline import merge_boxes
 from conftest import image_bytes, two_color_image
 
 
@@ -149,3 +150,35 @@ def test_letterbox_matches_ultralytics_rules():
     assert (r, left, top) == (0.625, 0, 80)                        # 640×480 → 위아래 80
     _, r, left, top = letterbox(Image.new("RGB", (300, 401)), 640, 114)
     assert (left, top) == (80, 0)                                  # 479×640 → 왼쪽 round(80.5-0.1)=80
+
+
+def test_detect_adds_bowls_without_auto_select(bowl_client):
+    r = bowl_client.post("/detect", files={"file": ("a.png", two_color_image((512, 256)), "image/png")})
+    items = r.json()["data"]["items"]
+    assert [it["source"] for it in items] == ["food", "food", "bowl"]   # 겹친 그릇·컵·상 전체 상자는 빠진다
+    assert [it["status"] for it in items[:2]] == ["SUCCESS", "SUCCESS"]
+    assert items[2]["status"] == "FAILED"            # 그릇 상자는 후보만 보여 준다
+    assert items[2]["box"]["y0"] < 0.5 < items[2]["box"]["x1"]
+    assert bowl_client.get("/health").json()["data"]["detect"]["bowl"] is True
+
+
+def test_detect_bowl_auto_select_option(bowl_client, monkeypatch):
+    monkeypatch.setenv("DETECT_BOWL_AUTO_SELECT", "true")
+    monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.0")
+    from app.main import app
+    from fastapi.testclient import TestClient
+    with TestClient(app) as c:
+        items = c.post("/detect", files={"file": ("a.png", two_color_image((512, 256)), "image/png")}).json()["data"]["items"]
+    assert items[2]["source"] == "bowl" and items[2]["status"] == "SUCCESS"
+
+
+def test_merge_drops_table_wide_food_box_and_huge_bowls():
+    table = Box(0, 0, 100, 100, 0.9)                 # 상 전체를 음식 하나로 본 상자
+    dish = Box(70, 70, 90, 90, 0.8)
+    bowls = [Box(10, 10, 30, 30, 0.9), Box(40, 10, 60, 30, 0.8), Box(10, 40, 30, 60, 0.75), Box(0, 0, 100, 90, 0.7),
+             Box(71, 71, 89, 89, 0.6)]
+    kept = merge_boxes([table, dish], bowls, 100, 100)
+    assert [(b.x0, src) for b, src in kept] == [(70, "food"), (10, "bowl"), (40, "bowl"), (10, "bowl")]
+    # 그릇이 2개뿐이면(한 음식 사진의 곁들이 그릇 등) 큰 음식 상자를 지우지 않는다
+    assert merge_boxes([table], bowls[:2], 100, 100)[0] == (table, "food")
+    assert len(merge_boxes([dish], bowls, 100, 100, max_items=2)) == 2

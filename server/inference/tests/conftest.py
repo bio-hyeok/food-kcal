@@ -62,9 +62,19 @@ DET_BOXES = [
 ]
 
 
-def build_detector(path):
-    """입력과 상관없이 DET_BOXES 를 (1, 5, N) 으로 내는 모델. 입력 × 0 을 더해 입력과 연결해 둔다."""
-    const = np.array(DET_BOXES, dtype=np.float32).T[None]               # (1, 5, N)
+# 그릇 찾기용 가짜 COCO 모델: 클래스 3개(cup, bowl, dining table) 중 bowl(1)만 쓴다. (cx, cy, w, h, 점수 3개)
+BOWL_BOXES = [
+    (160, 320, 300, 300, 0.0, 0.9, 0.0),   # 음식 A 와 같은 자리 → 겹쳐서 빠진다
+    (320, 200, 100, 80, 0.0, 0.7, 0.0),    # 새 그릇 → 더해진다 (source=bowl)
+    (480, 420, 60, 60, 0.95, 0.05, 0.0),   # 컵 → keep_classes 가 아니라 무시
+    (320, 320, 640, 330, 0.0, 0.6, 0.0),   # 사진 거의 전체 → 너무 커서 버린다
+]
+
+
+def build_detector(path, boxes=None):
+    """입력과 상관없이 boxes(기본 DET_BOXES)를 (1, 4+클래스 수, N) 으로 내는 모델. 입력 × 0 을 더해 입력과 연결해 둔다."""
+    boxes = DET_BOXES if boxes is None else boxes
+    const = np.array(boxes, dtype=np.float32).T[None]                   # (1, 4+클래스 수, N)
     c = helper.make_tensor("C", TensorProto.FLOAT, const.shape, const.flatten().tolist())
     zero = helper.make_tensor("Z", TensorProto.FLOAT, [], [0.0])
     shape = helper.make_tensor("S", TensorProto.INT64, [3], [1, 1, 1])
@@ -77,7 +87,7 @@ def build_detector(path):
     graph = helper.make_graph(
         nodes, "tiny_det",
         [helper.make_tensor_value_info("images", TensorProto.FLOAT, [1, 3, DET_SIZE, DET_SIZE])],
-        [helper.make_tensor_value_info("output0", TensorProto.FLOAT, [1, 5, len(DET_BOXES)])],
+        [helper.make_tensor_value_info("output0", TensorProto.FLOAT, list(const.shape))],
         initializer=[c, zero, shape],
     )
     model = helper.make_model(graph, opset_imports=[helper.make_opsetid("", 17)])
@@ -97,7 +107,32 @@ def detect_dir(tmp_path):
 
 
 @pytest.fixture
+def bowl_dir(tmp_path):
+    d = tmp_path / "bowl"
+    d.mkdir()
+    build_detector(d / "detector.onnx", BOWL_BOXES)
+    meta = {"onnx": "detector.onnx", "input": {"name": "images", "size": DET_SIZE, "pad_value": 114},
+            "output": {"name": "output0", "format": "cx,cy,w,h,class_scores"},
+            "classes": ["cup", "bowl", "dining table"], "keep_classes": [1]}
+    (d / "detector_meta.json").write_text(json.dumps(meta), encoding="utf-8")
+    return d
+
+
+@pytest.fixture
+def bowl_client(model_dir, detect_dir, bowl_dir, monkeypatch):
+    monkeypatch.setenv("MODEL_DIR", str(model_dir))
+    monkeypatch.setenv("DETECT_MODEL_DIR", str(detect_dir))
+    monkeypatch.setenv("DETECT_BOWL_MODEL_DIR", str(bowl_dir))
+    monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.5")
+    monkeypatch.setenv("RECOGNITION_TOP_K", "3")
+    from app.main import app
+    with TestClient(app) as c:
+        yield c
+
+
+@pytest.fixture
 def detect_client(model_dir, detect_dir, monkeypatch):
+    monkeypatch.delenv("DETECT_BOWL_MODEL_DIR", raising=False)
     monkeypatch.setenv("MODEL_DIR", str(model_dir))
     monkeypatch.setenv("DETECT_MODEL_DIR", str(detect_dir))
     monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.5")
@@ -119,6 +154,7 @@ def two_color_image(size=(128, 64)):
 @pytest.fixture
 def client(model_dir, monkeypatch):
     monkeypatch.delenv("DETECT_MODEL_DIR", raising=False)
+    monkeypatch.delenv("DETECT_BOWL_MODEL_DIR", raising=False)
     monkeypatch.setenv("MODEL_DIR", str(model_dir))
     monkeypatch.setenv("RECOGNITION_MIN_CONFIDENCE", "0.5")
     monkeypatch.setenv("RECOGNITION_TOP_K", "3")
