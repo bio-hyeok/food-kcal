@@ -36,8 +36,28 @@ function parseResponse(httpStatus, body, foodsById) {
   return { error: ERROR_MESSAGES[code] || `인식 서버 오류가 났어요 (${httpStatus}).` };
 }
 
-// 사진 1장을 보내고 결과를 받는다. 네트워크 오류도 { error } 로 돌려준다.
-async function recognize({ uri, mimeType, url, platform, foodsById, fetchImpl = fetch }) {
+// /detect 응답(JSON) → { items: [{ itemNo, box, status, candidates }], imageWidth, imageHeight } 또는 { error }
+// box 는 사진 대비 0~1 비율 { x0, y0, x1, y1 }. 음식을 하나도 못 찾으면 items 는 빈 배열.
+function parseDetectResponse(httpStatus, body, foodsById) {
+  if (body && body.success) {
+    const d = body.data;
+    return {
+      imageWidth: d.imageWidth,
+      imageHeight: d.imageHeight,
+      items: (d.items || []).map((it) => ({
+        itemNo: it.itemNo,
+        box: it.box,
+        status: it.status,
+        candidates: toCandidates(it, foodsById),
+      })),
+    };
+  }
+  const code = body?.error?.code;
+  return { error: ERROR_MESSAGES[code] || `인식 서버 오류가 났어요 (${httpStatus}).` };
+}
+
+// 사진 1장을 server 의 path 로 보낸다 → { httpStatus, body } 또는 { error }(네트워크 오류)
+async function postPhoto({ uri, mimeType, url, platform, path, fetchImpl }) {
   const form = new FormData();
   const type = mimeType || 'image/jpeg';
   const name = type === 'image/png' ? 'photo.png' : 'photo.jpg';
@@ -51,9 +71,9 @@ async function recognize({ uri, mimeType, url, platform, foodsById, fetchImpl = 
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
-    const res = await fetchImpl(`${url}/predict`, { method: 'POST', body: form, signal: controller.signal });
+    const res = await fetchImpl(`${url}${path}`, { method: 'POST', body: form, signal: controller.signal });
     const body = await res.json().catch(() => null);
-    return parseResponse(res.status, body, foodsById);
+    return { httpStatus: res.status, body };
   } catch (e) {
     return {
       error:
@@ -66,4 +86,23 @@ async function recognize({ uri, mimeType, url, platform, foodsById, fetchImpl = 
   }
 }
 
-module.exports = { resolveInferenceUrl, toCandidates, parseResponse, recognize };
+// 사진 1장 → 음식 1개 (/predict). 네트워크 오류도 { error } 로 돌려준다.
+async function recognize({ uri, mimeType, url, platform, foodsById, fetchImpl = fetch }) {
+  const r = await postPhoto({ uri, mimeType, url, platform, path: '/predict', fetchImpl });
+  return r.error ? r : parseResponse(r.httpStatus, r.body, foodsById);
+}
+
+// 사진 1장 → 음식 여러 개 (/detect).
+// 서버에 검출 모델이 없으면(503 DETECTOR_NOT_AVAILABLE) /predict 로 한 음식만 인식한다 (box 없음).
+async function recognizeMulti({ uri, mimeType, url, platform, foodsById, fetchImpl = fetch }) {
+  const r = await postPhoto({ uri, mimeType, url, platform, path: '/detect', fetchImpl });
+  if (r.error) return r;
+  if (r.httpStatus === 503 && r.body?.error?.code === 'DETECTOR_NOT_AVAILABLE') {
+    const one = await recognize({ uri, mimeType, url, platform, foodsById, fetchImpl });
+    if (one.error) return one;
+    return { items: [{ itemNo: 1, box: null, status: one.status, candidates: one.candidates }] };
+  }
+  return parseDetectResponse(r.httpStatus, r.body, foodsById);
+}
+
+module.exports = { resolveInferenceUrl, toCandidates, parseResponse, parseDetectResponse, recognize, recognizeMulti };
