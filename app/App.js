@@ -213,6 +213,9 @@ function EntryCard({ entry: e, onChoose, onGrams, onRemove }) {
       </View>
 
       {e.status === 'MANUAL' && <Text style={styles.hint}>검색으로 추가한 음식</Text>}
+      {e.small && (
+        <Text style={styles.warn}>음식이 작게 찍혔어요. 가까이서 다시 찍으면 더 정확해요.</Text>
+      )}
       {e.status === 'FAILED' && !e.food && (
         <Text style={styles.warn}>확실하지 않아요. 아래 후보에 있으면 골라 주세요. 없으면 삭제하고 검색해 주세요.</Text>
       )}

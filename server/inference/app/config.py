@@ -16,6 +16,8 @@ class Settings:
     detect_min_confidence: float = 0.25
     detect_iou: float = 0.7
     detect_max_items: int = 6
+    # 음식 상자의 짧은 변이 이보다 작으면 small=true (가까이서 다시 찍도록 안내). 128 은 val 크기별 정확도로 정했다
+    detect_small_px: int = 128
 
 
 def load_settings() -> Settings:
@@ -35,6 +37,7 @@ def load_settings() -> Settings:
         detect_min_confidence=float(os.environ.get("DETECT_MIN_CONFIDENCE", "0.25")),
         detect_iou=float(os.environ.get("DETECT_IOU", "0.7")),
         detect_max_items=int(os.environ.get("DETECT_MAX_ITEMS", "6")),
+        detect_small_px=int(os.environ.get("DETECT_SMALL_PX", "128")),
     )
     if not 0.0 <= s.min_confidence <= 1.0:
         raise RuntimeError("RECOGNITION_MIN_CONFIDENCE 는 0~1 사이여야 합니다")

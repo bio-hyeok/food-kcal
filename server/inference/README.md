@@ -51,6 +51,7 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 | `DETECT_MIN_CONFIDENCE` | `0.25` | 이 신뢰도 미만의 상자는 버린다 |
 | `DETECT_IOU` | `0.7` | 이만큼 겹친 상자는 신뢰도 높은 하나만 남긴다 (NMS) |
 | `DETECT_MAX_ITEMS` | `6` | 한 사진에서 돌려줄 음식 최대 수 |
+| `DETECT_SMALL_PX` | `128` | 음식 상자의 짧은 변이 이보다 작으면 `small: true` (앱이 "가까이서 찍어 주세요" 안내) |
 
 **모델을 바꾸면 `RECOGNITION_MIN_CONFIDENCE` 도 다시 정한다** (`ml/scripts/confidence_threshold.py`). 학습 설정에 따라 신뢰도 분포가 크게 달라진다.
 
@@ -116,6 +117,7 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 ```
 
 - `box` 는 사진(EXIF 회전 반영) 대비 0~1 비율. `items` 는 검출 신뢰도 높은 순서.
+- `cropShortSide` 는 상자의 짧은 변(px), `small` 은 그 값이 `DETECT_SMALL_PX` 미만인지. 음식이 작게 찍히면 정확도가 떨어진다 (아래 표).
 - 상자를 하나도 못 찾으면 `items` 는 빈 배열 → 앱은 "음식을 찾지 못했어요". 음식이 아닌 사진이 여기서 많이 걸러진다.
 - `status` 는 상자마다 `/predict` 와 같은 규칙(1순위 신뢰도 ≥ `minConfidence`).
 - `DETECT_MODEL_DIR` 이 없으면 `503 DETECTOR_NOT_AVAILABLE`.
@@ -129,6 +131,24 @@ Git Bash 에서는 `MODEL_DIR="C:\food-data\models_v3" DETECT_MODEL_DIR="C:\food
 | 음식 사진을 거절 (잘못 거절) | 18.5% | **9.0%** |
 | 음식 아닌 사진 320장 거절 | 62.2% | **86.3%** (그중 상자 없음 75.0%) |
 | CPU 시간 (사진 1장, 이 PC) | 약 25ms | 약 80ms |
+
+#### 작은 설정 조정 (`scripts/tune_detect.py`, 2026-11-25)
+
+값은 val 912장으로 고르고 test 1,520장으로 확인했다 (test 로 고르면 점수가 부풀려진다).
+
+| 시험한 것 | val top-1 | test top-1 | 결정 |
+| --- | --- | --- | --- |
+| 자르는 여유 5% (지금) | 82.2% | 82.6% | **유지** (분류 학습 데이터와 같은 값) |
+| 자르는 여유 10% | 83.2% | 82.3% | val 에서만 좋았다. 차이가 우연 범위(약 ±1%p) 안 |
+| 좌우 뒤집어 한 번 더 보기 (여유 5%) | 82.8% | 83.0% | **쓰지 않음**. 우연 범위 안인데 분류 시간이 약 2배 (25 → 44ms) |
+
+음식 부분의 크기별 정확도 (val, 사진을 줄여 라벨 상자의 짧은 변을 맞춤):
+
+| 짧은 변 | 48px | 64px | 96px | 128px | 160px | 224px | 320px |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| top-1 | 34.5% | 49.5% | 66.5% | 76.0% | 79.4% | 81.6% | 81.8% |
+
+128px 아래에서 크게 떨어져 `DETECT_SMALL_PX` 를 128 로 정했다. 단 이 표는 1순위 정답률이라, 음식이 작으면 맞히더라도 신뢰도가 낮아져 `FAILED` 가 늘어난다. 여러 음식을 작게 이어 붙인 시험 사진(음식 짧은 변 149~164px)에서는 `small` 이 붙지 않았지만 3개 모두 `FAILED` 였다 (표본 1장이라 기준을 바꾸지는 않았다).
 
 검출 전처리는 Ultralytics 와 같다: 비율을 유지해 640 에 맞게 줄이고 가운데 놓기(남는 곳 회색 114) → 0~1. 출력 (1, 5, N) 을 신뢰도로 거르고 NMS 를 서버에서 한다 (`app/detector.py`).
 

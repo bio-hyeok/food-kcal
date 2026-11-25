@@ -1,6 +1,7 @@
 // 한 사진의 음식 목록(식사). 화면과 분리해 시험할 수 있게 둔다.
-// 항목: { key, itemNo, box, status, candidates, food, gramText }
+// 항목: { key, itemNo, box, small, status, candidates, food, gramText }
 //   box       사진 대비 0~1 비율 (검색으로 직접 추가한 음식은 null)
+//   small     음식이 작게 찍혀 정확도가 떨어질 수 있음 (서버가 알려 줌)
 //   food      고른 음식 (아직 안 골랐으면 null)
 //   gramText  먹은 양(g) 입력값. 문자열로 두어 입력 중인 값도 그대로 보여준다
 const { calculate } = require('./calc');
@@ -16,6 +17,7 @@ function entriesFromItems(items) {
       key: nextKey(),
       itemNo: it.itemNo,
       box: it.box || null,
+      small: Boolean(it.small),
       status: it.status,
       candidates: it.candidates,
       food,
@@ -29,7 +31,7 @@ function addManual(entries, food) {
   const itemNo = entries.reduce((m, e) => Math.max(m, e.itemNo), 0) + 1;
   return [
     ...entries,
-    { key: nextKey(), itemNo, box: null, status: 'MANUAL', candidates: [], food, gramText: String(food.servingSizeG) },
+    { key: nextKey(), itemNo, box: null, small: false, status: 'MANUAL', candidates: [], food, gramText: String(food.servingSizeG) },
   ];
 }
 

@@ -77,7 +77,7 @@ const detectBody = {
     imageWidth: 1024,
     imageHeight: 768,
     items: [
-      { itemNo: 1, box: { x0: 0, y0: 0, x1: 0.5, y1: 1 }, detConfidence: 0.9, status: 'SUCCESS',
+      { itemNo: 1, box: { x0: 0, y0: 0, x1: 0.5, y1: 1 }, detConfidence: 0.9, small: true, status: 'SUCCESS',
         candidates: [{ rankNo: 1, foodId: 202, confidence: 0.8 }, { rankNo: 2, foodId: 9999, confidence: 0.1 }] },
       { itemNo: 2, box: { x0: 0.5, y0: 0, x1: 1, y1: 1 }, detConfidence: 0.7, status: 'FAILED',
         candidates: [{ rankNo: 1, foodId: 256, confidence: 0.2 }] },
@@ -90,6 +90,7 @@ test('/detect 응답: 음식마다 위치와 후보를 묶고, 모르는 foodId 
   assert.equal(r.imageWidth, 1024);
   assert.deepEqual(r.items.map((i) => [i.itemNo, i.status, i.box.x1]), [[1, 'SUCCESS', 0.5], [2, 'FAILED', 1]]);
   assert.deepEqual(r.items[0].candidates.map((c) => c.food.nameKo), ['불고기']);
+  assert.deepEqual(r.items.map((i) => i.small), [true, false]); // 없으면 false
 });
 
 test('recognizeMulti: /detect 로 보내고, 음식을 못 찾으면 빈 목록', async () => {

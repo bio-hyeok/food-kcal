@@ -112,6 +112,13 @@ def test_detect_finds_each_food_and_classifies_it(detect_client):
     assert items[0]["candidates"][0]["foodId"] == 5               # 왼쪽 빨강
     assert items[1]["candidates"][0]["foodId"] == 12              # 오른쪽 초록
     assert all(i["status"] == "SUCCESS" for i in items)
+    assert (items[0]["cropShortSide"], items[0]["small"]) == (64, True)   # 64px < 128px → 작게 찍힘
+
+
+def test_detect_small_flag_off_for_big_photo(detect_client):
+    r = detect_client.post("/detect", files={"file": ("a.png", two_color_image((512, 256)), "image/png")})
+    items = r.json()["data"]["items"]
+    assert [(i["cropShortSide"], i["small"]) for i in items] == [(256, False), (256, False)]
 
 
 def test_detect_no_box_gives_empty_items(detect_client, monkeypatch):

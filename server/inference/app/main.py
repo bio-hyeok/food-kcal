@@ -126,6 +126,7 @@ async def detect(request: Request, file: UploadFile = File(...)):
     """음식 상자를 찾아 상자마다 분류한다. 상자를 못 찾으면 items 는 빈 배열 (음식이 아닌 사진 포함).
 
     box 는 사진(EXIF 회전 반영) 대비 0~1 비율. 앱은 사진 위에 그대로 그릴 수 있다.
+    small 은 음식이 작게 찍혀(상자의 짧은 변 < DETECT_SMALL_PX) 정확도가 떨어질 수 있다는 표시다.
     """
     s = request.app.state.settings
     det: Detector | None = request.app.state.detector
@@ -144,6 +145,8 @@ async def detect(request: Request, file: UploadFile = File(...)):
         "itemNo": i,
         "box": {"x0": round(b.x0 / w, 4), "y0": round(b.y0 / h, 4), "x1": round(b.x1 / w, 4), "y1": round(b.y1 / h, 4)},
         "detConfidence": round(b.confidence, 4),
+        "cropShortSide": round(min(b.x1 - b.x0, b.y1 - b.y0)),
+        "small": min(b.x1 - b.x0, b.y1 - b.y0) < s.detect_small_px,
         "status": "SUCCESS" if cands[0].confidence >= s.min_confidence else "FAILED",
         "candidates": candidates_json(cands),
     } for i, (b, cands) in enumerate(results, 1)]

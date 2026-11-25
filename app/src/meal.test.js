@@ -11,7 +11,7 @@ const soup = food(2, '된장찌개', 300, 150);
 const kimchi = food(3, '배추김치', 50, 15);
 
 const items = [
-  { itemNo: 1, box: { x0: 0, y0: 0, x1: 0.5, y1: 1 }, status: 'SUCCESS',
+  { itemNo: 1, box: { x0: 0, y0: 0, x1: 0.5, y1: 1 }, small: true, status: 'SUCCESS',
     candidates: [{ foodId: 1, confidence: 0.9, food: rice }, { foodId: 2, confidence: 0.05, food: soup }] },
   { itemNo: 2, box: { x0: 0.5, y0: 0, x1: 1, y1: 1 }, status: 'FAILED',
     candidates: [{ foodId: 2, confidence: 0.2, food: soup }] },
@@ -24,6 +24,7 @@ test('인식 성공한 음식은 1순위를 1인분으로 미리 고르고, 실�
   assert.equal(es[1].food, null);
   assert.equal(es[1].gramText, '');
   assert.notEqual(es[0].key, es[1].key);
+  assert.deepEqual(es.map((e) => e.small), [true, false]);
 });
 
 test('합계는 계산할 수 있는 음식만 더한다', () => {

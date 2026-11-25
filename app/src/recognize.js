@@ -47,6 +47,7 @@ function parseDetectResponse(httpStatus, body, foodsById) {
       items: (d.items || []).map((it) => ({
         itemNo: it.itemNo,
         box: it.box,
+        small: Boolean(it.small), // 음식이 작게 찍혀 정확도가 떨어질 수 있음
         status: it.status,
         candidates: toCandidates(it, foodsById),
       })),
